@@ -1,0 +1,626 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   ReelSpy landing — design system
+   Base semantic tokens are lifted verbatim from the product app
+   (app/globals.css) so the marketing site inherits the exact same chrome
+   palette. Landing-only marketing colors are namespaced --lp-*.
+   ========================================================================== */
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #f7f7f8;
+  --foreground: #18181b;
+  --card: #ffffff;
+  --card-foreground: #18181b;
+  --popover: #ffffff;
+  --popover-foreground: #18181b;
+  --primary: #18181b;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f1f3;
+  --secondary-foreground: #18181b;
+  --muted: #f1f1f3;
+  --muted-foreground: #52525b;
+  --accent: #e9e9ec;
+  --accent-foreground: #18181b;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #18181b;
+  --surface-2: #f1f1f3;
+  --border-strong: #d4d4d8;
+  --subtle: #71717a;
+  --brand: #4b45c6;
+  --radius: 0.75rem;
+
+  /* ---- Landing marketing palette (fixed, theme-independent) ------------- */
+  --lp-space: #090a18;       /* darkest page bg — hero, radar, final band */
+  --lp-indigo: #131631;      /* alternate dark section bg */
+  --lp-surface: #222850;     /* elevated cards / mock-screen chrome on dark */
+  --lp-surface-2: #1a1e40;
+  --lp-violet: #6d5cff;      /* gradient start, interactive accents */
+  --lp-violet-soft: #a78bff; /* gradient mid, secondary glow */
+  --lp-blue: #4e7dff;        /* gradient mid, links on dark */
+  --lp-cyan: #49e4ff;        /* gradient end, live/rising pulses */
+  --lp-cyan-electric: #2fe0ff; /* sparks, count-up numbers, radar pings */
+  --lp-ink: #e7e7ea;         /* text on dark */
+  --lp-ink-dim: #a2a2ad;     /* secondary text on dark */
+  --lp-ink-faint: #6b6f8a;
+  --lp-hairline: rgba(255, 255, 255, 0.08);
+  --lp-hairline-strong: rgba(255, 255, 255, 0.14);
+  --lp-glass: rgba(19, 22, 49, 0.62);
+
+  /* The one gradient. Never on body text / large fills. */
+  --lp-gradient: linear-gradient(120deg, #6d5cff 0%, #4e7dff 45%, #49e4ff 100%);
+  --lp-gradient-soft: linear-gradient(120deg, #6d5cff 0%, #4e7dff 55%, #49e4ff 100%);
+
+  /* ---- Motion tokens ---------------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 150ms;
+  --dur-base: 300ms;
+  --dur-slow: 600ms;
+}
+
+.dark {
+  --background: #0b0d1a;
+  --foreground: #e7e7ea;
+  --card: #12152b;
+  --card-foreground: #e7e7ea;
+  --popover: #161a34;
+  --popover-foreground: #e7e7ea;
+  --primary: #f4f4f5;
+  --primary-foreground: #121212;
+  --secondary: #1a1e3a;
+  --secondary-foreground: #e7e7ea;
+  --muted: #1a1e3a;
+  --muted-foreground: #a2a2ad;
+  --accent: #222850;
+  --accent-foreground: #e7e7ea;
+  --border: #232748;
+  --input: #232748;
+  --ring: #49e4ff;
+  --surface-2: #161a34;
+  --border-strong: #2f345c;
+  --subtle: #8a8a95;
+  --brand: #a78bff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-surface-2: var(--surface-2);
+  --color-border-strong: var(--border-strong);
+  --color-subtle: var(--subtle);
+  --color-brand: var(--brand);
+
+  --color-lp-space: var(--lp-space);
+  --color-lp-indigo: var(--lp-indigo);
+  --color-lp-surface: var(--lp-surface);
+  --color-lp-violet: var(--lp-violet);
+  --color-lp-violet-soft: var(--lp-violet-soft);
+  --color-lp-blue: var(--lp-blue);
+  --color-lp-cyan: var(--lp-cyan);
+  --color-lp-cyan-electric: var(--lp-cyan-electric);
+  --color-lp-ink: var(--lp-ink);
+  --color-lp-ink-dim: var(--lp-ink-dim);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
+html[lang="ar"] body {
+  font-family: var(--font-arabic), var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Arabic body copy wants more leading; never letter-space or uppercase it. */
+html[lang="ar"] {
+  --tracking-tight: 0;
+}
+html[lang="ar"] .lp-eyebrow {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+button,
+a,
+select,
+input,
+textarea,
+label,
+summary {
+  touch-action: manipulation;
+}
+
+button:not(:disabled),
+[role="button"],
+a[href],
+summary {
+  cursor: pointer;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--lp-violet) 40%, transparent);
+  color: #fff;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border: 2px solid transparent;
+  background-clip: content-box;
+  border-radius: 9999px;
+}
+
+:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--lp-cyan) 70%, transparent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip link */
+.skip-link {
+  position: fixed;
+  inset-inline-start: 1rem;
+  top: -100px;
+  z-index: 100;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--lp-violet);
+  color: #fff;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ==========================================================================
+   Typography helpers
+   ========================================================================== */
+
+.lp-eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lp-violet-soft);
+}
+
+.font-mono {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Fluid display type */
+.lp-h1 {
+  font-size: clamp(2.5rem, 1.4rem + 4.6vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+.lp-h2 {
+  font-size: clamp(1.875rem, 1.2rem + 2.6vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+.lp-h3 {
+  font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+.lp-lead {
+  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+  line-height: 1.65;
+}
+html[lang="ar"] .lp-lead,
+html[lang="ar"] p {
+  line-height: 1.9;
+}
+
+/* ==========================================================================
+   Gradient + surface utilities
+   ========================================================================== */
+
+.lp-gradient-text {
+  background: var(--lp-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.lp-gradient-bg {
+  background: var(--lp-gradient);
+}
+
+/* Dark elevated card (mock screens, dark surfaces) */
+.lp-card {
+  background: linear-gradient(180deg, var(--lp-indigo) 0%, var(--lp-surface) 140%);
+  border: 1px solid var(--lp-hairline);
+  border-radius: 1rem;
+  box-shadow:
+    0 20px 60px rgba(9, 10, 24, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.lp-glass {
+  background: var(--lp-glass);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border: 1px solid var(--lp-hairline);
+}
+
+.lp-hairline {
+  border: 1px solid var(--lp-hairline);
+}
+
+/* Animated gradient border (highlighted pricing card, chips) */
+.lp-gradient-border {
+  position: relative;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, var(--lp-indigo), var(--lp-surface));
+}
+.lp-gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(130deg, var(--lp-violet), var(--lp-cyan), var(--lp-violet-soft), var(--lp-violet));
+  background-size: 300% 300%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: lp-border-flow 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes lp-border-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+/* Signal chip (score / badge) */
+.lp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid var(--lp-hairline);
+}
+.lp-chip-cyan {
+  color: var(--lp-cyan);
+  background: color-mix(in srgb, var(--lp-cyan) 12%, transparent);
+  border-color: color-mix(in srgb, var(--lp-cyan) 34%, transparent);
+}
+.lp-chip-violet {
+  color: var(--lp-violet-soft);
+  background: color-mix(in srgb, var(--lp-violet) 14%, transparent);
+  border-color: color-mix(in srgb, var(--lp-violet) 34%, transparent);
+}
+
+/* Section-lead icon tile (mirrors the logo motif) */
+.lp-icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(150deg, rgba(109, 92, 255, 0.22), rgba(73, 228, 255, 0.14));
+  border: 1px solid var(--lp-hairline-strong);
+  color: var(--lp-cyan);
+}
+
+/* Glow bloom behind hero / bands */
+.lp-nebula {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Dashed / glow divider */
+.lp-grid-bg {
+  background-image:
+    linear-gradient(var(--lp-hairline) 1px, transparent 1px),
+    linear-gradient(90deg, var(--lp-hairline) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
+}
+
+/* ==========================================================================
+   Motion
+   ========================================================================== */
+
+/* Scroll reveal (JS toggles data-visible via IntersectionObserver).
+   The hidden initial state only applies when JS is on (html.js is stamped by a
+   synchronous inline script), so with JS disabled all content is fully visible. */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out-expo),
+    transform var(--dur-slow) var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: transform, opacity;
+}
+html.js [data-reveal][data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Brand logo animations (components/brand/Logo.tsx) */
+@keyframes logoScan {
+  0% { transform: translateY(-15px); opacity: 0; }
+  12% { opacity: 0.55; }
+  50% { transform: translateY(15px); opacity: 0.55; }
+  62% { opacity: 0; }
+  100% { transform: translateY(-15px); opacity: 0; }
+}
+.logo-scan { animation: logoScan 3.2s ease-in-out infinite; }
+
+@keyframes logoFocus {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+}
+.logo-focus { animation: logoFocus 3.2s ease-in-out infinite; }
+
+@keyframes logoPlayPop {
+  0%, 88%, 100% { transform: scale(1); }
+  94% { transform: scale(0.92); }
+}
+.logo-play { animation: logoPlayPop 3.2s ease-in-out infinite; }
+
+/* Idle float (hero art) */
+@keyframes lp-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+@keyframes lp-float-slow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(0.5deg); }
+}
+
+/* Nebula drift */
+@keyframes lp-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(3%, -4%, 0) scale(1.08); }
+}
+.lp-drift { animation: lp-drift 16s ease-in-out infinite; }
+
+/* Pulse (rising dots, live glow) */
+@keyframes lp-pulse-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--lp-cyan) 55%, transparent); }
+  70% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--lp-cyan) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--lp-cyan) 0%, transparent); }
+}
+.lp-pulse { animation: lp-pulse-ring 2.4s var(--ease-out-expo) infinite; }
+
+/* Marquee */
+@keyframes lp-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+[dir="rtl"] .lp-marquee-track {
+  animation-direction: reverse;
+}
+.lp-marquee-track {
+  animation: lp-marquee 32s linear infinite;
+}
+.lp-marquee:hover .lp-marquee-track,
+.lp-marquee:focus-within .lp-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Blinking caret for the script demo */
+@keyframes lp-caret {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.lp-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-inline-start: 2px;
+  vertical-align: text-bottom;
+  background: var(--lp-cyan);
+  animation: lp-caret 1s step-end infinite;
+}
+
+/* Traveling dot on the loop diagram / publish paths */
+@keyframes lp-dash {
+  to { stroke-dashoffset: -1000; }
+}
+
+/* Magnetic / hover lift */
+.lp-lift {
+  transition: transform var(--dur-base) var(--ease-spring), box-shadow var(--dur-base) var(--ease-out-expo), border-color var(--dur-base) ease;
+}
+@media (hover: hover) {
+  .lp-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 70px rgba(9, 10, 24, 0.6), 0 0 0 1px color-mix(in srgb, var(--lp-violet) 35%, transparent);
+  }
+}
+
+/* Shimmer for skeleton thumbnails */
+@keyframes lp-shimmer {
+  0% { background-position: -160% 0; }
+  100% { background-position: 260% 0; }
+}
+.lp-shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--lp-surface) 30%,
+    color-mix(in srgb, var(--lp-violet) 18%, var(--lp-surface)) 50%,
+    var(--lp-surface) 70%
+  );
+  background-size: 220% 100%;
+  animation: lp-shimmer 3.2s ease-in-out infinite;
+}
+
+/* Count-up numbers never jitter */
+.count {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Mobile sheet slide-in. Direction is driven by --sheet-from (set inline per
+   locale) so it enters from the correct edge under both LTR and RTL. */
+@keyframes riseInSheet {
+  from { opacity: 0; transform: translateX(var(--sheet-from, 12%)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Spin (radar sweep) */
+@keyframes lp-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes lp-spin-rev {
+  to { transform: rotate(-360deg); }
+}
+
+/* 4-step loop diagram — orbiting dot + node light-up */
+@keyframes lp-orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.lp-orbit { animation: lp-orbit 8s linear infinite; }
+[dir="rtl"] .lp-orbit { animation-direction: reverse; }
+
+@keyframes lp-node-lit {
+  0% { box-shadow: 0 0 0 0 rgba(73, 228, 255, 0); border-color: var(--lp-hairline); color: var(--lp-ink-dim); }
+  6% { box-shadow: 0 0 30px 2px rgba(73, 228, 255, 0.45); border-color: var(--lp-cyan); color: var(--lp-cyan); background: color-mix(in srgb, var(--lp-cyan) 14%, var(--lp-indigo)); }
+  22% { box-shadow: 0 0 0 0 rgba(73, 228, 255, 0); border-color: var(--lp-hairline); color: var(--lp-ink-dim); }
+  100% { box-shadow: 0 0 0 0 rgba(73, 228, 255, 0); border-color: var(--lp-hairline); color: var(--lp-ink-dim); }
+}
+
+@keyframes lp-ring-flow {
+  to { stroke-dashoffset: -140; }
+}
+
+/* Publish fan-out — flowing connector strokes + RTL mirror */
+@keyframes lp-flow {
+  to { stroke-dashoffset: -24; }
+}
+[dir="rtl"] .fanout-mirror {
+  transform: scaleX(-1);
+}
+[dir="rtl"] .fanout-mirror .fanout-unflip {
+  transform: scaleX(-1);
+}
+
+/* ==========================================================================
+   Reduced motion — freeze everything to informative static frames
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .lp-caret { opacity: 1 !important; }
+}
+
+/* prefers-contrast: solidify hairlines */
+@media (prefers-contrast: more) {
+  .lp-hairline,
+  .lp-card,
+  .lp-glass {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* FAQ native disclosure — chevron rotates, content fades in (works without JS) */
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary { list-style: none; }
+.faq-item[open] .faq-chevron { transform: rotate(180deg); }
+.faq-item[open] .faq-body { animation: riseIn 0.3s var(--ease-out-expo) both; }
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
