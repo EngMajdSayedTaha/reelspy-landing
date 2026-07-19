@@ -109,12 +109,13 @@ export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
         <div className="hidden items-center gap-2 lg:flex">
           <LangToggle locale={locale} toggleLabel={t.langToggle} ariaLabel={t.langToggleLabel} />
           <ThemeToggle label={t.themeToggle} />
-          <Link
+          {/* Plain anchor: /login lives in the dashboard zone (see lib/zones). */}
+          <a
             href="/login"
             className="rounded-full px-3.5 py-2 text-sm font-medium text-current/85 transition hover:text-current"
           >
             {t.login}
-          </Link>
+          </a>
           <CTALink href="/signup" size="md" magnetic={false}>
             {t.startFree}
           </CTALink>
@@ -176,13 +177,13 @@ export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
               </a>
             ))}
             <div className="my-3 h-px bg-border" />
-            <Link
+            <a
               href="/login"
               onClick={() => setOpen(false)}
               className="rounded-xl px-3 py-3 text-lg font-medium text-foreground transition hover:bg-accent"
             >
               {t.login}
-            </Link>
+            </a>
             <CTALink href="/signup" size="lg" magnetic={false} className="mt-1 w-full" onClick={() => setOpen(false)}>
               {t.startFree}
             </CTALink>

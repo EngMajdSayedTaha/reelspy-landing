@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRef, type ReactNode, type MouseEvent } from "react";
 import { cn } from "@/lib/utils";
 
@@ -61,8 +60,13 @@ export function CTALink({
       "border border-border-strong text-foreground hover:bg-accent hover:border-foreground/25 backdrop-blur-sm",
   };
 
+  // A plain <a>, not next/link, on purpose. Almost every CTA points at
+  // /signup or /login, which the multi-zone rewrites proxy to the dashboard
+  // deployment. next/link would try a client-side RSC navigation into an app
+  // that isn't this one and fail on the prefetch. Hash anchors (#how) still
+  // scroll smoothly via html { scroll-behavior }.
   return (
-    <Link
+    <a
       ref={ref}
       href={href}
       onClick={onClick}
@@ -71,6 +75,6 @@ export function CTALink({
       className={cn(base, sizes[size], variants[variant], className)}
     >
       {children}
-    </Link>
+    </a>
   );
 }
