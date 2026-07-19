@@ -164,21 +164,19 @@ export const ar: Dictionary = {
       food: "الطعام",
       travel: "السفر",
     },
-    outperform: (ratio: string) => `${ratio}× متوسط الحساب`,
-    followers: (count: string) => `${count} متابع`,
     views: "مشاهدة",
     likes: "إعجاب",
     comments: "تعليق",
-    daysAgo: (days: number) =>
-      days === 0
-        ? "اليوم"
-        : days === 1
-          ? "قبل يوم"
-          : days === 2
-            ? "قبل يومين"
-            : days <= 10
-              ? `قبل ${days} أيام`
-              : `قبل ${days} يومًا`,
+    // Arabic counts nouns in four shapes, not two: a dual form for exactly
+    // two, the plural for 3–10, and the accusative singular from 11 up.
+    // "قبل 2 أيام" and "قبل 15 أيام" are both wrong.
+    day: {
+      today: "اليوم",
+      one: "قبل يوم",
+      two: "قبل يومين",
+      few: "قبل {n} أيام",
+      many: "قبل {n} يومًا",
+    },
     viewOn: "عرض على إنستغرام",
     cta: "تابِع هذا المجال",
     demoNote: "بيانات تجريبية — اربط حسابك لترى ريلز حقيقية من مجالك أنت.",

@@ -1,6 +1,7 @@
 import { ArrowUpRight, Eye, Heart, MessageCircle, Play, TrendingUp } from "lucide-react";
 import type { Dictionary } from "@/lib/i18n/en";
 import type { ShowcaseReel } from "@/lib/showcase/types";
+import { formatDaysAgo } from "@/lib/showcase/format";
 
 // Mirrors the dashboard's TrendReelCard, minus everything that needs an
 // account: no tracking action, no saved state. What's left is the part a
@@ -63,7 +64,9 @@ export function TrendingCard({ reel, dict }: { reel: ShowcaseReel; dict: Diction
             @{reel.igUsername}
           </span>
           {days !== null && (
-            <span className="shrink-0 text-[0.7rem] text-muted-foreground">{t.daysAgo(days)}</span>
+            <span className="shrink-0 text-[0.7rem] text-muted-foreground">
+              {formatDaysAgo(days, t.day)}
+            </span>
           )}
         </div>
 

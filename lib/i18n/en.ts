@@ -142,12 +142,21 @@ export const en = {
       food: "Food",
       travel: "Travel",
     },
-    outperform: (ratio: string) => `${ratio}× the account's median`,
-    followers: (count: string) => `${count} followers`,
     views: "views",
     likes: "likes",
     comments: "comments",
-    daysAgo: (days: number) => (days === 0 ? "today" : days === 1 ? "1 day ago" : `${days} days ago`),
+    // Plural forms rather than a function: this namespace is handed to a
+    // client component, and functions can't cross the server/client boundary.
+    // formatDaysAgo (lib/showcase/format) picks the right form. English only
+    // needs one/other; the keys exist so Arabic can use its dual and its
+    // 3–10 vs 11+ split.
+    day: {
+      today: "today",
+      one: "1 day ago",
+      two: "2 days ago",
+      few: "{n} days ago",
+      many: "{n} days ago",
+    },
     viewOn: "View on Instagram",
     cta: "Track this niche",
     demoNote: "Sample data — connect an account to see live reels from your own niche.",
