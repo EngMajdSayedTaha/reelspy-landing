@@ -30,29 +30,35 @@
   --surface-2: #f1f1f3;
   --border-strong: #d4d4d8;
   --subtle: #71717a;
-  --brand: #4b45c6;
+  --brand: #a16207;
   --radius: 0.75rem;
 
-  /* ---- Landing marketing palette (fixed, theme-independent) ------------- */
-  --lp-space: #090a18;       /* darkest page bg — hero, radar, final band */
-  --lp-indigo: #131631;      /* alternate dark section bg */
-  --lp-surface: #222850;     /* elevated cards / mock-screen chrome on dark */
-  --lp-surface-2: #1a1e40;
-  --lp-violet: #6d5cff;      /* gradient start, interactive accents */
-  --lp-violet-soft: #a78bff; /* gradient mid, secondary glow */
-  --lp-blue: #4e7dff;        /* gradient mid, links on dark */
-  --lp-cyan: #49e4ff;        /* gradient end, live/rising pulses */
-  --lp-cyan-electric: #2fe0ff; /* sparks, count-up numbers, radar pings */
-  --lp-ink: #e7e7ea;         /* text on dark */
-  --lp-ink-dim: #a2a2ad;     /* secondary text on dark */
-  --lp-ink-faint: #6b6f8a;
+  /* ---- Landing marketing palette ---------------------------------------
+     Graphite + electric yellow, matching the product's volt preset. There is
+     exactly ONE chromatic voice (--lp-yellow); everything else is the neutral
+     scale above. The previous violet→cyan gradient system was a second brand
+     entirely, which is why the landing and the dashboard never looked like the
+     same product.
+
+     --lp-yellow is a FILL color: it carries dark text and must never be used
+     for text itself (#f9e400 on white is ~1.2:1). For text and icons use
+     --lp-yellow-ink, which darkens to amber on light backgrounds and returns
+     to the neon in dark mode where it has the contrast to spare. */
+  --lp-yellow: #f9e400;
+  --lp-yellow-ink: #a16207;
+  --lp-yellow-fg: #121212;   /* readable text ON --lp-yellow */
+
+  /* Fixed dark values for the fake browser chrome in the feature demos. These
+     stay dark in BOTH themes on purpose — a product screenshot that inverts
+     with the page stops looking like a screenshot. Everything else on the page
+     is theme-aware. */
+  --lp-deep: #101014;
+  --lp-mock-surface: #1b1b21;
+  --lp-mock-surface-2: #24242c;
+  --lp-ink: #e7e7ea;         /* text on the fixed-dark mock surfaces */
+  --lp-ink-dim: #a2a2ad;
   --lp-hairline: rgba(255, 255, 255, 0.08);
   --lp-hairline-strong: rgba(255, 255, 255, 0.14);
-  --lp-glass: rgba(19, 22, 49, 0.62);
-
-  /* The one gradient. Never on body text / large fills. */
-  --lp-gradient: linear-gradient(120deg, #6d5cff 0%, #4e7dff 45%, #49e4ff 100%);
-  --lp-gradient-soft: linear-gradient(120deg, #6d5cff 0%, #4e7dff 55%, #49e4ff 100%);
 
   /* ---- Motion tokens ---------------------------------------------------- */
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
@@ -62,28 +68,33 @@
   --dur-slow: 600ms;
 }
 
+/* Lifted verbatim from the product app: a lifted graphite scale with a clear
+   elevation step page → card → popover, rather than the old navy. */
 .dark {
-  --background: #0b0d1a;
+  --background: #18181f;
   --foreground: #e7e7ea;
-  --card: #12152b;
+  --card: #1f1f27;
   --card-foreground: #e7e7ea;
-  --popover: #161a34;
+  --popover: #26262f;
   --popover-foreground: #e7e7ea;
   --primary: #f4f4f5;
   --primary-foreground: #121212;
-  --secondary: #1a1e3a;
+  --secondary: #26262e;
   --secondary-foreground: #e7e7ea;
-  --muted: #1a1e3a;
+  --muted: #2a2a33;
   --muted-foreground: #a2a2ad;
-  --accent: #222850;
+  --accent: #30303a;
   --accent-foreground: #e7e7ea;
-  --border: #232748;
-  --input: #232748;
-  --ring: #49e4ff;
-  --surface-2: #161a34;
-  --border-strong: #2f345c;
+  --border: #2d2d37;
+  --input: #2d2d37;
+  --ring: #f9e400;
+  --surface-2: #212129;
+  --border-strong: #3d3d49;
   --subtle: #8a8a95;
-  --brand: #a78bff;
+  --brand: #f9e400;
+  /* On graphite the neon has ample contrast, so accent text is the neon
+     itself rather than the light-mode amber. */
+  --lp-yellow-ink: #f9e400;
 }
 
 @theme inline {
@@ -109,14 +120,12 @@
   --color-subtle: var(--subtle);
   --color-brand: var(--brand);
 
-  --color-lp-space: var(--lp-space);
-  --color-lp-indigo: var(--lp-indigo);
-  --color-lp-surface: var(--lp-surface);
-  --color-lp-violet: var(--lp-violet);
-  --color-lp-violet-soft: var(--lp-violet-soft);
-  --color-lp-blue: var(--lp-blue);
-  --color-lp-cyan: var(--lp-cyan);
-  --color-lp-cyan-electric: var(--lp-cyan-electric);
+  --color-lp-yellow: var(--lp-yellow);
+  --color-lp-yellow-ink: var(--lp-yellow-ink);
+  --color-lp-yellow-fg: var(--lp-yellow-fg);
+  --color-lp-deep: var(--lp-deep);
+  --color-lp-mock-surface: var(--lp-mock-surface);
+  --color-lp-mock-surface-2: var(--lp-mock-surface-2);
   --color-lp-ink: var(--lp-ink);
   --color-lp-ink-dim: var(--lp-ink-dim);
 
@@ -182,8 +191,8 @@ summary {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--lp-violet) 40%, transparent);
-  color: #fff;
+  background: color-mix(in srgb, var(--lp-yellow) 32%, transparent);
+  color: var(--foreground);
 }
 
 * {
@@ -202,7 +211,7 @@ summary {
 }
 
 :focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--lp-cyan) 70%, transparent);
+  outline: 2px solid var(--lp-yellow-ink);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -215,8 +224,8 @@ summary {
   z-index: 100;
   padding: 0.625rem 1rem;
   border-radius: 0.5rem;
-  background: var(--lp-violet);
-  color: #fff;
+  background: var(--lp-yellow);
+  color: var(--lp-yellow-fg);
   font-weight: 600;
   transition: top 0.2s ease;
 }
@@ -233,7 +242,7 @@ summary {
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--lp-violet-soft);
+  color: var(--lp-yellow-ink);
 }
 
 .font-mono {
@@ -274,47 +283,54 @@ html[lang="ar"] p {
 }
 
 /* ==========================================================================
-   Gradient + surface utilities
+   Accent + surface utilities
+
+   The old system built everything from a violet→cyan gradient. Under the
+   one-accent brand the gradient is gone: accents are a solid yellow, and the
+   visual interest comes from surface elevation and hairlines instead.
    ========================================================================== */
 
-.lp-gradient-text {
-  background: var(--lp-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+/* Accent text (was .lp-gradient-text). Solid, and theme-aware so it stays
+   readable on light backgrounds where the neon yellow would vanish. */
+.lp-accent-text {
+  color: var(--lp-yellow-ink);
 }
 
-.lp-gradient-bg {
-  background: var(--lp-gradient);
+/* Solid accent fill for CTAs (was .lp-gradient-bg). Always pairs with
+   --lp-yellow-fg; the yellow is a fill, never a text color. */
+.lp-cta-bg {
+  background: var(--lp-yellow);
+  color: var(--lp-yellow-fg);
 }
 
-/* Dark elevated card (mock screens, dark surfaces) */
+/* Elevated card. Now theme-aware — it was hardcoded to the dark navy, which
+   is what made light mode look half-finished. */
 .lp-card {
-  background: linear-gradient(180deg, var(--lp-indigo) 0%, var(--lp-surface) 140%);
-  border: 1px solid var(--lp-hairline);
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 1rem;
   box-shadow:
-    0 20px 60px rgba(9, 10, 24, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 20px 60px color-mix(in srgb, var(--foreground) 10%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--foreground) 5%, transparent);
 }
 
 .lp-glass {
-  background: var(--lp-glass);
+  background: color-mix(in srgb, var(--card) 72%, transparent);
   backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  border: 1px solid var(--lp-hairline);
+  border: 1px solid var(--border);
 }
 
 .lp-hairline {
-  border: 1px solid var(--lp-hairline);
+  border: 1px solid var(--border);
 }
 
-/* Animated gradient border (highlighted pricing card, chips) */
+/* Animated accent border (highlighted pricing card, chips). One hue cycling
+   through its own tints rather than a three-color gradient sweep. */
 .lp-gradient-border {
   position: relative;
   border-radius: 1rem;
-  background: linear-gradient(180deg, var(--lp-indigo), var(--lp-surface));
+  background: var(--card);
 }
 .lp-gradient-border::before {
   content: "";
@@ -322,7 +338,13 @@ html[lang="ar"] p {
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(130deg, var(--lp-violet), var(--lp-cyan), var(--lp-violet-soft), var(--lp-violet));
+  background: linear-gradient(
+    130deg,
+    color-mix(in srgb, var(--lp-yellow) 90%, transparent),
+    color-mix(in srgb, var(--lp-yellow) 25%, transparent),
+    color-mix(in srgb, var(--lp-yellow) 90%, transparent),
+    color-mix(in srgb, var(--lp-yellow) 25%, transparent)
+  );
   background-size: 300% 300%;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -347,17 +369,34 @@ html[lang="ar"] p {
   font-size: 0.75rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  border: 1px solid var(--lp-hairline);
+  border: 1px solid var(--border);
 }
-.lp-chip-cyan {
-  color: var(--lp-cyan);
-  background: color-mix(in srgb, var(--lp-cyan) 12%, transparent);
-  border-color: color-mix(in srgb, var(--lp-cyan) 34%, transparent);
+/* The accented chip — "this is the signal". Used sparingly: a viral score, a
+   live badge, an outperform ratio. */
+.lp-chip-accent {
+  color: var(--lp-yellow-ink);
+  background: color-mix(in srgb, var(--lp-yellow) 14%, transparent);
+  border-color: color-mix(in srgb, var(--lp-yellow) 38%, transparent);
 }
-.lp-chip-violet {
-  color: var(--lp-violet-soft);
-  background: color-mix(in srgb, var(--lp-violet) 14%, transparent);
-  border-color: color-mix(in srgb, var(--lp-violet) 34%, transparent);
+/* The unaccented chip — everything that is merely a label. */
+.lp-chip-neutral {
+  color: var(--muted-foreground);
+  background: var(--secondary);
+  border-color: var(--border);
+}
+
+/* Inside a MockScreen the surface is always dark, whatever the page theme is.
+   Re-point the theme-aware tokens to their dark-mode values there, so accent
+   text and hairlines inside the fake product screenshot stay readable in light
+   mode instead of rendering dark-amber-on-near-black. Anything using
+   --lp-yellow-ink, --border or --card inside a mock picks this up for free. */
+.lp-mock {
+  --lp-yellow-ink: #f9e400;
+  --border: var(--lp-hairline);
+  --card: var(--lp-mock-surface);
+  --secondary: var(--lp-mock-surface-2);
+  --foreground: var(--lp-ink);
+  --muted-foreground: var(--lp-ink-dim);
 }
 
 /* Section-lead icon tile (mirrors the logo motif) */
@@ -368,25 +407,33 @@ html[lang="ar"] p {
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 0.75rem;
-  background: linear-gradient(150deg, rgba(109, 92, 255, 0.22), rgba(73, 228, 255, 0.14));
-  border: 1px solid var(--lp-hairline-strong);
-  color: var(--lp-cyan);
+  background: color-mix(in srgb, var(--lp-yellow) 12%, var(--secondary));
+  border: 1px solid color-mix(in srgb, var(--lp-yellow) 26%, var(--border));
+  color: var(--lp-yellow-ink);
 }
 
-/* Glow bloom behind hero / bands */
+/* Glow bloom behind hero / bands.
+
+   NOTE: no `filter: blur()` here. This used to be blur(80px), and two of these
+   over an animating 3D scene was the single largest source of jank on low-end
+   phones — a full-viewport blur re-rasterizes every frame the nebula drifts.
+   A radial-gradient with a wide, soft falloff is visually equivalent at a
+   fraction of the cost, because it composites instead of filtering. Callers
+   supply the gradient; keep the outer stop fully transparent so the edge is
+   soft without a blur pass. */
 .lp-nebula {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.5;
+  opacity: 0.55;
   pointer-events: none;
 }
 
-/* Dashed / glow divider */
+/* Blueprint grid texture. Theme-aware, so it reads as faint ink on light and
+   faint light on dark. */
 .lp-grid-bg {
   background-image:
-    linear-gradient(var(--lp-hairline) 1px, transparent 1px),
-    linear-gradient(90deg, var(--lp-hairline) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--foreground) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--foreground) 7%, transparent) 1px, transparent 1px);
   background-size: 44px 44px;
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
   mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
@@ -454,9 +501,9 @@ html.js [data-reveal][data-visible="true"] {
 
 /* Pulse (rising dots, live glow) */
 @keyframes lp-pulse-ring {
-  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--lp-cyan) 55%, transparent); }
-  70% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--lp-cyan) 0%, transparent); }
-  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--lp-cyan) 0%, transparent); }
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--lp-yellow) 55%, transparent); }
+  70% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--lp-yellow) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--lp-yellow) 0%, transparent); }
 }
 .lp-pulse { animation: lp-pulse-ring 2.4s var(--ease-out-expo) infinite; }
 
@@ -487,7 +534,7 @@ html.js [data-reveal][data-visible="true"] {
   height: 1.05em;
   margin-inline-start: 2px;
   vertical-align: text-bottom;
-  background: var(--lp-cyan);
+  background: var(--lp-yellow);
   animation: lp-caret 1s step-end infinite;
 }
 
@@ -503,7 +550,9 @@ html.js [data-reveal][data-visible="true"] {
 @media (hover: hover) {
   .lp-lift:hover {
     transform: translateY(-4px);
-    box-shadow: 0 24px 70px rgba(9, 10, 24, 0.6), 0 0 0 1px color-mix(in srgb, var(--lp-violet) 35%, transparent);
+    box-shadow:
+      0 24px 70px color-mix(in srgb, var(--foreground) 16%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--lp-yellow) 40%, transparent);
   }
 }
 
@@ -515,9 +564,9 @@ html.js [data-reveal][data-visible="true"] {
 .lp-shimmer {
   background: linear-gradient(
     100deg,
-    var(--lp-surface) 30%,
-    color-mix(in srgb, var(--lp-violet) 18%, var(--lp-surface)) 50%,
-    var(--lp-surface) 70%
+    var(--secondary) 30%,
+    color-mix(in srgb, var(--lp-yellow) 16%, var(--secondary)) 50%,
+    var(--secondary) 70%
   );
   background-size: 220% 100%;
   animation: lp-shimmer 3.2s ease-in-out infinite;
@@ -553,10 +602,15 @@ html.js [data-reveal][data-visible="true"] {
 [dir="rtl"] .lp-orbit { animation-direction: reverse; }
 
 @keyframes lp-node-lit {
-  0% { box-shadow: 0 0 0 0 rgba(73, 228, 255, 0); border-color: var(--lp-hairline); color: var(--lp-ink-dim); }
-  6% { box-shadow: 0 0 30px 2px rgba(73, 228, 255, 0.45); border-color: var(--lp-cyan); color: var(--lp-cyan); background: color-mix(in srgb, var(--lp-cyan) 14%, var(--lp-indigo)); }
-  22% { box-shadow: 0 0 0 0 rgba(73, 228, 255, 0); border-color: var(--lp-hairline); color: var(--lp-ink-dim); }
-  100% { box-shadow: 0 0 0 0 rgba(73, 228, 255, 0); border-color: var(--lp-hairline); color: var(--lp-ink-dim); }
+  0% { box-shadow: 0 0 0 0 transparent; border-color: var(--border); color: var(--muted-foreground); }
+  6% {
+    box-shadow: 0 0 30px 2px color-mix(in srgb, var(--lp-yellow) 45%, transparent);
+    border-color: var(--lp-yellow);
+    color: var(--lp-yellow-ink);
+    background: color-mix(in srgb, var(--lp-yellow) 12%, var(--card));
+  }
+  22% { box-shadow: 0 0 0 0 transparent; border-color: var(--border); color: var(--muted-foreground); }
+  100% { box-shadow: 0 0 0 0 transparent; border-color: var(--border); color: var(--muted-foreground); }
 }
 
 @keyframes lp-ring-flow {
@@ -599,7 +653,7 @@ html.js [data-reveal][data-visible="true"] {
   .lp-hairline,
   .lp-card,
   .lp-glass {
-    border-color: rgba(255, 255, 255, 0.4);
+    border-color: color-mix(in srgb, var(--foreground) 45%, transparent);
   }
 }
 

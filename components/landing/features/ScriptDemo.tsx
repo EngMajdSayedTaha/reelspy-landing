@@ -30,10 +30,13 @@ export function ScriptDemo({ labels, defaultLang }: { labels: Labels; defaultLan
   const rootRef = useRef<HTMLDivElement>(null);
 
   const script = lang === "ar" ? labels.scriptAr : labels.script;
+  // The three labels used to be three different hues. Under the one-accent
+  // system the accent marks what matters — the hook and the call to action —
+  // and the body label stays neutral.
   const fields = [
-    { label: labels.hook, text: script.hook, accent: "text-lp-violet-soft" },
-    { label: labels.bodyLabel, text: script.body, accent: "text-lp-blue" },
-    { label: labels.cta, text: script.cta, accent: "text-lp-cyan" },
+    { label: labels.hook, text: script.hook, accent: "text-lp-yellow-ink" },
+    { label: labels.bodyLabel, text: script.body, accent: "text-lp-ink-dim" },
+    { label: labels.cta, text: script.cta, accent: "text-lp-yellow-ink" },
   ];
 
   useEffect(() => {
@@ -98,7 +101,7 @@ export function ScriptDemo({ labels, defaultLang }: { labels: Labels; defaultLan
                   restart();
                 }}
                 className={`rounded-full px-2.5 py-1 text-[0.72rem] font-medium transition ${
-                  lang === (i === 1 ? "ar" : "en") ? "lp-gradient-bg text-white" : "text-lp-ink-dim hover:text-lp-ink"
+                  lang === (i === 1 ? "ar" : "en") ? "lp-cta-bg" : "text-lp-ink-dim hover:text-lp-ink"
                 }`}
               >
                 {c}
@@ -146,7 +149,7 @@ export function ScriptDemo({ labels, defaultLang }: { labels: Labels; defaultLan
 
         {/* Footer */}
         <div className="flex items-center justify-between">
-          <span className="lp-chip lp-chip-violet">
+          <span className="lp-chip lp-chip-neutral">
             <Sparkles size={12} /> {labels.writtenBy}
           </span>
           <button

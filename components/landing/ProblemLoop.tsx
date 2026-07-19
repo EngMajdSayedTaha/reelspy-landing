@@ -47,11 +47,40 @@ export function ProblemLoop({ dict }: { dict: Dictionary }) {
           <span className="lp-h3 max-w-[26ch] text-balance font-semibold text-foreground">{t.pivot}</span>
         </Reveal>
 
-        <Reveal className="relative mt-6 w-full max-w-[480px]" delay={120}>
-          <div className="relative mx-auto aspect-square w-full">
+        {/* Below sm the circular diagram doesn't work: its four nodes are
+            absolutely positioned at the cardinal points and start overlapping
+            each other and the hub once the circle drops under ~420px. The same
+            four steps read fine as a vertical list, so that's what small
+            screens get. */}
+        <Reveal className="mt-6 flex w-full max-w-[420px] flex-col gap-3 sm:hidden" delay={120}>
+          {NODES.map((n, i) => {
+            const step = t.loop[n.key as keyof typeof t.loop];
+            const Icon = n.icon;
+            return (
+              <div
+                key={n.key}
+                className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4"
+              >
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border text-lp-yellow-ink">
+                  <Icon size={18} strokeWidth={1.7} />
+                </span>
+                <div className="min-w-0">
+                  <div className="text-sm font-semibold text-foreground">{step.k}</div>
+                  <div className="mt-0.5 text-[0.8rem] leading-snug text-muted-foreground">{step.d}</div>
+                </div>
+                <span className="ms-auto shrink-0 self-center text-xs tabular text-muted-foreground/60">
+                  {i + 1}
+                </span>
+              </div>
+            );
+          })}
+        </Reveal>
+
+        <Reveal className="relative mt-6 hidden w-full max-w-[480px] sm:block" delay={120}>
+          <div className="relative mx-auto aspect-square w-full" style={{ containerType: "inline-size" }}>
             {/* Ring */}
             <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full -rotate-90" aria-hidden>
-              <circle cx="50" cy="50" r="35" fill="none" stroke="var(--lp-hairline)" strokeWidth="0.5" />
+              <circle cx="50" cy="50" r="35" fill="none" stroke="var(--border)" strokeWidth="0.5" />
               <circle
                 cx="50"
                 cy="50"
@@ -65,9 +94,9 @@ export function ProblemLoop({ dict }: { dict: Dictionary }) {
               />
               <defs>
                 <linearGradient id="loopGrad" x1="0" y1="0" x2="100" y2="100">
-                  <stop offset="0" stopColor="#6d5cff" />
-                  <stop offset="0.5" stopColor="#4e7dff" />
-                  <stop offset="1" stopColor="#49e4ff" />
+                  <stop offset="0" stopColor="var(--lp-yellow)" />
+                  <stop offset="0.5" stopColor="var(--lp-yellow)" stopOpacity="0.45" />
+                  <stop offset="1" stopColor="var(--lp-yellow)" />
                 </linearGradient>
               </defs>
             </svg>
@@ -76,8 +105,8 @@ export function ProblemLoop({ dict }: { dict: Dictionary }) {
             <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 h-0 w-0">
               <div className="lp-orbit absolute h-0 w-0">
                 <span
-                  className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-lp-cyan"
-                  style={{ top: "-35%", boxShadow: "0 0 16px 4px rgba(73,228,255,0.7)" }}
+                  className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-lp-yellow"
+                  style={{ top: "-35%", boxShadow: "0 0 16px 4px rgba(249,228,0,0.6)" }}
                 />
               </div>
             </div>
@@ -94,7 +123,7 @@ export function ProblemLoop({ dict }: { dict: Dictionary }) {
               return (
                 <div
                   key={n.key}
-                  className={`absolute w-[140px] -translate-x-1/2 -translate-y-1/2 ${n.pos}`}
+                  className={`absolute w-[clamp(112px,30cqw,140px)] -translate-x-1/2 -translate-y-1/2 ${n.pos}`}
                 >
                   <div className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-card/80 p-3 text-center backdrop-blur">
                     <span
@@ -130,8 +159,8 @@ function LoopHub() {
       <path d="M17 3v3.5h-3.5M7 21v-3.5h3.5" stroke="url(#hubGrad)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       <defs>
         <linearGradient id="hubGrad" x1="0" y1="0" x2="24" y2="24">
-          <stop offset="0" stopColor="#6d5cff" />
-          <stop offset="1" stopColor="#49e4ff" />
+          <stop offset="0" stopColor="var(--lp-yellow)" />
+          <stop offset="1" stopColor="var(--lp-yellow-ink)" />
         </linearGradient>
       </defs>
     </svg>

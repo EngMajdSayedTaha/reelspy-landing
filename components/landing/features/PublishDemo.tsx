@@ -74,8 +74,8 @@ export function PublishDemo({ labels }: { labels: Labels }) {
           <svg viewBox="0 0 100 72" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" aria-hidden>
             <defs>
               <linearGradient id="pubFlow" x1="0" y1="0" x2="100" y2="0">
-                <stop offset="0" stopColor="#6d5cff" />
-                <stop offset="1" stopColor="#49e4ff" />
+                <stop offset="0" stopColor="var(--lp-yellow)" />
+                <stop offset="1" stopColor="var(--lp-yellow-ink)" />
               </linearGradient>
             </defs>
             {PATHS.map((d, i) => (
@@ -100,11 +100,11 @@ export function PublishDemo({ labels }: { labels: Labels }) {
             className="fanout-unflip absolute flex flex-col items-center gap-1.5"
             style={{ left: "3%", top: "50%", transform: "translateY(-50%)", width: "27%" }}
           >
-            <div className="relative grid aspect-[9/12] w-full place-items-center overflow-hidden rounded-lg border border-[var(--lp-hairline)]" style={{ background: "linear-gradient(150deg,#6d5cff,#49e4ff)" }}>
+            <div className="relative grid aspect-[9/12] w-full place-items-center overflow-hidden rounded-lg border border-[var(--lp-hairline)]" style={{ background: "linear-gradient(150deg,#f9e400,#a16207)" }}>
               <Play size={16} className="text-white" fill="currentColor" />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.35),transparent_55%)]" />
             </div>
-            <span className="lp-chip lp-chip-cyan whitespace-nowrap text-[0.6rem]">
+            <span className="lp-chip lp-chip-accent whitespace-nowrap text-[0.6rem]">
               <Clock size={9} /> {labels.schedule}
             </span>
           </div>
@@ -116,7 +116,7 @@ export function PublishDemo({ labels }: { labels: Labels }) {
             return (
               <div
                 key={n.id}
-                className="fanout-unflip absolute flex items-center gap-2 rounded-lg border bg-lp-indigo px-2 py-1.5 transition-all duration-500"
+                className="fanout-unflip absolute flex items-center gap-2 rounded-lg border bg-lp-mock-surface px-2 py-1.5 transition-all duration-500"
                 style={{
                   left: "58%",
                   top: `${n.y}%`,
@@ -126,13 +126,13 @@ export function PublishDemo({ labels }: { labels: Labels }) {
                   boxShadow: done ? "0 0 20px rgba(73,228,255,0.28)" : "none",
                 }}
               >
-                <span className={`shrink-0 transition-colors ${done ? "text-lp-cyan" : "text-lp-ink-dim"}`}>
+                <span className={`shrink-0 transition-colors ${done ? "text-lp-yellow-ink" : "text-lp-ink-dim"}`}>
                   <Mark size={16} />
                 </span>
                 <span className="min-w-0 flex-1 truncate text-[0.68rem] text-lp-ink-dim">{n.cap}</span>
                 <span
                   className={`grid h-4 w-4 shrink-0 place-items-center rounded-full transition-all duration-300 ${
-                    done ? "scale-100 bg-lp-cyan text-lp-space" : "scale-0 bg-transparent"
+                    done ? "scale-100 bg-lp-yellow text-lp-yellow-fg" : "scale-0 bg-transparent"
                   }`}
                 >
                   <Check size={11} strokeWidth={3} />
@@ -144,26 +144,26 @@ export function PublishDemo({ labels }: { labels: Labels }) {
 
         {/* Auto-reply chat sim */}
         <div className="rounded-xl border border-[var(--lp-hairline)] bg-white/[0.02] p-3">
-          <div className="mb-2.5 flex items-center gap-1.5 text-[0.72rem] font-semibold text-lp-cyan">
+          <div className="mb-2.5 flex items-center gap-1.5 text-[0.72rem] font-semibold text-lp-yellow-ink">
             <Zap size={13} /> {labels.autoReply}
           </div>
           <div className="grid gap-2">
             {/* Incoming comment */}
             <div className={`flex items-start gap-2 transition-all duration-500 ${showComment ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"}`}>
-              <span className="mt-0.5 h-6 w-6 shrink-0 rounded-full bg-gradient-to-br from-lp-violet to-lp-blue" />
+              <span className="mt-0.5 h-6 w-6 shrink-0 rounded-full bg-secondary" />
               <div className="rounded-2xl rounded-tl-sm bg-white/[0.05] px-3 py-1.5 text-[0.78rem] text-lp-ink" dir="ltr">
                 {labels.comment}
               </div>
             </div>
             {/* Public reply */}
             <div className={`flex items-start justify-end gap-2 transition-all duration-500 ${showReply ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"}`}>
-              <div className="lp-gradient-bg rounded-2xl rounded-tr-sm px-3 py-1.5 text-[0.78rem] font-medium text-white">
+              <div className="lp-cta-bg rounded-2xl rounded-tr-sm px-3 py-1.5 text-[0.78rem] font-medium">
                 {labels.reply}
               </div>
             </div>
             {/* DM */}
             <div className={`flex items-center gap-2 transition-all duration-500 ${showDM ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"}`}>
-              <span className="lp-chip lp-chip-violet shrink-0">DM</span>
+              <span className="lp-chip lp-chip-neutral shrink-0">DM</span>
               <div className="min-w-0 flex-1 truncate rounded-lg border border-[var(--lp-hairline)] bg-white/[0.03] px-3 py-1.5 text-[0.76rem] text-lp-ink-dim" dir="ltr">
                 {labels.dm}
               </div>

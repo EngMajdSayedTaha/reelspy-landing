@@ -64,13 +64,13 @@ export function TranscriptDemo({ labels }: { labels: Labels }) {
         {/* Reel being transcribed */}
         <div className="rounded-xl border border-[var(--lp-hairline)] bg-white/[0.02] p-3">
           <div className="flex items-center gap-3">
-            <div className="relative grid h-12 w-9 shrink-0 place-items-center overflow-hidden rounded-md" style={{ background: "linear-gradient(150deg,#6d5cff,#49e4ff)" }}>
+            <div className="relative grid h-12 w-9 shrink-0 place-items-center overflow-hidden rounded-md" style={{ background: "linear-gradient(150deg,#f9e400,#a16207)" }}>
               <Play size={13} className="text-white/90" fill="currentColor" />
             </div>
             <div className="flex-1">
               <div className="text-[0.8rem] font-medium text-lp-ink" dir="ltr">@hooks.daily</div>
-              <div className="mt-1 flex items-center gap-1.5 text-[0.72rem] text-lp-cyan">
-                <span className={`h-1.5 w-1.5 rounded-full bg-lp-cyan ${revealed < LINES.length && !reduced ? "lp-pulse" : ""}`} />
+              <div className="mt-1 flex items-center gap-1.5 text-[0.72rem] text-lp-yellow-ink">
+                <span className={`h-1.5 w-1.5 rounded-full bg-lp-yellow ${revealed < LINES.length && !reduced ? "lp-pulse" : ""}`} />
                 {revealed < LINES.length && !reduced ? labels.transcribing : "Transcript"}
               </div>
             </div>
@@ -86,9 +86,9 @@ export function TranscriptDemo({ labels }: { labels: Labels }) {
                   key={i}
                   className={`rounded-lg px-2.5 py-1.5 text-[0.78rem] leading-snug transition-all duration-500 ${
                     shown ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"
-                  } ${isHook ? "border border-lp-violet/40 bg-lp-violet/10 font-medium text-lp-ink" : "text-lp-ink-dim"}`}
+                  } ${isHook ? "border border-lp-yellow/40 bg-lp-yellow/10 font-medium text-lp-ink" : "text-lp-ink-dim"}`}
                 >
-                  {isHook && <Quote size={12} className="mb-0.5 me-1 inline text-lp-violet-soft" />}
+                  {isHook && <Quote size={12} className="mb-0.5 me-1 inline text-lp-yellow-ink" />}
                   {line}
                 </p>
               );
@@ -100,7 +100,7 @@ export function TranscriptDemo({ labels }: { labels: Labels }) {
         <div className="rounded-xl border border-[var(--lp-hairline)] bg-white/[0.02] p-3">
           <div className="mb-2.5 flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-[0.78rem] font-semibold text-lp-ink">
-              <Sparkles size={14} className="text-lp-cyan" /> {labels.hookLibrary}
+              <Sparkles size={14} className="text-lp-yellow-ink" /> {labels.hookLibrary}
             </div>
             <div className="flex items-center gap-1 rounded-md border border-[var(--lp-hairline)] px-2 py-1 text-[0.68rem] text-lp-ink-dim">
               <Search size={11} /> hooks
@@ -111,22 +111,22 @@ export function TranscriptDemo({ labels }: { labels: Labels }) {
             <li
               className={`flex items-center gap-2 overflow-hidden rounded-lg border px-2.5 py-2 transition-all duration-500 ${
                 saved
-                  ? "max-h-16 border-lp-cyan/45 bg-lp-cyan/10 opacity-100"
+                  ? "max-h-16 border-lp-yellow/45 bg-lp-yellow/10 opacity-100"
                   : "max-h-0 border-transparent py-0 opacity-0"
               }`}
             >
-              <Check size={14} className="shrink-0 text-lp-cyan" />
+              <Check size={14} className="shrink-0 text-lp-yellow-ink" />
               <span className="min-w-0 flex-1 truncate text-[0.76rem] font-medium text-lp-ink">{LINES[0]}</span>
-              <span className="lp-chip lp-chip-cyan tabular shrink-0">94</span>
+              <span className="lp-chip lp-chip-accent tabular shrink-0">94</span>
             </li>
             {BASE_HOOKS.map((h, i) => (
               <li key={i} className="flex items-center gap-2 rounded-lg border border-[var(--lp-hairline)] bg-white/[0.02] px-2.5 py-2">
                 <span className="min-w-0 flex-1 truncate text-[0.76rem] text-lp-ink-dim">{h.text}</span>
-                <span className="lp-chip lp-chip-violet tabular shrink-0">{h.score}</span>
+                <span className="lp-chip lp-chip-neutral tabular shrink-0">{h.score}</span>
               </li>
             ))}
           </ul>
-          <div className={`mt-2 flex items-center gap-1.5 text-[0.7rem] font-medium text-lp-cyan transition-opacity duration-500 ${saved ? "opacity-100" : "opacity-0"}`}>
+          <div className={`mt-2 flex items-center gap-1.5 text-[0.7rem] font-medium text-lp-yellow-ink transition-opacity duration-500 ${saved ? "opacity-100" : "opacity-0"}`}>
             <Check size={12} /> {labels.savedHook}
           </div>
         </div>

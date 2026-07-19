@@ -24,20 +24,23 @@ export function Pricing({ dict }: { dict: Dictionary }) {
               key={i}
               className={cn(
                 "relative flex min-w-[80%] shrink-0 snap-center flex-col rounded-2xl p-6 sm:min-w-0",
-                isPro
-                  ? "lp-gradient-border order-first text-lp-ink sm:order-none"
-                  : "border border-border bg-card"
+                isPro ? "lp-gradient-border order-first sm:order-none" : "border border-border bg-card"
               )}
             >
               {/* Badge */}
               {isPro && (
-                <span className="absolute -top-3 start-6 rounded-full bg-gradient-to-r from-lp-violet to-lp-cyan px-3 py-1 text-[0.68rem] font-semibold text-white shadow">
+                <span className="absolute -top-3 start-6 rounded-full bg-lp-yellow px-3 py-1 text-[0.68rem] font-semibold text-lp-yellow-fg shadow">
                   {t.mostPopular}
                 </span>
               )}
-              <div className={cn("relative flex flex-col", isPro && "text-lp-ink")}>
+              {/* The Pro card no longer needs its own text colors: it used to
+                  sit on a dark gradient panel while the others were light, so
+                  every label had to branch. Now every card is a themed surface
+                  and the highlight is carried by the animated accent border
+                  plus the filled CTA. */}
+              <div className="relative flex flex-col">
                 <div className="flex items-center gap-2">
-                  <h3 className={cn("text-lg font-semibold", isPro ? "text-lp-ink" : "text-foreground")}>{plan.name}</h3>
+                  <h3 className="text-lg font-semibold text-foreground">{plan.name}</h3>
                   {isStudio && (
                     <span className="rounded-full border border-border px-2 py-0.5 text-[0.62rem] font-medium text-muted-foreground">
                       {t.forStudios}
@@ -46,13 +49,13 @@ export function Pricing({ dict }: { dict: Dictionary }) {
                 </div>
 
                 <div className="mt-4 flex items-end gap-1.5">
-                  {!rtl && <span className={cn("mb-1.5 text-sm font-medium", isPro ? "text-lp-ink-dim" : "text-muted-foreground")}>{t.currency}</span>}
-                  <span className={cn("tabular text-4xl font-semibold", isPro ? "text-lp-ink" : "text-foreground")}>{plan.price}</span>
-                  {rtl && <span className={cn("mb-1.5 text-sm font-medium", isPro ? "text-lp-ink-dim" : "text-muted-foreground")}>{t.currency}</span>}
-                  <span className={cn("mb-1.5 text-sm", isPro ? "text-lp-ink-dim" : "text-muted-foreground")}>{t.perMonth}</span>
+                  {!rtl && <span className="mb-1.5 text-sm font-medium text-muted-foreground">{t.currency}</span>}
+                  <span className="tabular text-4xl font-semibold text-foreground">{plan.price}</span>
+                  {rtl && <span className="mb-1.5 text-sm font-medium text-muted-foreground">{t.currency}</span>}
+                  <span className="mb-1.5 text-sm text-muted-foreground">{t.perMonth}</span>
                 </div>
 
-                <p className={cn("mt-2 min-h-[2.5rem] text-[0.82rem] leading-snug", isPro ? "text-lp-ink-dim" : "text-muted-foreground")}>
+                <p className="mt-2 min-h-[2.5rem] text-[0.82rem] leading-snug text-muted-foreground">
                   {plan.tagline}
                 </p>
 
@@ -68,8 +71,8 @@ export function Pricing({ dict }: { dict: Dictionary }) {
 
                 <ul className="mt-6 flex flex-col gap-2.5">
                   {plan.features.map((feat, fi) => (
-                    <li key={fi} className={cn("flex items-start gap-2 text-[0.82rem]", isPro ? "text-lp-ink-dim" : "text-muted-foreground")}>
-                      <Check size={15} className={cn("mt-0.5 shrink-0", isPro ? "text-lp-cyan" : "text-brand")} />
+                    <li key={fi} className="flex items-start gap-2 text-[0.82rem] text-muted-foreground">
+                      <Check size={15} className="mt-0.5 shrink-0 text-lp-yellow-ink" />
                       <span>{feat}</span>
                     </li>
                   ))}

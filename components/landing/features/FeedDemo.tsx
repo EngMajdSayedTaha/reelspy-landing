@@ -15,11 +15,11 @@ type Labels = {
 type Reel = { id: string; name: string; grad: string; score: number; mult: number };
 
 const REELS: Reel[] = [
-  { id: "a", name: "@fit.mia", grad: "linear-gradient(150deg,#6d5cff,#4e7dff)", score: 640, mult: 5.2 },
-  { id: "b", name: "@chef.omar", grad: "linear-gradient(150deg,#4e7dff,#49e4ff)", score: 1520, mult: 1.4 },
-  { id: "c", name: "@code.sam", grad: "linear-gradient(150deg,#a78bff,#6d5cff)", score: 910, mult: 3.1 },
-  { id: "d", name: "@travel.lea", grad: "linear-gradient(150deg,#2fe0ff,#4e7dff)", score: 1180, mult: 2.0 },
-  { id: "e", name: "@studio.k", grad: "linear-gradient(150deg,#6d5cff,#2fe0ff)", score: 430, mult: 4.4 },
+  { id: "a", name: "@fit.mia", grad: "linear-gradient(150deg,#f9e400,#a16207)", score: 640, mult: 5.2 },
+  { id: "b", name: "@chef.omar", grad: "linear-gradient(150deg,#3f3f46,#27272d)", score: 1520, mult: 1.4 },
+  { id: "c", name: "@code.sam", grad: "linear-gradient(150deg,#52525b,#34343b)", score: 910, mult: 3.1 },
+  { id: "d", name: "@travel.lea", grad: "linear-gradient(150deg,#3f3f46,#27272d)", score: 1180, mult: 2.0 },
+  { id: "e", name: "@studio.k", grad: "linear-gradient(150deg,#52525b,#34343b)", score: 430, mult: 4.4 },
 ];
 
 const RISING = [
@@ -107,16 +107,16 @@ export function FeedDemo({ labels }: { labels: Labels }) {
                 aria-pressed={sort === mode}
                 onClick={() => pick(mode)}
                 className={`rounded-full px-3 py-1.5 transition ${
-                  sort === mode ? "lp-gradient-bg text-white shadow" : "text-lp-ink-dim hover:text-lp-ink"
+                  sort === mode ? "lp-cta-bg shadow" : "text-lp-ink-dim hover:text-lp-ink"
                 }`}
               >
                 {mode === "out" ? labels.sortOut : labels.sortViral}
               </button>
             ))}
           </div>
-          <span className="lp-chip lp-chip-cyan">
+          <span className="lp-chip lp-chip-accent">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="lp-pulse absolute inline-flex h-1.5 w-1.5 rounded-full bg-lp-cyan" />
+              <span className="lp-pulse absolute inline-flex h-1.5 w-1.5 rounded-full bg-lp-yellow" />
             </span>
             {labels.rising}
           </span>
@@ -146,10 +146,10 @@ export function FeedDemo({ labels }: { labels: Labels }) {
                   <div className="mt-1 h-1.5 w-2/3 rounded-full bg-white/8" />
                 </div>
                 <div className="flex shrink-0 items-center gap-1.5">
-                  <span className={`lp-chip tabular transition ${outActive ? "lp-chip-violet" : "lp-chip-violet opacity-45"}`}>
+                  <span className={`lp-chip tabular transition ${outActive ? "lp-chip-neutral" : "lp-chip-neutral opacity-45"}`}>
                     <TrendingUp size={11} />↑ {reel.mult.toFixed(1)}×
                   </span>
-                  <span className={`lp-chip tabular transition ${!outActive ? "lp-chip-cyan" : "lp-chip-cyan opacity-45"}`}>
+                  <span className={`lp-chip tabular transition ${!outActive ? "lp-chip-accent" : "lp-chip-accent opacity-45"}`}>
                     <Flame size={11} />
                     {reel.score.toLocaleString()}
                   </span>
@@ -161,7 +161,7 @@ export function FeedDemo({ labels }: { labels: Labels }) {
 
         {/* Rising Now rail */}
         <div className="mt-4 rounded-xl border border-[var(--lp-hairline)] bg-gradient-to-br from-[rgba(73,228,255,0.08)] to-transparent p-3">
-          <div className="mb-2 flex items-center gap-1.5 text-[0.72rem] font-semibold uppercase tracking-wide text-lp-cyan">
+          <div className="mb-2 flex items-center gap-1.5 text-[0.72rem] font-semibold uppercase tracking-wide text-lp-yellow-ink">
             <ArrowUpRight size={13} /> {labels.rising}
           </div>
           <div className="flex gap-2 overflow-hidden">
@@ -172,7 +172,7 @@ export function FeedDemo({ labels }: { labels: Labels }) {
                   <div className="truncate text-[0.72rem] font-medium text-lp-ink" dir="ltr">
                     {r.name}
                   </div>
-                  <div className="text-[0.68rem] font-semibold tabular text-lp-cyan">+{r.rate}%/hr</div>
+                  <div className="text-[0.68rem] font-semibold tabular text-lp-yellow-ink">+{r.rate}%/hr</div>
                 </div>
               </div>
             ))}

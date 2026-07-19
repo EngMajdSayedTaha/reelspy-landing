@@ -31,8 +31,8 @@ export function BeforeAfter({ dict }: { dict: Dictionary }) {
               <div className="flex items-center justify-center text-muted-foreground/50">
                 <ArrowRight size={16} className="rtl:-scale-x-100" />
               </div>
-              <div className="flex items-center gap-2.5 rounded-xl border border-lp-violet/25 bg-gradient-to-br from-lp-violet/[0.08] to-lp-cyan/[0.05] px-4 py-3.5">
-                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-gradient-to-br from-lp-violet to-lp-cyan text-white">
+              <div className="flex items-center gap-2.5 rounded-xl border border-lp-yellow/30 bg-lp-yellow/[0.07] px-4 py-3.5">
+                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-lp-yellow text-lp-yellow-fg">
                   <Check size={12} strokeWidth={3} />
                 </span>
                 <span className="text-[0.82rem] font-medium text-foreground">{row.after}</span>

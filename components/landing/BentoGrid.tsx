@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n/en";
 
 const ICONS = [BarChart3, CalendarDays, Boxes, Compass, Palette, Languages, Download, Users];
-// Bento spans: first two tiles are featured (wider).
+// Bento spans: the first two tiles are featured (double width). At the 2-column
+// tier that means one featured tile per row; at 4 columns they pair up.
 const SPANS = ["sm:col-span-2", "sm:col-span-2", "", "", "", "", "", ""];
 
 export function BentoGrid({ dict }: { dict: Dictionary }) {
@@ -13,7 +14,10 @@ export function BentoGrid({ dict }: { dict: Dictionary }) {
   return (
     <Section className="bg-background">
       <SectionHeading eyebrow={t.eyebrow} title={t.h2} align="center" className="mx-auto mb-14" />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+      {/* The 2-column tier matters: going straight from 1 to 4 columns put four
+          tiles (two of them double-width) on one row from 640px up, which was
+          unreadable on a small tablet. */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {t.tiles.map((tile, i) => {
           const Icon = ICONS[i];
           return (
@@ -21,11 +25,11 @@ export function BentoGrid({ dict }: { dict: Dictionary }) {
               key={i}
               delay={(i % 4) * 60}
               className={cn(
-                "sheen lp-lift group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5",
+                "lp-lift group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5",
                 SPANS[i]
               )}
             >
-              <span className="lp-icon-tile h-10 w-10 text-lp-cyan transition-transform duration-300 group-hover:scale-110">
+              <span className="lp-icon-tile h-10 w-10 transition-transform duration-300 group-hover:scale-110">
                 <Icon size={18} strokeWidth={1.7} />
               </span>
               <div>

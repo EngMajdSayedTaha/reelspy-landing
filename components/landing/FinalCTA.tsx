@@ -6,18 +6,32 @@ import type { Dictionary } from "@/lib/i18n/en";
 export function FinalCTA({ dict }: { dict: Dictionary }) {
   const t = dict.finalCta;
   return (
-    <section className="relative overflow-hidden bg-lp-space text-lp-ink" style={{ paddingBlock: "clamp(5rem, 11vh, 8rem)" }}>
+    <section
+      className="relative overflow-hidden border-y border-border bg-surface-2 text-foreground"
+      style={{ paddingBlock: "clamp(5rem, 11vh, 8rem)" }}
+    >
+      {/* The closing band is where the accent earns its keep: a yellow rail
+          across the top, and a single warm bloom behind the copy. */}
+      <div aria-hidden className="absolute inset-x-0 top-0 h-0.5 bg-lp-yellow" />
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="lp-grid-bg absolute inset-0 opacity-40" />
-        <div className="lp-nebula lp-drift" style={{ inset: "auto auto -30% 20%", width: "60%", height: "80%", background: "radial-gradient(circle,#6d5cff,transparent 60%)", opacity: 0.4 }} />
-        <div className="lp-nebula lp-drift" style={{ inset: "-20% 10% auto auto", width: "50%", height: "70%", background: "radial-gradient(circle,#49e4ff,transparent 62%)", opacity: 0.3, animationDelay: "-7s" }} />
+        <div
+          className="lp-nebula lp-drift"
+          style={{
+            inset: "auto auto -30% 20%",
+            width: "60%",
+            height: "80%",
+            background: "radial-gradient(circle, var(--lp-yellow), transparent 60%)",
+            opacity: 0.16,
+          }}
+        />
       </div>
 
       <Reveal className="relative mx-auto max-w-[720px] px-4 text-center sm:px-6">
-        <h2 className="lp-h2 mx-auto max-w-[18ch] text-balance text-lp-ink">
-          {t.h2a} <span className="lp-gradient-text">{t.h2b}</span>
+        <h2 className="lp-h2 mx-auto max-w-[18ch] text-balance text-foreground">
+          {t.h2a} <span className="lp-accent-text">{t.h2b}</span>
         </h2>
-        <p className="lp-lead mx-auto mt-5 max-w-[52ch] text-lp-ink-dim">{t.sub}</p>
+        <p className="lp-lead mx-auto mt-5 max-w-[52ch] text-muted-foreground">{t.sub}</p>
         <div className="mt-9 flex justify-center">
           <CTALink href="/signup" size="lg">
             {t.cta}

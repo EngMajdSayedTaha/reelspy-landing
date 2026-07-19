@@ -15,8 +15,10 @@ type CTAProps = {
 };
 
 /**
- * Primary = brand-gradient pill with a magnetic pull (desktop pointer only) and
- * a glow bloom on hover. Ghost = hairline outline that fills faintly on hover.
+ * Primary = solid brand-yellow pill with a magnetic pull (desktop pointer only)
+ * and a warm glow on hover. Ghost = hairline outline that fills faintly on
+ * hover. Both are theme-aware; the ghost variant used to be white-on-dark only,
+ * which made it invisible once sections stopped being permanently dark.
  */
 export function CTALink({
   href,
@@ -54,9 +56,9 @@ export function CTALink({
   };
   const variants = {
     primary:
-      "lp-gradient-bg text-white shadow-[0_8px_30px_rgba(78,125,255,0.35)] hover:shadow-[0_12px_44px_rgba(73,228,255,0.5)] hover:scale-[1.02] before:absolute before:inset-0 before:rounded-full before:bg-[linear-gradient(180deg,rgba(255,255,255,0.28),transparent_45%)] before:pointer-events-none",
+      "lp-cta-bg shadow-[0_8px_30px_rgba(249,228,0,0.28)] hover:shadow-[0_12px_44px_rgba(249,228,0,0.42)] hover:brightness-[0.96] hover:scale-[1.02] before:absolute before:inset-0 before:rounded-full before:bg-[linear-gradient(180deg,rgba(255,255,255,0.3),transparent_45%)] before:pointer-events-none",
     ghost:
-      "border border-[var(--lp-hairline-strong)] text-lp-ink/90 hover:bg-white/[0.06] hover:border-white/25 backdrop-blur-sm",
+      "border border-border-strong text-foreground hover:bg-accent hover:border-foreground/25 backdrop-blur-sm",
   };
 
   return (

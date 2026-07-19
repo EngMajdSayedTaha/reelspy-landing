@@ -37,12 +37,12 @@ export function Footer({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   ];
 
   return (
-    <footer className="relative border-t border-[var(--lp-hairline)] bg-lp-space text-lp-ink">
+    <footer className="relative border-t border-border bg-surface-2 text-foreground">
       <div className="mx-auto grid max-w-[1240px] grid-cols-2 gap-10 px-4 py-16 sm:px-6 md:grid-cols-[1.6fr_1fr_1fr_1fr]">
         <div className="col-span-2 md:col-span-1">
           <Logo size={30} animated={false} />
-          <p className="mt-4 max-w-[32ch] text-sm text-lp-ink-dim">{t.tagline}</p>
-          <div className="mt-5 flex items-center gap-4 text-lp-ink-dim/70">
+          <p className="mt-4 max-w-[32ch] text-sm text-muted-foreground">{t.tagline}</p>
+          <div className="mt-5 flex items-center gap-4 text-muted-foreground/70">
             <InstagramMark size={18} />
             <TikTokMark size={18} />
             <YouTubeMark size={18} />
@@ -52,11 +52,11 @@ export function Footer({ dict, locale }: { dict: Dictionary; locale: Locale }) {
 
         {columns.map((col) => (
           <nav key={col.title} aria-label={col.title}>
-            <h3 className="text-[0.72rem] font-semibold uppercase tracking-wide text-lp-ink-dim">{col.title}</h3>
+            <h3 className="text-[0.72rem] font-semibold uppercase tracking-wide text-muted-foreground">{col.title}</h3>
             <ul className="mt-4 flex flex-col gap-2.5">
               {col.links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-sm text-lp-ink/80 transition hover:text-lp-cyan">
+                  <Link href={l.href} className="text-sm text-foreground/80 transition hover:text-lp-yellow-ink">
                     {l.label}
                   </Link>
                 </li>
@@ -67,7 +67,7 @@ export function Footer({ dict, locale }: { dict: Dictionary; locale: Locale }) {
       </div>
 
       <div className="border-t border-[var(--lp-hairline)]">
-        <div className="mx-auto flex max-w-[1240px] flex-col items-center justify-between gap-4 px-4 py-6 text-[0.78rem] text-lp-ink-dim sm:flex-row sm:px-6">
+        <div className="mx-auto flex max-w-[1240px] flex-col items-center justify-between gap-4 px-4 py-6 text-[0.78rem] text-muted-foreground sm:flex-row sm:px-6">
           <p>
             © {year} ReelSpy. {t.rights}
           </p>

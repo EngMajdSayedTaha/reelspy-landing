@@ -1,8 +1,14 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-/** Browser-chrome mock frame — reads instantly as "the product". Always dark
- *  (brand-anchored), regardless of page theme. Decorative by default. */
+/** Browser-chrome mock frame — reads instantly as "the product".
+ *
+ *  DELIBERATELY always dark, regardless of page theme. This is the one
+ *  exception to the theme-aware rule: it depicts a screenshot of the app, and
+ *  a screenshot that inverts along with the marketing page around it stops
+ *  reading as a screenshot. It uses the fixed --lp-deep/--lp-mock-* tokens
+ *  rather than the semantic ones for exactly that reason.
+ *  Decorative by default. */
 export function MockScreen({
   children,
   path = "dashboard",
@@ -17,7 +23,7 @@ export function MockScreen({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-3xl border border-[var(--lp-hairline)] bg-lp-space text-lp-ink shadow-[0_30px_80px_rgba(9,10,24,0.5)]",
+        "lp-mock relative overflow-hidden rounded-3xl border border-[var(--lp-hairline)] bg-lp-deep text-lp-ink shadow-[0_30px_80px_rgba(0,0,0,0.45)]",
         className
       )}
       aria-hidden={srLabel ? undefined : "true"}
@@ -34,7 +40,7 @@ export function MockScreen({
           <span className="h-3 w-3 rounded-full bg-[#28c840]/80" />
         </div>
         <div className="mx-auto flex max-w-[70%] items-center gap-1.5 truncate rounded-md border border-[var(--lp-hairline)] bg-white/[0.03] px-3 py-1 text-[0.72rem] text-lp-ink-dim">
-          <span className="h-1.5 w-1.5 rounded-full bg-lp-cyan/70" />
+          <span className="h-1.5 w-1.5 rounded-full bg-lp-yellow/70" />
           <span className="truncate" dir="ltr">reelspy.dev/{path}</span>
         </div>
       </div>

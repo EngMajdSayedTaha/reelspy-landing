@@ -67,14 +67,17 @@ export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
+        // The unscrolled state used to be text-white, which worked only because
+        // the hero behind it was permanently dark. Now that the hero follows
+        // the theme, the nav has to as well.
         scrolled
           ? "bg-background/72 backdrop-blur-xl border-b border-border/70 text-foreground supports-[backdrop-filter]:bg-background/60"
-          : "bg-transparent text-white"
+          : "bg-transparent text-foreground"
       )}
     >
       <nav className="mx-auto flex h-16 max-w-[1240px] items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="#top" aria-label="ReelSpy — home" className="shrink-0">
-          <span className={cn("transition-opacity", scrolled ? "text-foreground" : "text-white")}>
+          <span className="text-foreground transition-opacity">
             <Logo size={30} animated />
           </span>
         </Link>

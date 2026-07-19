@@ -17,14 +17,14 @@ export function LogoStrip({ dict }: { dict: Dictionary }) {
   // Rendered twice back-to-back so the marquee loops seamlessly (translateX -50%).
   const row = (keyPrefix: string) =>
     items.map((it, i) => (
-      <li key={`${keyPrefix}-${i}`} className="flex shrink-0 items-center gap-2.5 px-7 text-lp-ink-dim/75">
-        <span className="text-lp-ink-dim/90">{it.node}</span>
+      <li key={`${keyPrefix}-${i}`} className="flex shrink-0 items-center gap-2.5 px-7 text-muted-foreground/75">
+        <span className="text-muted-foreground/90">{it.node}</span>
         <span className="whitespace-nowrap text-sm font-medium">{it.label}</span>
       </li>
     ));
 
   return (
-    <section aria-label={t.connects} className="relative border-y border-white/5 bg-lp-space py-7 text-lp-ink">
+    <section aria-label={t.connects} className="relative border-y border-border bg-background py-7 text-foreground">
       <p className="sr-only">{t.connects}</p>
       <div
         aria-hidden="true"

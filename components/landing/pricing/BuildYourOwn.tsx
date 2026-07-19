@@ -28,18 +28,18 @@ export function BuildYourOwn({ dict }: { dict: Dictionary }) {
     <div className="lp-gradient-border mt-8 overflow-hidden p-6 sm:p-8">
       <div className="relative grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <div>
-          <div className="flex items-center gap-2 text-lp-cyan">
+          <div className="flex items-center gap-2 text-lp-yellow-ink">
             <SlidersHorizontal size={18} />
             <span className="text-sm font-semibold">{t.byoTitle}</span>
           </div>
-          <p className="mt-2 max-w-[42ch] text-lp-ink-dim">{t.byoBody}</p>
+          <p className="mt-2 max-w-[42ch] text-muted-foreground">{t.byoBody}</p>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {t.byoSliders.map((s, i) => (
               <label key={i} className="block">
                 <div className="mb-1.5 flex items-center justify-between text-[0.78rem]">
-                  <span className="text-lp-ink-dim">{s.label}</span>
-                  <span className="tabular font-semibold text-lp-ink">{vals[i]}</span>
+                  <span className="text-muted-foreground">{s.label}</span>
+                  <span className="tabular font-semibold text-foreground">{vals[i]}</span>
                 </div>
                 <input
                   type="range"
@@ -49,8 +49,8 @@ export function BuildYourOwn({ dict }: { dict: Dictionary }) {
                   value={vals[i]}
                   aria-label={s.label}
                   onChange={(e) => setVals((v) => v.map((x, j) => (j === i ? Number(e.target.value) : x)))}
-                  className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-white/12 accent-[#6d5cff]"
-                  style={{ accentColor: "#6d5cff" }}
+                  className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-secondary"
+                  style={{ accentColor: "var(--lp-yellow)" }}
                   dir={rtl ? "rtl" : "ltr"}
                 />
               </label>
@@ -58,13 +58,13 @@ export function BuildYourOwn({ dict }: { dict: Dictionary }) {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-[var(--lp-hairline)] bg-white/[0.03] p-6 text-center">
-          <span className="text-[0.72rem] font-medium uppercase tracking-wide text-lp-ink-dim">{t.byoLivePrice}</span>
+        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border bg-card p-6 text-center">
+          <span className="text-[0.72rem] font-medium uppercase tracking-wide text-muted-foreground">{t.byoLivePrice}</span>
           <div className="flex items-end justify-center gap-1.5">
-            {!rtl && <span className="mb-1 text-sm font-medium text-lp-ink-dim">{t.currency}</span>}
-            <span className="tabular text-5xl font-semibold text-lp-ink">{price}</span>
-            {rtl && <span className="mb-1 text-sm font-medium text-lp-ink-dim">{t.currency}</span>}
-            <span className="mb-1.5 text-sm text-lp-ink-dim">{t.perMonth}</span>
+            {!rtl && <span className="mb-1 text-sm font-medium text-muted-foreground">{t.currency}</span>}
+            <span className="tabular text-5xl font-semibold text-foreground">{price}</span>
+            {rtl && <span className="mb-1 text-sm font-medium text-muted-foreground">{t.currency}</span>}
+            <span className="mb-1.5 text-sm text-muted-foreground">{t.perMonth}</span>
           </div>
           <CTALink href="/signup" size="md" className="w-full">
             {t.byoCta}

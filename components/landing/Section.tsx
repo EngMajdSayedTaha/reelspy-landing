@@ -13,6 +13,12 @@ export function Section({
   children: ReactNode;
   className?: string;
   containerClassName?: string;
+  /**
+   * Renders the section one elevation step off the page background, to break
+   * up a long scroll. It used to force a fixed near-black regardless of theme,
+   * which is what left light mode looking like alternating stripes of two
+   * different sites.
+   */
   dark?: boolean;
 }) {
   return (
@@ -20,7 +26,7 @@ export function Section({
       id={id}
       className={cn(
         "relative scroll-mt-20",
-        dark && "bg-lp-space text-lp-ink",
+        dark && "bg-surface-2 text-foreground",
         className
       )}
       style={{ paddingBlock: "clamp(4.5rem, 9vh, 7.5rem)" }}
@@ -36,7 +42,6 @@ export function SectionHeading({
   titleAccent,
   align = "center",
   description,
-  dark = false,
   className,
 }: {
   eyebrow?: string;
@@ -44,7 +49,6 @@ export function SectionHeading({
   titleAccent?: string;
   align?: "center" | "start";
   description?: string;
-  dark?: boolean;
   className?: string;
 }) {
   return (
@@ -56,11 +60,11 @@ export function SectionHeading({
       )}
     >
       {eyebrow && <span className="lp-eyebrow">{eyebrow}</span>}
-      <h2 className={cn("lp-h2 max-w-[20ch] text-balance", dark ? "text-lp-ink" : "text-foreground")}>
-        {title} {titleAccent && <span className="lp-gradient-text">{titleAccent}</span>}
+      <h2 className="lp-h2 max-w-[20ch] text-balance text-foreground">
+        {title} {titleAccent && <span className="lp-accent-text">{titleAccent}</span>}
       </h2>
       {description && (
-        <p className={cn("lp-lead max-w-[62ch]", dark ? "text-lp-ink-dim" : "text-muted-foreground")}>
+        <p className="lp-lead max-w-[62ch] text-muted-foreground">
           {description}
         </p>
       )}

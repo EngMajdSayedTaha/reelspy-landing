@@ -64,7 +64,7 @@ export default async function LandingPage() {
       </a>
       <Nav dict={dict} locale={locale} />
       <main>
-        <Hero dict={dict} />
+        <Hero dict={dict} locale={locale} />
         <LogoStrip dict={dict} />
         <ProblemLoop dict={dict} />
         <Features dict={dict} locale={locale} />

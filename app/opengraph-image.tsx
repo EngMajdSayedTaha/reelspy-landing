@@ -15,7 +15,7 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px",
-          backgroundColor: "#090a18",
+          backgroundColor: "#18181f",
           backgroundImage:
             "radial-gradient(700px 500px at 12% 0%, rgba(109,92,255,0.35), transparent 60%), radial-gradient(700px 600px at 100% 100%, rgba(73,228,255,0.28), transparent 60%)",
           fontFamily: "sans-serif",
@@ -32,7 +32,7 @@ export default function OpengraphImage() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "linear-gradient(150deg,#222850,#090a18)",
+              background: "linear-gradient(150deg,#2a2a31,#0e0e11)",
               border: "1px solid rgba(255,255,255,0.12)",
             }}
           >
@@ -42,14 +42,14 @@ export default function OpengraphImage() {
                 height: 0,
                 borderTop: "16px solid transparent",
                 borderBottom: "16px solid transparent",
-                borderLeft: "26px solid #49e4ff",
+                borderLeft: "26px solid #f9e400",
                 marginLeft: 6,
               }}
             />
           </div>
           <div style={{ display: "flex", fontSize: 40, fontWeight: 700, letterSpacing: -1 }}>
             <span>Reel</span>
-            <span style={{ color: "#49e4ff" }}>Spy</span>
+            <span style={{ color: "#f9e400" }}>Spy</span>
           </div>
         </div>
 
@@ -59,7 +59,7 @@ export default function OpengraphImage() {
             <span>Your&nbsp;</span>
             <span
               style={{
-                backgroundImage: "linear-gradient(120deg,#6d5cff,#4e7dff,#49e4ff)",
+                backgroundImage: "linear-gradient(120deg,#f9e400,#f9e400)",
                 backgroundClip: "text",
                 color: "transparent",
               }}
@@ -75,7 +75,7 @@ export default function OpengraphImage() {
 
         {/* Footer strip */}
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <div style={{ height: 6, width: 120, borderRadius: 999, background: "linear-gradient(120deg,#6d5cff,#49e4ff)" }} />
+          <div style={{ height: 6, width: 120, borderRadius: 999, background: "#f9e400" }} />
           <div style={{ fontSize: 24, color: "#a2a2ad" }}>
             Instagram · TikTok · YouTube · Facebook · reelspy.dev
           </div>
