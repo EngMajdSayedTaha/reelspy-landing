@@ -7,6 +7,7 @@ import { Hero } from "@/components/landing/hero/Hero";
 import { LogoStrip } from "@/components/landing/LogoStrip";
 import { ProblemLoop } from "@/components/landing/ProblemLoop";
 import { Features } from "@/components/landing/features/Features";
+import { LiveTrending } from "@/components/landing/showcase/LiveTrending";
 import { NicheRadar } from "@/components/landing/NicheRadar";
 import { BentoGrid } from "@/components/landing/BentoGrid";
 import { Pricing } from "@/components/landing/pricing/Pricing";
@@ -68,6 +69,7 @@ export default async function LandingPage() {
         <LogoStrip dict={dict} />
         <ProblemLoop dict={dict} />
         <Features dict={dict} locale={locale} />
+        <LiveTrending dict={dict} />
         <NicheRadar dict={dict} />
         <BentoGrid dict={dict} />
         <Pricing dict={dict} />

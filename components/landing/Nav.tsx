@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 const SECTIONS = [
   { id: "features", key: "features" as const },
   { id: "how", key: "how" as const },
+  { id: "live", key: "live" as const },
   { id: "pricing", key: "pricing" as const },
   { id: "faq", key: "faq" as const },
 ];
