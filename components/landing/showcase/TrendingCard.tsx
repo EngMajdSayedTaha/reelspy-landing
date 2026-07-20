@@ -49,13 +49,24 @@ export function TrendingCard({ reel, dict }: { reel: ShowcaseReel; dict: Diction
         ) : (
           // Placeholder for reels whose thumbnail we don't self-host. The
           // endpoint nulls out expiring Instagram CDN URLs rather than ship
-          // links that rot, so this is the normal case, not an error state.
+          // links that rot, so this is the normal case, not an error state —
+          // which is exactly why it has to look like a deliberate reel cover,
+          // not an empty box that reads as "the image failed to load". A warm
+          // graphite wash, the blueprint grid texture and a framed play glyph
+          // give it the same visual weight as a real thumbnail.
           <div
-            className="grid h-full w-full place-items-center"
-            style={{ background: "linear-gradient(150deg,#3f3f46,#27272d)" }}
+            className="relative grid h-full w-full place-items-center overflow-hidden"
+            style={{ background: "linear-gradient(155deg,#43434c,#26262d 70%)" }}
             aria-hidden
           >
-            <Play size={28} className="text-white/40" fill="currentColor" />
+            <div className="lp-grid-bg absolute inset-0 opacity-40" />
+            <div
+              className="absolute -inset-x-4 top-0 h-2/3"
+              style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(249,228,0,0.14), transparent 65%)" }}
+            />
+            <span className="relative grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/10 backdrop-blur-sm">
+              <Play size={18} className="translate-x-px text-white/85" fill="currentColor" />
+            </span>
           </div>
         )}
 

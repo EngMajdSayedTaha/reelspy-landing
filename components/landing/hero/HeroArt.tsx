@@ -189,7 +189,13 @@ export function HeroArt({ labels, rtl = false }: { labels: Labels; rtl?: boolean
             <article
               className="w-[clamp(190px,66cqw,290px)] rounded-2xl border bg-card p-3"
               style={{
-                opacity: pos.o,
+                // The stack overlaps tightly by design, so every card showing
+                // its score/multiplier chips at full strength made adjacent
+                // cards' data collide with the focused one — it read as
+                // "conflicting" rather than as a deck. Push the non-focused
+                // cards well back so only the highlighted card carries crisp
+                // data; the rest are depth, not competing signal.
+                opacity: isHot ? 1 : Math.min(pos.o, 0.42),
                 borderColor: isHot ? "var(--lp-yellow)" : "var(--border)",
                 boxShadow: isHot
                   ? "0 24px 70px rgba(0,0,0,0.28), 0 0 0 1px var(--lp-yellow), 0 0 44px rgba(249,228,0,0.3)"
