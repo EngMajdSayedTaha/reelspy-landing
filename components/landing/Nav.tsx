@@ -65,6 +65,7 @@ export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   }, [open]);
 
   return (
+    <>
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
@@ -136,8 +137,16 @@ export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
           </button>
         </div>
       </nav>
+      </header>
 
-      {/* Mobile sheet */}
+      {/* Mobile sheet — rendered as a sibling of <header>, NOT a child.
+          When the page is scrolled the header gets `backdrop-blur-xl`, and a
+          `backdrop-filter` turns an element into the containing block for its
+          `position: fixed` descendants. Nested inside the header, this overlay
+          therefore sized to the 64px header instead of the viewport: its opaque
+          panel covered only the top strip and the menu links overflowed
+          straight over the page content. Hoisting it to the body (which has no
+          such filter) keeps `fixed inset-0` bound to the viewport. */}
       {open && (
         <div className="fixed inset-0 z-[60] lg:hidden" role="dialog" aria-modal="true" aria-label={t.openMenu}>
           <button
@@ -148,7 +157,7 @@ export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
           />
           <div
             ref={sheetRef}
-            className="absolute inset-y-0 end-0 flex w-[min(88vw,360px)] flex-col gap-1 border-s border-border bg-background p-5 text-foreground shadow-2xl"
+            className="absolute inset-y-0 end-0 flex w-[min(88vw,360px)] flex-col gap-1 overflow-y-auto border-s border-border bg-background p-5 text-foreground shadow-2xl"
             style={
               {
                 animation: "riseInSheet 0.28s cubic-bezier(0.22,1,0.36,1) both",
@@ -194,6 +203,6 @@ export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
