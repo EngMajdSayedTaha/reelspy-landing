@@ -40,7 +40,7 @@ export function NicheRadar({ dict }: { dict: Dictionary }) {
             width: "42%",
             height: "52%",
             background: "radial-gradient(circle, var(--lp-yellow), transparent 62%)",
-            opacity: 0.12,
+            ["--lp-bloom" as string]: 0.12,
           }}
         />
       </div>
@@ -92,10 +92,18 @@ export function NicheRadar({ dict }: { dict: Dictionary }) {
               <div
                 className="absolute inset-0"
                 style={{
+                  // Peak alpha down again (0.32 → 0.16) with more intermediate
+                  // stops. The leading edge of a conic gradient is a hard line by
+                  // construction, and at 0.32 against a dark surface that line was
+                  // still reading as a solid spotlight beam rather than a radar
+                  // sweep — most obviously on a phone, where the radar fills the
+                  // full column width. The mask now starts fading at 30% instead
+                  // of 55%, so the cone is brightest near the hub and has
+                  // essentially dissolved before it reaches the outer ring.
                   background:
-                    "conic-gradient(from 0deg, rgba(249,228,0,0.32) 0deg, rgba(249,228,0,0.10) 22deg, rgba(249,228,0,0.03) 46deg, transparent 72deg, transparent 360deg)",
-                  WebkitMaskImage: "radial-gradient(circle at 50% 50%, #000 55%, transparent 78%)",
-                  maskImage: "radial-gradient(circle at 50% 50%, #000 55%, transparent 78%)",
+                    "conic-gradient(from 0deg, rgba(249,228,0,0.16) 0deg, rgba(249,228,0,0.08) 16deg, rgba(249,228,0,0.035) 34deg, rgba(249,228,0,0.012) 54deg, transparent 78deg, transparent 360deg)",
+                  WebkitMaskImage: "radial-gradient(circle at 50% 50%, #000 30%, rgba(0,0,0,0.35) 62%, transparent 82%)",
+                  maskImage: "radial-gradient(circle at 50% 50%, #000 30%, rgba(0,0,0,0.35) 62%, transparent 82%)",
                   animation: "lp-spin 7s linear infinite",
                 }}
               />

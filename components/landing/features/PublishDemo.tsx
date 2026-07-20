@@ -98,7 +98,7 @@ export function PublishDemo({ labels }: { labels: Labels }) {
           {/* Video tile */}
           <div
             className="fanout-unflip absolute flex flex-col items-center gap-1.5"
-            style={{ left: "3%", top: "50%", transform: "translateY(-50%)", width: "27%" }}
+            style={{ left: "3%", top: "50%", transform: "translateY(-50%) var(--unflip, scaleX(1))", width: "27%" }}
           >
             <div className="relative grid aspect-[9/12] w-full place-items-center overflow-hidden rounded-lg border border-[var(--lp-hairline)]" style={{ background: "linear-gradient(150deg,#f9e400,#a16207)" }}>
               <Play size={16} className="text-white" fill="currentColor" />
@@ -120,7 +120,7 @@ export function PublishDemo({ labels }: { labels: Labels }) {
                 style={{
                   left: "58%",
                   top: `${n.y}%`,
-                  transform: "translateY(-50%)",
+                  transform: "translateY(-50%) var(--unflip, scaleX(1))",
                   width: "40%",
                   borderColor: done ? "rgba(73,228,255,0.5)" : "var(--lp-hairline)",
                   boxShadow: done ? "0 0 20px rgba(73,228,255,0.28)" : "none",

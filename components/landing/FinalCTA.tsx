@@ -22,7 +22,7 @@ export function FinalCTA({ dict }: { dict: Dictionary }) {
             width: "60%",
             height: "80%",
             background: "radial-gradient(circle, var(--lp-yellow), transparent 60%)",
-            opacity: 0.16,
+            ["--lp-bloom" as string]: 0.16,
           }}
         />
       </div>

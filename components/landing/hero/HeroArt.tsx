@@ -25,14 +25,19 @@ const CARDS = [
 // pixel height, which is why the cards spilled out of their box on small
 // phones.
 //
-// `mobile: false` cards are hidden below the sm breakpoint — four overlapping
-// cards on a narrow screen read as clutter, two read as a deck. The choice is
-// made in CSS rather than JS so server and client render the same markup.
+// All four cards render at every width now. Hiding the back two below `sm` was
+// meant to avoid clutter, but with the offsets expressed in `cqw` the whole
+// composition already scales with the scene — so the phone was showing a
+// two-card fragment of a four-card deck, which reads as "the other two failed to
+// load" rather than as a deliberate simpler layout.
+//
+// The widest extent is |x| + half the card (33cqw) = 43.5cqw against a 50cqw
+// half-scene, so the deck stays inside its box down to a 320px viewport.
 const LAYOUT = [
-  { x: -10.5, y: 21.8, z: -120, r: -5, o: 0.72, mobile: false },
-  { x: 8.6, y: 9.1, z: -60, r: 3.5, o: 0.85, mobile: false },
-  { x: -6.8, y: -4.5, z: 0, r: -2.5, o: 1, mobile: true },
-  { x: 10, y: -20.9, z: 40, r: 4.5, o: 0.94, mobile: true },
+  { x: -10.5, y: 21.8, z: -120, r: -5, o: 0.72 },
+  { x: 8.6, y: 9.1, z: -60, r: 3.5, o: 0.85 },
+  { x: -6.8, y: -4.5, z: 0, r: -2.5, o: 1 },
+  { x: 10, y: -20.9, z: 40, r: 4.5, o: 0.94 },
 ];
 
 // Thumbnail ramps: graphite by default, warm for the card that's "going viral".
@@ -107,15 +112,9 @@ export function HeroArt({ labels, rtl = false }: { labels: Labels; rtl?: boolean
 
     let timer: ReturnType<typeof setInterval> | null = null;
 
-    // Only highlight a card that's actually visible: below sm the back two are
-    // hidden, and cycling onto one of them would leave the deck dark. Read at
-    // tick time (not render time) so this never affects hydration.
-    const nextHot = (current: number) => {
-      const wide = window.matchMedia("(min-width: 640px)").matches;
-      const candidates = LAYOUT.map((l, i) => (wide || l.mobile ? i : -1)).filter((i) => i >= 0);
-      const pos = candidates.indexOf(current);
-      return candidates[(pos + 1) % candidates.length];
-    };
+    // Every card is visible at every width now, so the highlight just walks the
+    // deck in order.
+    const nextHot = (current: number) => (current + 1) % LAYOUT.length;
 
     const start = () => {
       if (timer) return;
@@ -150,7 +149,7 @@ export function HeroArt({ labels, rtl = false }: { labels: Labels; rtl?: boolean
         style={{
           inset: "8% 12% 22% 8%",
           background: "radial-gradient(circle at 40% 40%, var(--lp-yellow), transparent 60%)",
-          opacity: 0.1,
+          ["--lp-bloom" as string]: 0.1,
         }}
       />
 
@@ -177,7 +176,7 @@ export function HeroArt({ labels, rtl = false }: { labels: Labels; rtl?: boolean
             // grinding. Splitting the two transforms lets them compose.
             <div
               key={card.id}
-              className={["absolute", pos.mobile ? "" : "hidden sm:block"].join(" ")}
+              className="absolute"
               style={{
                 transformStyle: "preserve-3d",
                 transform: `translate3d(${x}cqw, ${pos.y}cqw, ${pos.z + (isHot ? 70 : 0)}px) rotate(${

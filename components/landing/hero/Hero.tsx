@@ -29,7 +29,7 @@ export function Hero({ dict, locale = "en" }: { dict: Dictionary; locale?: Local
             width: "44%",
             height: "56%",
             background: "radial-gradient(circle, var(--lp-yellow), transparent 62%)",
-            opacity: 0.09,
+            ["--lp-bloom" as string]: 0.09,
           }}
         />
         <div
@@ -39,7 +39,7 @@ export function Hero({ dict, locale = "en" }: { dict: Dictionary; locale?: Local
             width: "52%",
             height: "64%",
             background: "radial-gradient(circle, var(--lp-yellow), transparent 64%)",
-            opacity: 0.06,
+            ["--lp-bloom" as string]: 0.06,
             animationDelay: "-8s",
           }}
         />

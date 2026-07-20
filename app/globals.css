@@ -440,8 +440,24 @@ html[lang="ar"] p {
 .lp-nebula {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.55;
   pointer-events: none;
+  /* Brightness is a token, not an inline `opacity`, so it can be scaled in one
+     place. Callers set --lp-bloom; they must NOT set `opacity` directly, or the
+     mobile rule below can't reach them (an inline style beats a stylesheet). */
+  opacity: var(--lp-bloom, 0.12);
+}
+
+/* Phones get roughly half the bloom.
+   These are sized in percentages of their section. On a desktop column a 42%
+   bloom is a soft corner glow; on a 390px phone the same 42% is a huge wash
+   sitting directly behind the body copy, because the single-column layout puts
+   the text exactly where the art used to be. Same CSS, completely different
+   result — which is why tuning the values for desktop kept leaving mobile
+   washed out. Scale the whole system down instead of re-tuning each caller. */
+@media (max-width: 640px) {
+  .lp-nebula {
+    opacity: calc(var(--lp-bloom, 0.12) * 0.45);
+  }
 }
 
 /* Blueprint grid texture. Theme-aware, so it reads as faint ink on light and
@@ -652,8 +668,24 @@ html.js [data-reveal]:not([data-visible="true"]) {
 [dir="rtl"] .fanout-mirror {
   transform: scaleX(-1);
 }
+
+/* Un-flipping the children is handed over as a *custom property*, not as a
+   `transform` declaration.
+
+   The children are absolutely positioned and carry their own inline
+   `transform: translateY(-50%)`. An inline style beats any stylesheet selector,
+   so a rule that set `transform: scaleX(-1)` here never applied — the container
+   mirrored the whole fan-out and nothing ever mirrored the contents back, which
+   rendered every platform label ("Reels", "For You", "Shorts", "Feed"), the
+   schedule chip and the play glyph as backwards text in Arabic.
+
+   A custom property has no such conflict: the stylesheet sets it, and the inline
+   transform composes it in via var(). */
+.fanout-unflip {
+  --unflip: scaleX(1);
+}
 [dir="rtl"] .fanout-mirror .fanout-unflip {
-  transform: scaleX(-1);
+  --unflip: scaleX(-1);
 }
 
 /* ==========================================================================

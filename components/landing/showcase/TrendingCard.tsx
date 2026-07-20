@@ -81,8 +81,14 @@ export function TrendingCard({ reel, dict }: { reel: ShowcaseReel; dict: Diction
           )}
         </div>
 
+        {/* `dir="auto"` rather than a fixed direction: captions are whatever the
+            creator wrote, so the direction has to come from the content, not from
+            the page locale. Inheriting the page's RTL for an English caption put
+            the clamp ellipsis on the wrong end and reordered the trailing
+            fragment ("...xed my lower back in a"). auto resolves per string, so
+            English reads LTR and Arabic reads RTL inside the same grid. */}
         {reel.caption && (
-          <p className="line-clamp-2 text-[0.78rem] leading-snug text-muted-foreground">
+          <p dir="auto" className="line-clamp-2 text-start text-[0.78rem] leading-snug text-muted-foreground">
             {reel.caption}
           </p>
         )}
