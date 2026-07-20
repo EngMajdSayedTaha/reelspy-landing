@@ -385,6 +385,22 @@ html[lang="ar"] p {
   border-color: var(--border);
 }
 
+/* Product mocks must be able to shrink to phone width.
+
+   Grid and flex items default to `min-width: auto`, which refuses to shrink
+   below the content's min-content size. Inside these mocks the content includes
+   `truncate` rows (`white-space: nowrap`), so that floor was ~450px — the
+   transcript/Hook Library mock overflowed its column by ~72px on a 390px phone
+   and got sliced off at the screen edge. The truncation was already there and
+   working; it simply never got the chance to engage, because nothing ever
+   squeezed the row.
+
+   Scoped to .lp-mock and written with :where() so it carries zero specificity —
+   any explicit min-w-* utility on a specific element still wins. */
+.lp-mock :where(div, ul, ol, li, p, span, section, article) {
+  min-width: 0;
+}
+
 /* Inside a MockScreen the surface is always dark, whatever the page theme is.
    Re-point the theme-aware tokens to their dark-mode values there, so accent
    text and hairlines inside the fake product screenshot stay readable in light
@@ -499,12 +515,17 @@ html.js [data-reveal]:not([data-visible="true"]) {
   50% { transform: translateY(-10px) rotate(0.5deg); }
 }
 
-/* Nebula drift */
+/* Nebula drift.
+   Deliberately near-imperceptible. At 16s with an 8% scale swing this was a
+   large, bright shape visibly breathing behind body copy — the eye tracks the
+   movement instead of reading, and on a full-viewport bloom the repaint is not
+   free either. A slower cycle with roughly half the travel and scale keeps the
+   depth cue without the pulsing. */
 @keyframes lp-drift {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(3%, -4%, 0) scale(1.08); }
+  50% { transform: translate3d(1.5%, -2%, 0) scale(1.04); }
 }
-.lp-drift { animation: lp-drift 16s ease-in-out infinite; }
+.lp-drift { animation: lp-drift 26s ease-in-out infinite; }
 
 /* Pulse (rising dots, live glow) */
 @keyframes lp-pulse-ring {

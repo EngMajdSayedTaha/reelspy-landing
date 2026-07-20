@@ -24,7 +24,7 @@ export const en = {
     eyebrow: "For creators, agencies & growth teams",
     h1a: "Your unfair advantage for",
     h1grad: "short-form video.",
-    sub: "ReelSpy watches the creators you admire, spots which reels are over-performing right now, writes original scripts in your voice — and posts them to Instagram, TikTok, YouTube & Facebook at once.",
+    sub: "ReelSpy watches the creators you admire, spots which reels are over-performing right now, writes original scripts in your voice — and posts them straight to Instagram. TikTok, YouTube & Facebook are coming soon.",
     ctaPrimary: "Start free — no card needed",
     ctaSecondary: "See how it works",
     trust1: "Free plan forever",
@@ -37,9 +37,9 @@ export const en = {
     scrollCue: "Scroll to explore",
   },
   proof: {
-    connects: "Connects the platforms you already publish to",
+    connects: "Instagram today — TikTok, YouTube and Facebook coming soon",
     poweredBy: "Powered by Claude AI",
-    builtOn: "Built on Supabase + Vercel",
+    soon: "Soon",
   },
   problem: {
     h2a: "Growing on Reels shouldn't be a",
@@ -112,7 +112,7 @@ export const en = {
     f4: {
       eyebrow: "Publish",
       title: "Post everywhere. Reply to everyone.",
-      body: "Upload once, publish to four platforms with per-platform captions and scheduling. And every keyword comment gets an instant reply plus a DM — 24/7.",
+      body: "Upload once and publish to Instagram with its own captions and scheduling — TikTok, YouTube and Facebook are coming soon. And every keyword comment gets an instant reply plus a DM — 24/7.",
       demo: {
         upload: "Your video",
         schedule: "Scheduled · 6:00 PM",
@@ -206,14 +206,14 @@ export const en = {
         price: "49",
         tagline: "For creators publishing every week.",
         cta: "Get Creator",
-        features: ["30 tracked accounts", "60 AI scripts / month", "30 transcripts / month", "15 auto-replies", "Publishing to all platforms", "Claude Sonnet"],
+        features: ["30 tracked accounts", "60 AI scripts / month", "30 transcripts / month", "15 auto-replies", "Instagram publishing", "Claude Sonnet"],
       },
       {
         name: "Pro",
         price: "149",
         tagline: "For serious growth and bigger catalogs.",
         cta: "Get Pro",
-        features: ["50 tracked accounts", "200 AI scripts / month", "100 transcripts / month", "30 auto-replies", "Publishing to all platforms", "Claude Opus"],
+        features: ["50 tracked accounts", "200 AI scripts / month", "100 transcripts / month", "30 auto-replies", "Instagram publishing", "Claude Opus"],
       },
       {
         name: "Studio",
@@ -263,7 +263,7 @@ export const en = {
       },
       {
         q: "Which platforms does it work with?",
-        a: "Track and learn from Instagram, and publish to Instagram, Facebook, TikTok and YouTube — each with its own captions and schedule. Auto-reply works on Instagram and YouTube.",
+        a: "Today ReelSpy tracks, learns from and publishes to Instagram, with auto-reply on Instagram. Facebook, TikTok and YouTube publishing — each with its own captions and schedule — is in active development and coming soon.",
       },
       {
         q: "Does it work in Arabic?",

@@ -23,8 +23,19 @@ export function TrendingCard({ reel, dict }: { reel: ShowcaseReel; dict: Diction
   const days = daysSince(reel.postedAt);
   const isOutperforming = reel.outperformRatio >= 1.5;
 
+  // A reel is only interactive if the payload gave us somewhere to go. The
+  // curated fixtures ship `permalink: null` on every row, so in demo mode the
+  // card is deliberately inert rather than a link to nowhere — hover lift and
+  // the pointer cursor are gated on the same flag so it doesn't *look*
+  // clickable when it isn't.
+  const href = reel.permalink;
+
   return (
-    <article className="lp-lift group flex flex-col overflow-hidden rounded-2xl border border-border bg-card">
+    <article
+      className={`group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card focus-within:ring-2 focus-within:ring-lp-yellow-ink ${
+        href ? "lp-lift" : ""
+      }`}
+    >
       <div className="relative aspect-[9/16] overflow-hidden bg-secondary">
         {reel.thumbnailUrl ? (
           // eslint-disable-next-line @next/next/no-img-element -- Supabase Storage URLs, not a configured next/image loader.
@@ -91,18 +102,31 @@ export function TrendingCard({ reel, dict }: { reel: ShowcaseReel; dict: Diction
           </span>
         </div>
 
-        {reel.permalink && (
-          <a
-            href={reel.permalink}
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            className="inline-flex items-center gap-1 text-[0.72rem] font-medium text-lp-yellow-ink transition hover:underline"
-          >
+        {href && (
+          <span className="inline-flex items-center gap-1 text-[0.72rem] font-medium text-lp-yellow-ink transition group-hover:underline">
             {t.viewOn}
             <ArrowUpRight size={12} className="rtl:-scale-x-100" />
-          </a>
+          </span>
         )}
       </div>
+
+      {/* Stretched link: the whole card is the hit target, not just the tiny
+          "View on Instagram" line, which was a ~90px tap target on a card the
+          user is obviously trying to tap. Rendered last and absolutely
+          positioned so it covers the card without nesting interactive content
+          inside an anchor. */}
+      {href && (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          className="absolute inset-0 z-10"
+        >
+          <span className="sr-only">
+            {t.viewOn} — @{reel.igUsername}
+          </span>
+        </a>
+      )}
     </article>
   );
 }

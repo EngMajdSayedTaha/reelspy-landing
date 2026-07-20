@@ -150,7 +150,7 @@ export function HeroArt({ labels, rtl = false }: { labels: Labels; rtl?: boolean
         style={{
           inset: "8% 12% 22% 8%",
           background: "radial-gradient(circle at 40% 40%, var(--lp-yellow), transparent 60%)",
-          opacity: 0.16,
+          opacity: 0.1,
         }}
       />
 
@@ -166,25 +166,36 @@ export function HeroArt({ labels, rtl = false }: { labels: Labels; rtl?: boolean
           // not away from it.
           const x = rtl ? -pos.x : pos.x;
           return (
-            <article
+            // Two elements, deliberately. The deck's fan-out lives on the outer
+            // wrapper's `transform`; the idle float lives on the inner card's.
+            // They cannot share one element: a CSS animation outranks an inline
+            // style in the cascade, so `lp-float`'s `transform: translateY(...)`
+            // replaced the whole inline `translate3d(...) rotate(...) scale(...)`
+            // outright. Every card collapsed onto the same spot — the composition
+            // read as a single card, and four full-size shadowed cards animating
+            // on top of each other is what made the hero feel like it was
+            // grinding. Splitting the two transforms lets them compose.
+            <div
               key={card.id}
-              className={[
-                "absolute w-[clamp(190px,66cqw,290px)] rounded-2xl border bg-card p-3",
-                pos.mobile ? "" : "hidden sm:block",
-              ].join(" ")}
+              className={["absolute", pos.mobile ? "" : "hidden sm:block"].join(" ")}
               style={{
                 transformStyle: "preserve-3d",
                 transform: `translate3d(${x}cqw, ${pos.y}cqw, ${pos.z + (isHot ? 70 : 0)}px) rotate(${
                   rtl ? -pos.r : pos.r
                 }deg) scale(${isHot ? 1.05 : 1})`,
-                opacity: pos.o,
                 zIndex: isHot ? 50 : 10 + i,
+                transition: "transform 0.7s cubic-bezier(0.22,1,0.36,1)",
+              }}
+            >
+            <article
+              className="w-[clamp(190px,66cqw,290px)] rounded-2xl border bg-card p-3"
+              style={{
+                opacity: pos.o,
                 borderColor: isHot ? "var(--lp-yellow)" : "var(--border)",
                 boxShadow: isHot
                   ? "0 24px 70px rgba(0,0,0,0.28), 0 0 0 1px var(--lp-yellow), 0 0 44px rgba(249,228,0,0.3)"
                   : "0 20px 50px rgba(0,0,0,0.18)",
-                transition:
-                  "transform 0.7s cubic-bezier(0.22,1,0.36,1), box-shadow 0.6s ease, border-color 0.6s ease, opacity 0.6s ease",
+                transition: "box-shadow 0.6s ease, border-color 0.6s ease, opacity 0.6s ease",
                 animation: reduced ? undefined : `lp-float ${7 + i}s ease-in-out ${i * 0.6}s infinite`,
               }}
             >
@@ -220,6 +231,7 @@ export function HeroArt({ labels, rtl = false }: { labels: Labels; rtl?: boolean
                 </div>
               )}
             </article>
+            </div>
           );
         })}
       </div>

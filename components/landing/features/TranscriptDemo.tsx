@@ -67,8 +67,8 @@ export function TranscriptDemo({ labels }: { labels: Labels }) {
             <div className="relative grid h-12 w-9 shrink-0 place-items-center overflow-hidden rounded-md" style={{ background: "linear-gradient(150deg,#f9e400,#a16207)" }}>
               <Play size={13} className="text-white/90" fill="currentColor" />
             </div>
-            <div className="flex-1">
-              <div className="text-[0.8rem] font-medium text-lp-ink" dir="ltr">@hooks.daily</div>
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-[0.8rem] font-medium text-lp-ink" dir="ltr">@hooks.daily</div>
               <div className="mt-1 flex items-center gap-1.5 text-[0.72rem] text-lp-yellow-ink">
                 <span className={`h-1.5 w-1.5 rounded-full bg-lp-yellow ${revealed < LINES.length && !reduced ? "lp-pulse" : ""}`} />
                 {revealed < LINES.length && !reduced ? labels.transcribing : "Transcript"}

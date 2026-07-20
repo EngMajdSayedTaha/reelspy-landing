@@ -26,7 +26,7 @@ function jsonLd() {
     operatingSystem: "Web",
     url: SITE_URL,
     description:
-      "ReelSpy tracks the creators you admire, ranks which reels are over-performing right now, writes original AI scripts in your voice, and cross-posts to Instagram, TikTok, YouTube & Facebook.",
+      "ReelSpy tracks the creators you admire, ranks which reels are over-performing right now, writes original AI scripts in your voice, and publishes straight to Instagram, with TikTok, YouTube & Facebook coming soon.",
     offers: en.pricing.plans.map((p) => ({
       "@type": "Offer",
       name: p.name,

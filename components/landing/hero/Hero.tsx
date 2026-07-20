@@ -17,14 +17,19 @@ export function Hero({ dict, locale = "en" }: { dict: Dictionary; locale?: Local
           blur filter. */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="lp-grid-bg absolute inset-0 opacity-60" />
+        {/* Both blooms sit behind the headline and the lead paragraph, so their
+            opacity is a legibility budget, not a taste call. At 0.18 the
+            top-left one was lifting the background enough under "Your unfair
+            advantage" to eat into the text contrast. Halved, and pulled further
+            off-canvas so the bright core sits outside the copy column. */}
         <div
           className="lp-nebula lp-drift"
           style={{
-            inset: "-12% auto auto -8%",
-            width: "48%",
-            height: "60%",
+            inset: "-18% auto auto -14%",
+            width: "44%",
+            height: "56%",
             background: "radial-gradient(circle, var(--lp-yellow), transparent 62%)",
-            opacity: 0.18,
+            opacity: 0.09,
           }}
         />
         <div
@@ -34,7 +39,7 @@ export function Hero({ dict, locale = "en" }: { dict: Dictionary; locale?: Local
             width: "52%",
             height: "64%",
             background: "radial-gradient(circle, var(--lp-yellow), transparent 64%)",
-            opacity: 0.1,
+            opacity: 0.06,
             animationDelay: "-8s",
           }}
         />

@@ -17,7 +17,7 @@ const plexArabic = IBM_Plex_Sans_Arabic({
 });
 
 const description =
-  "ReelSpy tracks the creators you admire, ranks which reels are over-performing right now, writes original AI scripts in your voice, and cross-posts to Instagram, TikTok, YouTube & Facebook.";
+  "ReelSpy tracks the creators you admire, ranks which reels are over-performing right now, writes original AI scripts in your voice, and publishes straight to Instagram, with TikTok, YouTube & Facebook coming soon.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
