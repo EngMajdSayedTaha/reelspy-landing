@@ -1,6 +1,4 @@
-"use client";
-
-import { useEffect, useRef, type ElementType, type ReactNode } from "react";
+import type { CSSProperties, ElementType, ReactNode } from "react";
 
 type RevealProps = {
   children: ReactNode;
@@ -13,47 +11,23 @@ type RevealProps = {
 };
 
 /**
- * Reveal-on-scroll wrapper. Server-rendered children stay server-rendered; this
- * only attaches an IntersectionObserver that flips `data-visible`. The hidden
- * initial state is CSS-gated behind `html.js`, so JS-off users see everything.
+ * Marks a subtree as a scroll-reveal target. This is markup only — no hooks, no
+ * "use client" — so it stays a server component and ships no JS of its own.
+ * <RevealEngine> (mounted once in the root layout) owns the observation.
+ *
+ * Note that `data-reveal` is the real contract, not this component: a plain
+ * element carrying the attribute (used to stagger siblings without a wrapper per
+ * child) is revealed the same way.
  */
 export function Reveal({ children, as, className, delay = 0, once = true }: RevealProps) {
   const Tag = (as ?? "div") as ElementType;
-  const ref = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    if (typeof IntersectionObserver === "undefined") {
-      el.setAttribute("data-visible", "true");
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            el.setAttribute("data-visible", "true");
-            if (once) observer.unobserve(el);
-          } else if (!once) {
-            el.setAttribute("data-visible", "false");
-          }
-        }
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [once]);
 
   return (
     <Tag
-      ref={ref}
       data-reveal=""
+      data-reveal-once={once ? undefined : "false"}
       className={className}
-      style={delay ? ({ "--reveal-delay": `${delay}ms` } as React.CSSProperties) : undefined}
+      style={delay ? ({ "--reveal-delay": `${delay}ms` } as CSSProperties) : undefined}
     >
       {children}
     </Tag>

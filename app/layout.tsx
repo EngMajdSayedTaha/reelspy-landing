@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { cookies } from "next/headers";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { RevealEngine } from "@/components/ui/RevealEngine";
 import { LOCALE_COOKIE, dirForLocale, normalizeLocale } from "@/lib/i18n/config";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
@@ -76,6 +77,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         {/* Enable JS-gated reveal states before paint so JS-off users see all content. */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <RevealEngine />
           {children}
         </ThemeProvider>
       </body>

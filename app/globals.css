@@ -453,11 +453,18 @@ html.js [data-reveal] {
     opacity var(--dur-slow) var(--ease-out-expo),
     transform var(--dur-slow) var(--ease-out-expo);
   transition-delay: var(--reveal-delay, 0ms);
-  will-change: transform, opacity;
 }
 html.js [data-reveal][data-visible="true"] {
   opacity: 1;
   transform: none;
+}
+/* Promote only what is still waiting to animate. This was an unconditional
+   `will-change` on every [data-reveal], which pinned ~46 composited layers for
+   the whole session — the page never stopped paying for animations that had
+   already finished, and on a mid-range phone that alone made scrolling stutter.
+   Dropping the hint once an element settles hands the memory straight back. */
+html.js [data-reveal]:not([data-visible="true"]) {
+  will-change: transform, opacity;
 }
 
 /* Brand logo animations (components/brand/Logo.tsx) */

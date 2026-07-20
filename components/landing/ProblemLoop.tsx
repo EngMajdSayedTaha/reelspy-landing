@@ -20,8 +20,11 @@ export function ProblemLoop({ dict }: { dict: Dictionary }) {
     <Section id="how">
       <SectionHeading title={t.h2a} titleAccent={t.h2b} align="center" />
 
-      {/* Pain cards */}
-      <Reveal className="mx-auto mt-14 grid max-w-[1080px] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      {/* Pain cards. The grid itself is a plain container — each card is its own
+          reveal target so they stagger in. Wrapping the grid in a <Reveal> too
+          would fade the group and the cards independently, multiplying the two
+          opacities into a muddy double-fade. */}
+      <div className="mx-auto mt-14 grid max-w-[1080px] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {t.pains.map((p, i) => {
           const Icon = PAIN_ICONS[i];
           return (
@@ -39,7 +42,7 @@ export function ProblemLoop({ dict }: { dict: Dictionary }) {
             </div>
           );
         })}
-      </Reveal>
+      </div>
 
       {/* Pivot + loop diagram */}
       <div className="mt-20 flex flex-col items-center">

@@ -26,7 +26,23 @@ export function NicheRadar({ dict }: { dict: Dictionary }) {
     >
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="lp-grid-bg absolute inset-0 opacity-40" />
-        <div className="lp-nebula lp-drift" style={{ inset: "auto -8% -18% 30%", width: "50%", height: "60%", background: "radial-gradient(circle, var(--lp-yellow), transparent 62%)", opacity: 0.22 }} />
+        {/* Anchored to the bottom-right so it blooms behind the radar art only.
+            It used to start at left:30% and run 50% of the section wide, which
+            put its brightest core directly under the body copy — a ~1030px wash
+            of yellow across the paragraph on a 1440px viewport. That's what made
+            the text look washed out rather than lit. Anchoring it to the art
+            column and halving the opacity keeps the glow as depth behind the
+            radar without ever crossing into the reading column. */}
+        <div
+          className="lp-nebula lp-drift"
+          style={{
+            inset: "auto -6% -14% auto",
+            width: "42%",
+            height: "52%",
+            background: "radial-gradient(circle, var(--lp-yellow), transparent 62%)",
+            opacity: 0.12,
+          }}
+        />
       </div>
 
       <div className="relative mx-auto grid max-w-[1240px] grid-cols-1 items-center gap-12 px-4 sm:px-6 lg:grid-cols-[0.95fr_1.05fr]">
@@ -62,16 +78,28 @@ export function NicheRadar({ dict }: { dict: Dictionary }) {
               <line x1="50" y1="4" x2="50" y2="96" stroke="var(--border)" strokeWidth="0.3" />
             </svg>
 
-            {/* Sweep */}
-            <div
-              className="absolute inset-[4%] rounded-full"
-              style={{
-                background: "conic-gradient(from 0deg, rgba(249,228,0,0.5) 0deg, rgba(249,228,0,0.12) 26deg, transparent 60deg, transparent 360deg)",
-                WebkitMask: "radial-gradient(circle, #000 68%, transparent 70%)",
-                mask: "radial-gradient(circle, #000 68%, transparent 70%)",
-                animation: "lp-spin 7s linear infinite",
-              }}
-            />
+            {/* Sweep. The spinning cone lives inside a non-rotating clip so the
+                circle is enforced by overflow, not only by the mask — a rotated
+                element's paint area is its bounding box, so a mask that fails to
+                apply lets a hard-edged wedge escape into the layout. The mask is
+                still there, as a longhand (mask-image) rather than the `mask`
+                shorthand, to soften the outer arc.
+
+                The cone itself was a near-solid 0.5-alpha wedge with a hard
+                leading edge, which read as a spotlight rather than a sweep.
+                Lower peak alpha and an extra falloff stop give it a tail. */}
+            <div className="absolute inset-[4%] overflow-hidden rounded-full">
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, rgba(249,228,0,0.32) 0deg, rgba(249,228,0,0.10) 22deg, rgba(249,228,0,0.03) 46deg, transparent 72deg, transparent 360deg)",
+                  WebkitMaskImage: "radial-gradient(circle at 50% 50%, #000 55%, transparent 78%)",
+                  maskImage: "radial-gradient(circle at 50% 50%, #000 55%, transparent 78%)",
+                  animation: "lp-spin 7s linear infinite",
+                }}
+              />
+            </div>
 
             {/* Dim ambient nodes */}
             {DIM.map((n, i) => (

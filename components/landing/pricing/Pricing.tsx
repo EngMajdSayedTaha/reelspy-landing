@@ -14,8 +14,15 @@ export function Pricing({ dict }: { dict: Dictionary }) {
     <Section id="pricing" className="bg-background">
       <SectionHeading eyebrow={t.eyebrow} title={t.h2a} titleAccent={t.h2b} align="center" className="mx-auto mb-14" />
 
-      {/* Cards: horizontal snap-scroll on mobile (Pro first), grid on desktop */}
-      <Reveal className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
+      {/* Cards: horizontal snap-scroll on mobile (Pro first), grid on desktop.
+          The `pt-5` is load-bearing, not spacing taste: `overflow-x: auto` forces
+          the computed `overflow-y` to `auto` too — it cannot stay `visible` — so
+          this scroller clips vertically as well. The Pro card's "Most popular"
+          badge sits at `-top-3`, outside the content box, and was being sliced
+          off at the top edge on every phone. Padding the scroller moves the clip
+          boundary out far enough to contain the badge. Desktop is a plain grid
+          with `overflow-visible`, so it resets. */}
+      <Reveal className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 pt-5 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 sm:pt-0 lg:grid-cols-4">
         {t.plans.map((plan, i) => {
           const isPro = plan.name === "Pro";
           const isStudio = plan.name === "Studio";
