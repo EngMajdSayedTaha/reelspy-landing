@@ -28,3 +28,16 @@ export function isDashboardZone(href: string): boolean {
     (prefix) => href === prefix || href.startsWith(`${prefix}/`) || href.startsWith(`${prefix}?`)
   );
 }
+
+// The legal pages are a subset of the dashboard zone (they're served by that
+// app) that a marketing visitor reaches from the footer. They get a `redirect`
+// param so the dashboard's Back control can return the visitor to the landing
+// page rather than dropping them at /dashboard.
+const LEGAL_ZONE_PREFIXES = ["/privacy", "/terms", "/cookies"];
+
+export function isLegalZone(href: string): boolean {
+  if (!href.startsWith("/")) return false;
+  return LEGAL_ZONE_PREFIXES.some(
+    (prefix) => href === prefix || href.startsWith(`${prefix}/`) || href.startsWith(`${prefix}?`)
+  );
+}

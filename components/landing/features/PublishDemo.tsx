@@ -97,13 +97,27 @@ export function PublishDemo({ labels }: { labels: Labels }) {
 
           {/* Video tile */}
           <div
-            className="fanout-unflip absolute flex flex-col items-center gap-1.5"
+            className="fanout-unflip absolute flex flex-col items-center"
             style={{ left: "3%", top: "50%", transform: "translateY(-50%) var(--unflip, scaleX(1))", width: "27%" }}
           >
             <div className="relative grid aspect-[9/12] w-full place-items-center overflow-hidden rounded-lg border border-[var(--lp-hairline)]" style={{ background: "linear-gradient(150deg,#f9e400,#a16207)" }}>
               <Play size={16} className="text-white" fill="currentColor" />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.35),transparent_55%)]" />
             </div>
+          </div>
+
+          {/* Schedule badge. Pulled out of the 27%-wide tile column and centered
+              inside a wide left-anchored band instead. As a nowrap chip centered
+              on the ~16% tile column, its left half ran past the mock's rounded
+              edge and got clipped on phones. Centering it in a band that starts
+              at the container's near edge keeps the whole chip on-screen at any
+              width, and because the band is edge-anchored (not centered on the
+              tile) it stays clear of the mock border in RTL too, where the whole
+              fan-out mirrors. */}
+          <div
+            className="fanout-unflip absolute flex justify-center"
+            style={{ left: "0%", top: "76%", width: "52%", transform: "var(--unflip, scaleX(1))" }}
+          >
             <span className="lp-chip lp-chip-accent whitespace-nowrap text-[0.6rem]">
               <Clock size={9} /> {labels.schedule}
             </span>

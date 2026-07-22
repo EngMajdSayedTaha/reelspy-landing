@@ -16,8 +16,11 @@ type Labels = {
   writtenBy: string;
   regenerate: string;
   aria: string;
-  script: ScriptText;
-  scriptAr: ScriptText;
+  // [Gulf, MSA] per language. The voice + dialect toggles index into this.
+  scripts: {
+    en: ScriptText[];
+    ar: ScriptText[];
+  };
 };
 
 export function ScriptDemo({ labels, defaultLang }: { labels: Labels; defaultLang: Locale }) {
@@ -29,7 +32,7 @@ export function ScriptDemo({ labels, defaultLang }: { labels: Labels; defaultLan
   const reduced = usePrefersReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
 
-  const script = lang === "ar" ? labels.scriptAr : labels.script;
+  const script = labels.scripts[lang][dialect];
   // The three labels used to be three different hues. Under the one-accent
   // system the accent marks what matters — the hook and the call to action —
   // and the body label stays neutral.

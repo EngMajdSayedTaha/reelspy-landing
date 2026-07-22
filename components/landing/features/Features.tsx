@@ -28,7 +28,15 @@ function FeatureBlock({
   const reversed = index % 2 === 1;
   return (
     <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
-      <Reveal className={cn("order-2", reversed ? "lg:order-2" : "lg:order-1")}>
+      <Reveal
+        className={cn(
+          // Copy is centered on mobile — where it stacks above the demo and
+          // everything else on the page is centered — and left-aligned from lg
+          // up, where it sits beside the demo in a two-column row.
+          "order-2 flex flex-col items-center text-center lg:items-start lg:text-start",
+          reversed ? "lg:order-2" : "lg:order-1"
+        )}
+      >
         <span className="lp-icon-tile mb-5">{icon}</span>
         <p className="lp-eyebrow mb-3">{eyebrow}</p>
         <h3 className="lp-h2 max-w-[16ch] text-balance text-foreground" style={{ fontSize: "clamp(1.6rem,1.2rem+1.6vw,2.25rem)" }}>

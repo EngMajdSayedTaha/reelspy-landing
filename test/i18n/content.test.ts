@@ -31,13 +31,13 @@ const ARABIC = /[؀-ۿ]/;
 // Paths that are NOT prose and so are exempt from the checks below:
 //  - meta.* are HTML attribute values (lang="ar", dir="rtl")
 //  - the BYO sliders are unitless counts, so a blank unit suffix is correct
-//  - features.f3.demo.script.* is the English sample script the demo types out;
-//    its Arabic counterpart lives in scriptAr, so this one stays Latin in both
-//    dictionaries by design
+//  - features.f3.demo.scripts.en[*] are the English sample scripts the demo
+//    types out (Gulf/MSA voice slots); their Arabic counterparts live in
+//    scripts.ar[*], so these stay Latin in both dictionaries by design
 const NOT_PROSE = [
   /^meta\./,
   /^pricing\.byoSliders\[\d+\]\.unit$/,
-  /^features\.f3\.demo\.script\./,
+  /^features\.f3\.demo\.scripts\.en\[/,
 ];
 
 function isProse(path: string): boolean {

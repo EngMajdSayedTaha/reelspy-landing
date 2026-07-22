@@ -97,15 +97,38 @@ export const en = {
         writtenBy: "Written by Claude",
         regenerate: "Regenerate",
         aria: "A script generator types out a hook, body and call-to-action, switching to right-to-left when Arabic is picked.",
-        script: {
-          hook: "Everyone films their morning routine. Almost nobody films the 4pm slump — that's where your audience actually lives.",
-          body: "Show the real dip: the third coffee, the half-finished task, the reset that works. Give one tiny system they can copy before the day gets away from them.",
-          cta: "Save this for your 4pm. Follow for the systems the polished accounts skip.",
-        },
-        scriptAr: {
-          hook: "الكل يصوّر روتين الصباح. لا أحد تقريبًا يصوّر خمول الرابعة عصرًا — وهناك بالضبط يعيش جمهورك.",
-          body: "أظهر الهبوط الحقيقي: القهوة الثالثة، المهمة نصف المنجزة، ثم إعادة ضبط تنجح فعلًا. أعطِ نظامًا صغيرًا واحدًا يمكن تقليده قبل أن ينتهي اليوم.",
-          cta: "احفظ هذا لرابعتك عصرًا. تابِع لتصلك الأنظمة التي تتجاهلها الحسابات المصقولة.",
+        // Two dialect slots per language. Index 0 = Gulf chip, 1 = MSA chip, so
+        // the voice toggle actually swaps the copy. Arabic keeps ONE story
+        // (the 4pm-slump script) written two genuinely different ways — natural
+        // Gulf vs polished MSA — which is the whole point of the feature. The
+        // English pair are two distinct sample scripts so the toggle still
+        // responds in English. This block is the source of truth; ar.ts mirrors
+        // it verbatim (the demo shows both voices regardless of page language).
+        scripts: {
+          en: [
+            {
+              hook: "Everyone films their morning routine. Almost nobody films the 4pm slump — that's where your audience actually lives.",
+              body: "Show the real dip: the third coffee, the half-finished task, the reset that works. Give one tiny system they can copy before the day gets away from them.",
+              cta: "Save this for your 4pm. Follow for the systems the polished accounts skip.",
+            },
+            {
+              hook: "Stop leading with your best tip. Lead with the mistake you made right before it — that's the part people actually stay for.",
+              body: "Walk through the wrong version fast: what you tried, why it flopped, the one change that fixed it. Keep it to a single before-and-after they can feel in six seconds.",
+              cta: "Try it on your next post. Follow for the angles most creators quietly edit out.",
+            },
+          ],
+          ar: [
+            {
+              hook: "الكل يصوّر روتين الصبح، بس محّد يصوّر خمول العصر — وهني بالضبط وين جمهورك الحقيقي.",
+              body: "ورّهم الهبطة على طبيعتها: ثالث فنجان قهوة، المهمة اللي وقفت بنصّها، والحركة الصغيرة اللي ترجّعك للتركيز. اعطهم فكرة وحدة بسيطة يقدرون يطبّقونها على طول.",
+              cta: "احفظ الفيديو لوقت خمولك الجاي، وتابعنا توصلك الأفكار اللي الحسابات المرتّبة تتجاهلها.",
+            },
+            {
+              hook: "الجميع يصوّر روتين الصباح، لكن لا أحد يصوّر لحظة الفتور بعد الظهر — وهناك تحديدًا يعيش جمهورك الحقيقي.",
+              body: "أظهِر الهبوط كما هو: فنجان القهوة الثالث، المهمة التي توقفت في منتصفها، والخطوة البسيطة التي تعيدك إلى التركيز. قدّم فكرة واحدة صغيرة يمكن تطبيقها على الفور.",
+              cta: "احفظ الفيديو لوقت فتورك القادم، وتابعنا لتصلك الأفكار التي تتجاهلها الحسابات المثالية.",
+            },
+          ],
         },
       },
     },

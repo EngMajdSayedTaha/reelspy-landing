@@ -46,14 +46,15 @@ export function NicheRadar({ dict }: { dict: Dictionary }) {
       </div>
 
       <div className="relative mx-auto grid max-w-[1240px] grid-cols-1 items-center gap-12 px-4 sm:px-6 lg:grid-cols-[0.95fr_1.05fr]">
-        {/* Copy */}
-        <Reveal>
+        {/* Copy — centered on mobile (stacked above the radar art, matching the
+            rest of the page), left-aligned from lg up where it sits beside it. */}
+        <Reveal className="flex flex-col items-center text-center lg:items-start lg:text-start">
           <span className="lp-eyebrow">{t.eyebrow}</span>
           <h2 className="lp-h2 mt-4 max-w-[16ch] text-balance text-foreground">
             {t.h2a} <span className="lp-accent-text">{t.h2b}</span>
           </h2>
           <p className="lp-lead mt-5 max-w-[48ch] text-muted-foreground">{t.body}</p>
-          <p className="mt-6 inline-flex items-start gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm text-muted-foreground">
+          <p className="mt-6 inline-flex items-start gap-2 rounded-xl border border-border bg-card px-4 py-3 text-start text-sm text-muted-foreground">
             <Lock size={16} className="mt-0.5 shrink-0 text-lp-yellow-ink" />
             <span className="max-w-[44ch]">{t.anonymity}</span>
           </p>

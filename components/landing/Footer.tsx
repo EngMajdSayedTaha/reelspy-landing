@@ -2,9 +2,10 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
 import { InstagramMark, TikTokMark, YouTubeMark, FacebookMark } from "@/components/brand/PlatformMarks";
 import { LangToggle } from "./controls/LangToggle";
+import { LegalLink } from "./LegalLink";
 import type { Dictionary } from "@/lib/i18n/en";
 import type { Locale } from "@/lib/i18n/config";
-import { isDashboardZone } from "@/lib/zones";
+import { isDashboardZone, isLegalZone } from "@/lib/zones";
 
 export function Footer({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   const t = dict.footer;
@@ -57,11 +58,17 @@ export function Footer({ dict, locale }: { dict: Dictionary; locale: Locale }) {
             <ul className="mt-4 flex flex-col gap-2.5">
               {col.links.map((l) => {
                 // Account links point into the dashboard zone, so they need a
-                // real navigation rather than a client-side route change.
+                // real navigation rather than a client-side route change. The
+                // legal pages live there too, but additionally carry a `redirect`
+                // param so their Back control returns here (see LegalLink).
                 const cls = "text-sm text-foreground/80 transition hover:text-lp-yellow-ink";
                 return (
                   <li key={l.href}>
-                    {isDashboardZone(l.href) ? (
+                    {isLegalZone(l.href) ? (
+                      <LegalLink href={l.href} className={cls}>
+                        {l.label}
+                      </LegalLink>
+                    ) : isDashboardZone(l.href) ? (
                       <a href={l.href} className={cls}>
                         {l.label}
                       </a>
