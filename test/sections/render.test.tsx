@@ -72,10 +72,15 @@ describe("structural contracts", () => {
     expect(hrefs).toContain("/signup");
   });
 
-  it("the footer links to all three legal pages", () => {
+  it("the footer links to all three legal pages, each carrying a return redirect", () => {
     const { container } = render(<Footer dict={en} locale="en" />);
     const hrefs = [...container.querySelectorAll("a")].map((a) => a.getAttribute("href"));
-    expect(hrefs).toEqual(expect.arrayContaining(["/privacy", "/terms", "/cookies"]));
+    // LegalLink resolves the bare path to a `?redirect=<here>` variant after
+    // mount so the dashboard's Back control can return the visitor to the
+    // landing page. In jsdom `window.location` is "/", so redirect=%2F.
+    for (const base of ["/privacy", "/terms", "/cookies"]) {
+      expect(hrefs).toContainEqual(expect.stringMatching(new RegExp(`^${base}\\?redirect=`)));
+    }
   });
 
   // The FAQ must stay native <details> so it works without JS and keeps
