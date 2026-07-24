@@ -1,13 +1,15 @@
-// Multi-zone link helper.
+// Cross-zone link helper.
 //
-// reelspy.dev is served by two separate Next apps: this one (marketing) and
-// the dashboard, which is proxied in via the rewrites in next.config.ts. A
-// next/link into the dashboard zone would attempt a client-side RSC navigation
-// against an app that doesn't share this one's build, and the prefetch 404s —
-// so links that cross the boundary must be plain anchors and do a real
-// document navigation.
+// reelspy.dev (this app) hands product paths to the dashboard two different
+// ways: the legal/brand/api surface is PROXIED in via rewrites, and the
+// authenticated surface now REDIRECTS to https://app.reelspy.dev. Either way a
+// next/link is wrong — it would attempt a client-side RSC navigation against a
+// build this app doesn't share (prefetch 404s), or try to client-navigate to
+// what is actually a cross-origin redirect. Both cases need a plain anchor and a
+// real document navigation.
 //
-// Keep this list in sync with DASHBOARD_ZONE_PATHS in next.config.ts.
+// Keep this list in sync with DASHBOARD_PROXY_PATHS + DASHBOARD_REDIRECT_PATHS
+// in next.config.ts — test/zones.test.ts enforces that.
 const DASHBOARD_ZONE_PREFIXES = [
   "/dashboard",
   "/admin",
