@@ -1,11 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { isDashboardZone } from "@/lib/zones";
-import { DASHBOARD_ZONE_PATHS } from "@/next.config";
+import { DASHBOARD_PROXY_PATHS, DASHBOARD_REDIRECT_PATHS } from "@/next.config";
 
-// reelspy.dev is two Next apps behind one origin. If these two lists drift
-// apart, links break in a way that only shows up in production: a path the
-// rewrites proxy but isDashboardZone doesn't know about gets rendered as a
-// next/link, and the client-side navigation 404s against the wrong app.
+// reelspy.dev hands product paths off to another app — by proxy for the
+// marketing/legal surface, by redirect for the authenticated surface. If these
+// lists drift from the link helper, links break in a way that only shows up in
+// production: a path this zone doesn't own gets rendered as a next/link, and the
+// client-side navigation 404s against the wrong app (or worse, silently fails to
+// leave the origin for a path that is now a cross-origin redirect).
 
 describe("isDashboardZone", () => {
   it("recognizes the product routes", () => {
@@ -42,8 +44,8 @@ describe("isDashboardZone", () => {
 });
 
 describe("zone config parity", () => {
-  it("every proxied path is also treated as cross-zone by the link helper", () => {
-    const missing = DASHBOARD_ZONE_PATHS
+  it("every handed-off path is also treated as cross-zone by the link helper", () => {
+    const missing = [...DASHBOARD_PROXY_PATHS, ...DASHBOARD_REDIRECT_PATHS]
       // Asset/static prefixes are never rendered as links.
       .filter((p) => !p.startsWith("/dashboard-static") && !p.startsWith("/brand"))
       .map((p) => p.replace("/:path*", ""))
