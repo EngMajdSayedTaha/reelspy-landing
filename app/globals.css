@@ -717,6 +717,16 @@ html.js [data-reveal]:not([data-visible="true"]) {
   }
 }
 
+/* Cookie consent banner entrance. Reduced-motion is handled globally above
+   (all animation-duration collapses to ~0), so no extra media query needed. */
+@keyframes cc-rise-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.cc-banner {
+  animation: cc-rise-in var(--dur-slow) var(--ease-out-expo) both;
+}
+
 /* FAQ native disclosure — chevron rotates, content fades in (works without JS) */
 .faq-item summary::-webkit-details-marker { display: none; }
 .faq-item summary { list-style: none; }

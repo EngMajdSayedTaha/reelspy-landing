@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { cookies } from "next/headers";
+import Script from "next/script";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { RevealEngine } from "@/components/ui/RevealEngine";
+import { CookieConsent } from "@/components/legal/CookieConsent";
 import { LOCALE_COOKIE, dirForLocale, normalizeLocale } from "@/lib/i18n/config";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
@@ -18,6 +20,13 @@ const plexArabic = IBM_Plex_Sans_Arabic({
 
 const description =
   "ReelSpy tracks the creators you admire, ranks which reels are over-performing right now, writes original AI scripts in your voice, and publishes straight to Instagram, with TikTok, YouTube & Facebook coming soon.";
+
+// clarity.microsoft.com project id — same project as the dashboard app
+// (app/layout.tsx there), so the funnel from this marketing site through to
+// the product shows up as one journey in Clarity rather than two. Not a
+// secret — it's embedded in the client-side tag either way.
+const CLARITY_PROJECT_ID =
+  process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID?.trim() || "xuzukpwv8n";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -65,6 +74,9 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const cookieStore = await cookies();
   const locale = normalizeLocale(cookieStore.get(LOCALE_COOKIE)?.value);
+  // Only fire Clarity once the visitor has accepted cookies (mirrored by
+  // CookieConsent into this cookie); no consent yet means no script.
+  const analyticsConsent = cookieStore.get("cookie_consent")?.value === "accepted";
 
   return (
     <html
@@ -76,9 +88,19 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body className="min-h-full bg-background text-foreground">
         {/* Enable JS-gated reveal states before paint so JS-off users see all content. */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        {analyticsConsent && (
+          <Script id="ms-clarity" strategy="afterInteractive">
+            {`(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "${CLARITY_PROJECT_ID}");`}
+          </Script>
+        )}
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <RevealEngine />
           {children}
+          <CookieConsent locale={locale} />
         </ThemeProvider>
       </body>
     </html>
