@@ -333,6 +333,16 @@ export const en = {
     },
     rights: "All rights reserved.",
   },
+  cookieConsent: {
+    ariaLabel: "Cookie consent",
+    message:
+      "We use essential cookies to keep this site running, plus optional analytics cookies (Microsoft Clarity) that help us understand how visitors use ReelSpy. See our",
+    cookiePolicy: "Cookie Policy",
+    and: "and",
+    privacyPolicy: "Privacy Policy",
+    reject: "Reject",
+    accept: "Accept",
+  },
 };
 
 export type Dictionary = typeof en;
