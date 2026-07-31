@@ -5,8 +5,9 @@ import type { ShowcaseData, ShowcaseNiche, ShowcaseReel } from "./types";
 // dashboard's public endpoint, which validates against its own allowlist.
 const NICHES = ["fitness", "food", "travel"] as const;
 
-// Below this, a niche's grid looks broken rather than sparse, so the whole
-// section falls back to fixtures instead of showing a half-empty tab.
+// Below this, a niche's grid looks broken rather than sparse, so that
+// individual tab falls back to its own fixture instead of showing a
+// half-empty grid.
 const MIN_REELS_PER_NICHE = 4;
 
 // Half an hour, matching the endpoint's own s-maxage. The underlying snapshot
@@ -78,9 +79,23 @@ export async function getShowcase(): Promise<ShowcaseData> {
   if (!base) return SHOWCASE_FIXTURES;
 
   const results = await Promise.all(NICHES.map((niche) => fetchNiche(base, niche)));
-  const niches = results.filter((n): n is ShowcaseNiche => n !== null);
 
-  // All or nothing. A tab strip where some niches are live and others are
-  // invented would make the "sample data" label meaningless.
-  return niches.length === NICHES.length ? { niches, isDemo: false } : SHOWCASE_FIXTURES;
+  // Per-niche fallback rather than all-or-nothing: a niche can run thin on its
+  // own (e.g. its seed accounts haven't posted inside the trending window)
+  // without real data existing for the other tabs too, and that's expected to
+  // happen on a rotating basis given the shared daily enrichment budget. A tab
+  // that falls back draws its own curated fixture instead of taking the whole
+  // section down with it; any fallback flips the disclosure note on so the
+  // page never presents fabricated numbers as live.
+  let usedFixture = false;
+  const niches: ShowcaseNiche[] = NICHES.map((niche, i) => {
+    const live = results[i];
+    if (live) return live;
+    usedFixture = true;
+    return (
+      SHOWCASE_FIXTURES.niches.find((n) => n.niche === niche) ?? { niche, reels: [] }
+    );
+  });
+
+  return { niches, isDemo: usedFixture };
 }
