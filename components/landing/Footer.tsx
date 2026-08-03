@@ -88,7 +88,7 @@ export function Footer({ dict, locale }: { dict: Dictionary; locale: Locale }) {
       <div className="border-t border-[var(--lp-hairline)]">
         <div className="mx-auto flex max-w-[1240px] flex-col items-center justify-between gap-4 px-4 py-6 text-[0.78rem] text-muted-foreground sm:flex-row sm:px-6">
           <p>
-            © {year} ReelSpy. {t.rights}
+            © {year} ReelSpy. {t.rights} {t.operatedBy}
           </p>
           <div className="flex items-center gap-4">
             {/* <span className="hidden sm:inline">{t.builtWith}</span> */}

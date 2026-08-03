@@ -332,6 +332,7 @@ export const en = {
       signup: "Sign up",
     },
     rights: "All rights reserved.",
+    operatedBy: "Operated by Majd Mohammed Nazir Sayed Taha.",
   },
   cookieConsent: {
     ariaLabel: "Cookie consent",

@@ -358,5 +358,6 @@ export const ar: Dictionary = {
       signup: "إنشاء حساب",
     },
     rights: "جميع الحقوق محفوظة.",
+    operatedBy: "يُدار بواسطة مجد محمد نذير سيد طه.",
   },
 };
