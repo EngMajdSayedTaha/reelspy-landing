@@ -334,7 +334,7 @@ export const en = {
     },
     rights: "All rights reserved.",
     operatedBy: "Operated by Majd Mohammed Nazir Sayed Taha.",
-    version: (version: string) => `Version ${version}`,
+    version: "Version {version}",
   },
   // Public changelog at /changelog — rendered from the dashboard zone's
   // /api/public/changelog so a release note is written exactly once.
