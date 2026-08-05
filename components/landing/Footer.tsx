@@ -110,7 +110,7 @@ export function Footer({
                 href="/changelog"
                 className="font-mono text-[0.72rem] text-muted-foreground/80 transition hover:text-lp-yellow-ink"
               >
-                {t.version(version)}
+                {t.version.replace("{version}", version)}
               </Link>
             ) : null}
             {/* <span className="hidden sm:inline">{t.builtWith}</span> */}

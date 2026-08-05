@@ -360,7 +360,7 @@ export const ar: Dictionary = {
     },
     rights: "جميع الحقوق محفوظة.",
     operatedBy: "يُدار بواسطة مجد محمد نذير سيد طه.",
-    version: (version: string) => `الإصدار ${version}`,
+    version: "الإصدار {version}",
   },
   changelog: {
     metaTitle: "ما الجديد — ReelSpy",
