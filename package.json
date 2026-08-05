@@ -1,6 +1,6 @@
 {
   "name": "reelspy-landing",
-  "version": "1.0.0",
+  "version": "0.12.0",
   "private": true,
   "description": "ReelSpy public marketing landing page — premium, animated, bilingual (EN/AR), Next.js 16 + Tailwind v4.",
   "scripts": {

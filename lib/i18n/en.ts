@@ -328,11 +328,33 @@ export const en = {
       privacy: "Privacy",
       terms: "Terms",
       cookies: "Cookies",
+      changelog: "What's new",
       login: "Log in",
       signup: "Sign up",
     },
     rights: "All rights reserved.",
     operatedBy: "Operated by Majd Mohammed Nazir Sayed Taha.",
+    version: (version: string) => `Version ${version}`,
+  },
+  // Public changelog at /changelog — rendered from the dashboard zone's
+  // /api/public/changelog so a release note is written exactly once.
+  changelog: {
+    metaTitle: "What's new — ReelSpy",
+    metaDescription:
+      "Every update to ReelSpy: what's new, what got better, and what we fixed — in plain language.",
+    eyebrow: "Product updates",
+    h1: "What's new in ReelSpy",
+    sub: "Everything we've added, improved and fixed — written for people who use the product, not for engineers.",
+    currentBadge: "Current version",
+    kinds: {
+      new: "New",
+      improved: "Improved",
+      fixed: "Fixed",
+    },
+    unavailableTitle: "Update history isn't loading right now",
+    unavailableBody: "You can always see the full list inside the app.",
+    unavailableCta: "Open ReelSpy",
+    backHome: "Back to home",
   },
   cookieConsent: {
     ariaLabel: "Cookie consent",

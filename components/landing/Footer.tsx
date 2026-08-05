@@ -7,7 +7,20 @@ import type { Dictionary } from "@/lib/i18n/en";
 import type { Locale } from "@/lib/i18n/config";
 import { isDashboardZone, isLegalZone } from "@/lib/zones";
 
-export function Footer({ dict, locale }: { dict: Dictionary; locale: Locale }) {
+export function Footer({
+  dict,
+  locale,
+  version,
+}: {
+  dict: Dictionary;
+  locale: Locale;
+  /**
+   * Product version, shown next to the copyright. Only passed on /changelog,
+   * which already loads it — the homepage deliberately doesn't fetch across the
+   * zone boundary just to print a number in the footer.
+   */
+  version?: string | null;
+}) {
   const t = dict.footer;
   const nav = dict.nav;
   const year = 2026;
@@ -19,6 +32,7 @@ export function Footer({ dict, locale }: { dict: Dictionary; locale: Locale }) {
         { label: t.links.features, href: "#features" },
         { label: t.links.pricing, href: "#pricing" },
         { label: t.links.faq, href: "#faq" },
+        { label: t.links.changelog, href: "/changelog" },
       ],
     },
     {
@@ -91,6 +105,14 @@ export function Footer({ dict, locale }: { dict: Dictionary; locale: Locale }) {
             © {year} ReelSpy. {t.rights} {t.operatedBy}
           </p>
           <div className="flex items-center gap-4">
+            {version ? (
+              <Link
+                href="/changelog"
+                className="font-mono text-[0.72rem] text-muted-foreground/80 transition hover:text-lp-yellow-ink"
+              >
+                {t.version(version)}
+              </Link>
+            ) : null}
             {/* <span className="hidden sm:inline">{t.builtWith}</span> */}
             <LangToggle locale={locale} toggleLabel={nav.langToggle} ariaLabel={nav.langToggleLabel} />
           </div>
