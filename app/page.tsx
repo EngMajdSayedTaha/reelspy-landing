@@ -15,6 +15,8 @@ import { BeforeAfter } from "@/components/landing/BeforeAfter";
 import { FAQ } from "@/components/landing/FAQ";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 import { Footer } from "@/components/landing/Footer";
+import { WaitlistProvider } from "@/components/landing/waitlist/WaitlistProvider";
+import { getWaitlistState } from "@/lib/waitlist";
 
 function jsonLd() {
   const en = getDictionary("en");
@@ -57,9 +59,18 @@ export default async function LandingPage() {
   const cookieStore = await cookies();
   const locale = normalizeLocale(cookieStore.get(LOCALE_COOKIE)?.value);
   const dict = getDictionary(locale);
+  // Closed-beta state, read from the dashboard at render (cached 60s, fails to
+  // "off"). When it's on, every /signup CTA below becomes "Join the waiting
+  // list" and opens the dialog — see components/ui/CTALink.tsx.
+  const waitlist = await getWaitlistState();
 
   return (
-    <>
+    <WaitlistProvider
+      enabled={waitlist.enabled}
+      total={waitlist.total}
+      copy={dict.waitlist}
+      locale={locale}
+    >
       <a href="#top" className="skip-link">
         Skip to content
       </a>
@@ -80,6 +91,6 @@ export default async function LandingPage() {
       <Footer dict={dict} locale={locale} />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd()) }} />
-    </>
+    </WaitlistProvider>
   );
 }

@@ -34,10 +34,13 @@ const ARABIC = /[؀-ۿ]/;
 //  - features.f3.demo.scripts.en[*] are the English sample scripts the demo
 //    types out (Gulf/MSA voice slots); their Arabic counterparts live in
 //    scripts.ar[*], so these stay Latin in both dictionaries by design
+//  - waitlist.emailPlaceholder is an example ADDRESS, not a sentence; email
+//    addresses are Latin in every locale
 const NOT_PROSE = [
   /^meta\./,
   /^pricing\.byoSliders\[\d+\]\.unit$/,
   /^features\.f3\.demo\.scripts\.en\[/,
+  /^waitlist\.emailPlaceholder$/,
 ];
 
 function isProse(path: string): boolean {

@@ -356,6 +356,59 @@ export const en = {
     unavailableCta: "Open ReelSpy",
     backHome: "Back to home",
   },
+  // Closed-beta copy. Rendered only while the product is behind the waiting
+  // list — the switch lives in the dashboard's admin panel, and this app asks
+  // for its state at render (see lib/waitlist.ts). `{n}` / `{count}` are
+  // substituted at the call site, not by a formatting library.
+  waitlist: {
+    // Replaces "Start free" on every CTA. Kept short: it sits in the nav, in
+    // pricing cards and in the hero, and the longest of those sets the width.
+    cta: "Join the waiting list",
+    navCta: "Join the list",
+    badge: "Closed beta",
+
+    dialogTitle: "Join the waiting list",
+    dialogSub:
+      "ReelSpy is in closed beta. Leave your email and we'll open your access in the next batch.",
+    close: "Close",
+
+    emailLabel: "Email",
+    emailPlaceholder: "you@example.com",
+    nameLabel: "Name",
+    namePlaceholder: "Optional",
+    handleLabel: "Instagram handle",
+    handlePlaceholder: "@yourhandle",
+    nicheLabel: "Your niche",
+    nichePlaceholder: "Fitness, food, real estate…",
+    followersLabel: "Followers",
+    followersAny: "Prefer not to say",
+    referralLabel: "How did you hear about us?",
+    referralPlaceholder: "Instagram, a friend, search…",
+    details: "Add a few details (optional)",
+    detailsHint:
+      "Only your email is required. The rest just helps us prioritise who we let in first.",
+
+    submit: "Join the waiting list",
+    submitting: "Joining…",
+    social: "{count} creators already on the list",
+
+    doneTitle: "You're on the list.",
+    doneBody: "You're #{n}. We'll email you the moment your access opens.",
+    alreadyTitle: "You're already on the list.",
+    alreadyBody: "You're #{n} — no need to sign up again. We'll email you when access opens.",
+    checkInbox:
+      "Check your inbox for a confirmation — if it isn't there in a few minutes, look in spam.",
+
+    errorEmail: "Enter a valid email address.",
+    errorThrottled: "That's a lot of requests. Try again a bit later.",
+    errorGeneric: "Couldn't save that. Try again in a moment.",
+    openedTitle: "Good news — signups are open.",
+    openedBody: "The waiting list has been lifted. You can create your account right now.",
+    openedCta: "Create your account",
+
+    haveAccount: "Already have an account?",
+    login: "Log in",
+  },
   cookieConsent: {
     ariaLabel: "Cookie consent",
     message:

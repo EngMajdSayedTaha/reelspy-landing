@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode, type MouseEvent } from "react";
+import { useWaitlist } from "@/components/landing/waitlist/WaitlistProvider";
 import { cn } from "@/lib/utils";
 
 type CTAProps = {
@@ -29,6 +30,14 @@ export function CTALink({
   onClick,
 }: CTAProps) {
   const ref = useRef<HTMLAnchorElement>(null);
+  const waitlist = useWaitlist();
+
+  // Closed beta: every CTA that would send someone to signup opens the join
+  // dialog instead, with the waiting-list label. Doing the swap HERE rather
+  // than at each call site means a CTA added to a new section next month is
+  // covered automatically. Outside a WaitlistProvider (the section tests, the
+  // changelog page) `enabled` is false and nothing below changes.
+  const intercept = waitlist.enabled && href === "/signup" && waitlist.copy !== null;
 
   const handleMove = (e: MouseEvent<HTMLAnchorElement>) => {
     if (!magnetic) return;
@@ -65,6 +74,27 @@ export function CTALink({
   // deployment. next/link would try a client-side RSC navigation into an app
   // that isn't this one and fail on the prefetch. Hash anchors (#how) still
   // scroll smoothly via html { scroll-behavior }.
+  if (intercept) {
+    // A <button>, not an <a> with a fake href: it opens a dialog, it doesn't
+    // navigate, and screen readers and middle-click should both be told the
+    // truth. The label replaces whatever children the call site passed —
+    // "Start free — no card needed" is a promise we can't keep right now — but
+    // any icon children (the arrow) are dropped with it, which is fine: the
+    // button no longer means "go somewhere".
+    return (
+      <button
+        type="button"
+        onClick={() => {
+          onClick?.();
+          waitlist.open();
+        }}
+        className={cn(base, sizes[size], variants[variant], className)}
+      >
+        {waitlist.copy!.cta}
+      </button>
+    );
+  }
+
   return (
     <a
       ref={ref}
