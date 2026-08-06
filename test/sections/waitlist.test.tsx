@@ -66,18 +66,19 @@ describe("closed-beta CTA interception", () => {
   // dedicated "approved" outcome with a CTA into /signup?email=, which
   // app/signup/page.tsx verifies server-side before granting the real form.
   describe("re-submitting an already-approved email", () => {
+    // vi.restoreAllMocks(), not vi.unstubAllGlobals(): the latter also wipes
+    // the IntersectionObserver/ResizeObserver stubs test/setup.ts installs
+    // once at module load (not per-test), which would break every later test
+    // in this file that renders an animated section.
     afterEach(() => {
-      vi.unstubAllGlobals();
+      vi.restoreAllMocks();
     });
 
     it("offers a way into the real account form instead of a dead end", async () => {
-      vi.stubGlobal(
-        "fetch",
-        vi.fn().mockResolvedValue(
-          new Response(JSON.stringify({ ok: true, alreadyOnList: true, queueNumber: 12, status: "approved" }), {
-            status: 200,
-          })
-        )
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(JSON.stringify({ ok: true, alreadyOnList: true, queueNumber: 12, status: "approved" }), {
+          status: 200,
+        })
       );
 
       const user = userEvent.setup();
@@ -94,6 +95,37 @@ describe("closed-beta CTA interception", () => {
       expect(await dialog.findByText(en.waitlist.approvedTitle)).toBeTruthy();
       const cta = dialog.getByRole("link", { name: en.waitlist.approvedCta });
       expect(cta.getAttribute("href")).toBe("/signup?email=approved%40example.com");
+    });
+  });
+
+  // Regression test for the second reported bug: re-submitting a REJECTED
+  // email used to fall through to the generic "you're already on the list —
+  // we'll email you when access opens" text, which is actively wrong — it
+  // promises an email that will never arrive and implies they're still
+  // waiting on a decision that was already made.
+  describe("re-submitting a rejected email", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("says so honestly instead of implying they're still waiting", async () => {
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(JSON.stringify({ ok: true, alreadyOnList: true, queueNumber: 12, status: "rejected" }), {
+          status: 200,
+        })
+      );
+
+      const user = userEvent.setup();
+      render(withWaitlist(<Hero dict={en} />, true));
+      await user.click(screen.getAllByRole("button", { name: en.waitlist.cta })[0]);
+
+      const dialog = within(await screen.findByRole("dialog"));
+      await user.type(dialog.getByLabelText(en.waitlist.emailLabel), "rejected@example.com");
+      await user.click(dialog.getByRole("button", { name: en.waitlist.submit }));
+
+      expect(await dialog.findByText(en.waitlist.rejectedTitle)).toBeTruthy();
+      expect(dialog.queryByText(en.waitlist.alreadyTitle)).toBeNull();
+      expect(dialog.queryByText(/we'll email you when access opens/i)).toBeNull();
     });
   });
 });

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { CheckCircle2, ChevronDown, X } from "lucide-react";
+import { CheckCircle2, ChevronDown, X, XCircle } from "lucide-react";
 import type { Dictionary } from "@/lib/i18n/en";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
@@ -55,6 +55,7 @@ export function WaitlistDialog({
     already: boolean;
     queueNumber: number | null;
     approved: boolean;
+    rejected: boolean;
     email: string;
   } | null>(null);
   const [opened, setOpened] = useState(false);
@@ -118,6 +119,7 @@ export function WaitlistDialog({
         already: body.alreadyOnList === true,
         queueNumber: body.queueNumber ?? null,
         approved: body.status === "approved",
+        rejected: body.status === "rejected",
         email,
       });
     } catch {
@@ -180,6 +182,15 @@ export function WaitlistDialog({
             >
               {copy.approvedCta}
             </a>
+          </div>
+        ) : done?.rejected ? (
+          // Used to fall through to "you're already on the list — we'll email
+          // you when access opens" below, which is wrong for someone who was
+          // declined: it promises an email that never comes.
+          <div className="space-y-3 py-6 text-center">
+            <XCircle size={40} className="mx-auto text-muted-foreground" aria-hidden />
+            <h2 className="text-lg font-semibold">{copy.rejectedTitle}</h2>
+            <p className="text-sm text-muted-foreground">{copy.rejectedBody}</p>
           </div>
         ) : done ? (
           <div className="space-y-3 py-6 text-center">

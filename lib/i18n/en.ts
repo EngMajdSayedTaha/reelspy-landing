@@ -401,6 +401,8 @@ export const en = {
     approvedTitle: "You're approved.",
     approvedBody: "Your access is already open — create your account with this address and you'll go straight in.",
     approvedCta: "Create your account",
+    rejectedTitle: "Not able to offer you access right now.",
+    rejectedBody: "We're keeping the beta small while we get the fundamentals right. If your situation changes, reply to your confirmation email and we'll take another look.",
 
     errorEmail: "Enter a valid email address.",
     errorThrottled: "That's a lot of requests. Try again a bit later.",
