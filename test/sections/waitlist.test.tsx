@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, afterEach } from "vitest";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { getDictionary } from "@/lib/i18n";
 import { Hero } from "@/components/landing/hero/Hero";
@@ -57,5 +57,43 @@ describe("closed-beta CTA interception", () => {
     // Email is the only required field — the rest sit behind the disclosure.
     expect(screen.getByLabelText(en.waitlist.emailLabel)).toBeTruthy();
     expect(screen.queryByLabelText(en.waitlist.nicheLabel)).toBeNull();
+  });
+
+  // Regression test for the reported bug: an already-approved applicant who
+  // (re-)submits their email used to land on static "you're on the list" text
+  // with nothing to click — the real account form was unreachable, because
+  // /signup always shows the join form while the gate is on. The fix is a
+  // dedicated "approved" outcome with a CTA into /signup?email=, which
+  // app/signup/page.tsx verifies server-side before granting the real form.
+  describe("re-submitting an already-approved email", () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it("offers a way into the real account form instead of a dead end", async () => {
+      vi.stubGlobal(
+        "fetch",
+        vi.fn().mockResolvedValue(
+          new Response(JSON.stringify({ ok: true, alreadyOnList: true, queueNumber: 12, status: "approved" }), {
+            status: 200,
+          })
+        )
+      );
+
+      const user = userEvent.setup();
+      render(withWaitlist(<Hero dict={en} />, true));
+      await user.click(screen.getAllByRole("button", { name: en.waitlist.cta })[0]);
+
+      const dialog = within(await screen.findByRole("dialog"));
+      // cta and submit share the same copy ("Join the waiting list"), so the
+      // opener button behind the overlay still matches by name — scope every
+      // query below to the dialog itself.
+      await user.type(dialog.getByLabelText(en.waitlist.emailLabel), "approved@example.com");
+      await user.click(dialog.getByRole("button", { name: en.waitlist.submit }));
+
+      expect(await dialog.findByText(en.waitlist.approvedTitle)).toBeTruthy();
+      const cta = dialog.getByRole("link", { name: en.waitlist.approvedCta });
+      expect(cta.getAttribute("href")).toBe("/signup?email=approved%40example.com");
+    });
   });
 });

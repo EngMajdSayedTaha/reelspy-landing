@@ -22,6 +22,7 @@ type JoinResponse = {
   ok?: boolean;
   alreadyOnList?: boolean;
   queueNumber?: number | null;
+  status?: string;
   reason?: string;
   error?: string;
 };
@@ -50,7 +51,12 @@ export function WaitlistDialog({
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState<{ already: boolean; queueNumber: number | null } | null>(null);
+  const [done, setDone] = useState<{
+    already: boolean;
+    queueNumber: number | null;
+    approved: boolean;
+    email: string;
+  } | null>(null);
   const [opened, setOpened] = useState(false);
 
   // Scroll lock + Escape, and move focus into the panel — same treatment the
@@ -108,7 +114,12 @@ export function WaitlistDialog({
         setError(body.error ?? copy.errorGeneric);
         return;
       }
-      setDone({ already: body.alreadyOnList === true, queueNumber: body.queueNumber ?? null });
+      setDone({
+        already: body.alreadyOnList === true,
+        queueNumber: body.queueNumber ?? null,
+        approved: body.status === "approved",
+        email,
+      });
     } catch {
       setError(copy.errorGeneric);
     } finally {
@@ -149,6 +160,25 @@ export function WaitlistDialog({
               className="lp-cta-bg inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-semibold"
             >
               {copy.openedCta}
+            </a>
+          </div>
+        ) : done?.approved ? (
+          // Already approved — most often someone re-submitting after the
+          // "you're in" email, or opening this dialog directly instead of
+          // clicking through it. /signup?email= re-verifies this exact
+          // address server-side and swaps in the real account form for it
+          // (dashboard app: app/signup/page.tsx, isEmailApproved) — a bare
+          // "you're approved" message with nothing to click would just be
+          // this same dead end one layer up.
+          <div className="space-y-4 py-6 text-center">
+            <CheckCircle2 size={40} className="mx-auto text-lp-yellow-ink" aria-hidden />
+            <h2 className="text-lg font-semibold">{copy.approvedTitle}</h2>
+            <p className="text-sm text-muted-foreground">{copy.approvedBody}</p>
+            <a
+              href={`/signup?email=${encodeURIComponent(done.email)}`}
+              className="lp-cta-bg inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-semibold"
+            >
+              {copy.approvedCta}
             </a>
           </div>
         ) : done ? (

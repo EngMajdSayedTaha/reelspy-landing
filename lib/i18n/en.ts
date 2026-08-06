@@ -398,6 +398,9 @@ export const en = {
     alreadyBody: "You're #{n} — no need to sign up again. We'll email you when access opens.",
     checkInbox:
       "Check your inbox for a confirmation — if it isn't there in a few minutes, look in spam.",
+    approvedTitle: "You're approved.",
+    approvedBody: "Your access is already open — create your account with this address and you'll go straight in.",
+    approvedCta: "Create your account",
 
     errorEmail: "Enter a valid email address.",
     errorThrottled: "That's a lot of requests. Try again a bit later.",
