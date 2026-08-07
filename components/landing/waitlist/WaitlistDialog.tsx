@@ -5,6 +5,7 @@ import { CheckCircle2, ChevronDown, X, XCircle } from "lucide-react";
 import type { Dictionary } from "@/lib/i18n/en";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
 
 // The join dialog. Hand-rolled rather than pulled from a component library:
 // this project ships no dialog primitive, and the mobile sheet in Nav.tsx
@@ -17,6 +18,11 @@ import { cn } from "@/lib/utils";
 // next.config.ts.
 
 const FOLLOWER_RANGES = ["0-1k", "1k-10k", "10k-50k", "50k-250k", "250k+"] as const;
+
+// Radix Select forbids an Item value of "" (reserved for "no selection"), but
+// "any" is a real, meaningful choice here — sentinel at the Select boundary,
+// translated back to "" (what the submit payload's `followerRange` expects).
+const FOLLOWERS_ANY = "__any__";
 
 type JoinResponse = {
   ok?: boolean;
@@ -265,14 +271,22 @@ export function WaitlistDialog({
                   <input id="wl-niche" value={niche} placeholder={copy.nichePlaceholder} onChange={(e) => setNiche(e.target.value)} className={inputClass} />
                 </Field>
                 <Field id="wl-followers" label={copy.followersLabel}>
-                  <select id="wl-followers" value={followerRange} onChange={(e) => setFollowerRange(e.target.value)} className={inputClass}>
-                    <option value="">{copy.followersAny}</option>
-                    {FOLLOWER_RANGES.map((r) => (
-                      <option key={r} value={r}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
+                  <Select
+                    value={followerRange || FOLLOWERS_ANY}
+                    onValueChange={(value) => setFollowerRange(value === FOLLOWERS_ANY ? "" : value)}
+                  >
+                    <SelectTrigger id="wl-followers" className={inputClass}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={FOLLOWERS_ANY}>{copy.followersAny}</SelectItem>
+                      {FOLLOWER_RANGES.map((r) => (
+                        <SelectItem key={r} value={r}>
+                          {r}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </Field>
                 <Field id="wl-referral" label={copy.referralLabel}>
                   <input id="wl-referral" value={referral} placeholder={copy.referralPlaceholder} onChange={(e) => setReferral(e.target.value)} className={inputClass} />
