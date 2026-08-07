@@ -10,6 +10,12 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Tells the browser which palette to use for UA-rendered chrome (native
+     <select> option popups, scrollbars, form controls) that Tailwind's
+     `dark:` variant can't reach — without this, native <select> dropdowns
+     render with the OS light popup even while .dark is active, showing
+     dark-mode (near-white) text on that light background. */
+  color-scheme: light;
   --background: #f7f7f8;
   --foreground: #18181b;
   --card: #ffffff;
@@ -71,6 +77,7 @@
 /* Lifted verbatim from the product app: a lifted graphite scale with a clear
    elevation step page → card → popover, rather than the old navy. */
 .dark {
+  color-scheme: dark;
   --background: #18181f;
   --foreground: #e7e7ea;
   --card: #1f1f27;
