@@ -220,6 +220,9 @@ export const en = {
     // catalog — {name} is replaced with the plan's display name.
     ctaFree: "Start free",
     ctaGet: "Get {name}",
+    saveBadge: "Save {pct}%",
+    saleEndsOn: "ends {date}",
+    trialBadge: "{days}-day free trial",
     plans: [
       {
         name: "Free",

@@ -14,6 +14,7 @@ import { BeforeAfter } from "@/components/landing/BeforeAfter";
 import { FAQ } from "@/components/landing/FAQ";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 import { Footer } from "@/components/landing/Footer";
+import type { Plan } from "@/lib/plans/types";
 
 const en = getDictionary("en");
 const ar = getDictionary("ar");
@@ -101,6 +102,37 @@ describe("structural contracts", () => {
     expect(hrefs.filter((h) => h === "/signup").length).toBeGreaterThanOrEqual(
       en.pricing.plans.length
     );
+  });
+
+  it("pricing reflects the admin catalog's badge, sale price and trial", () => {
+    const plans: Plan[] = [
+      {
+        slug: "creator",
+        kind: "fixed",
+        sortOrder: 10,
+        trialDays: 14,
+        copy: {
+          en: { name: "Creator", tagline: "For creators", highlights: ["30 accounts"], badge: "Most popular" },
+          ar: { name: "Creator", tagline: "لصنّاع المحتوى", highlights: ["30 حسابًا"], badge: "الأكثر رواجًا" },
+        },
+        price: {
+          currency: "aed",
+          unitAmount: 4900,
+          interval: "month",
+          compareAtAmount: 7900,
+          saleEndsAt: "2099-01-01T00:00:00.000Z",
+        },
+      },
+    ];
+    render(<Pricing dict={en} plans={plans} locale="en" />);
+    // Badge drives the highlighted-card pill.
+    expect(screen.getByText("Most popular")).toBeTruthy();
+    // "Was" price struck through, current price shown plainly.
+    expect(screen.getByText("79")).toBeTruthy();
+    expect(screen.getByText("49")).toBeTruthy();
+    // Sale + trial badges, matching the dashboard billing page's wording.
+    expect(screen.getByText(/Save 38%/)).toBeTruthy();
+    expect(screen.getByText("14-day free trial")).toBeTruthy();
   });
 
   it("renders the Arabic headline, not the English one", () => {

@@ -12,6 +12,8 @@ type RenderPlan = {
   key: string;
   name: string;
   price: string;
+  /** Struck-through "was" figure, matching the dashboard billing page's sale design. */
+  wasPrice: string | null;
   tagline: string;
   cta: string;
   features: string[];
@@ -23,13 +25,34 @@ type RenderPlan = {
    * second badge to show here yet.
    */
   subBadge: string | null;
+  /** "Save 20% · ends Aug 20" — null when there's no active sale. */
+  saleLabel: string | null;
+  /** "14-day free trial" — null when the plan has no trial. */
+  trialLabel: string | null;
 };
+
+function saleLabelFor(t: Dictionary["pricing"], plan: Plan, locale: Locale): string | null {
+  const price = plan.price;
+  if (!price?.compareAtAmount) return null;
+  const pct = Math.round(((price.compareAtAmount - price.unitAmount) / price.compareAtAmount) * 100);
+  if (pct <= 0) return null;
+  const save = t.saveBadge.replace("{pct}", String(pct));
+  if (!price.saleEndsAt) return save;
+  const date = new Date(price.saleEndsAt).toLocaleDateString(locale === "ar" ? "ar-AE-u-nu-latn" : "en-US", {
+    month: "short",
+    day: "numeric",
+  });
+  return `${save} · ${t.saleEndsOn.replace("{date}", date)}`;
+}
 
 // Admin-published plans (from the dashboard's plan catalog) win when present;
 // the dictionary's static copy is the fallback for a fetch failure, a fresh
 // checkout before the catalog migration is applied, or a caller (tests) that
 // doesn't pass `plans` at all. See lib/plans/fetch.ts for why an empty array,
 // never stale/invented data, is what a failure resolves to.
+//
+// The static fallback has no sale/trial data to show — those are catalog-only
+// fields, so the fallback plans render exactly as they always have.
 function resolvePlans(t: Dictionary["pricing"], plans: Plan[] | undefined, locale: Locale): RenderPlan[] {
   if (plans && plans.length > 0) {
     return plans.map((plan) => {
@@ -39,11 +62,14 @@ function resolvePlans(t: Dictionary["pricing"], plans: Plan[] | undefined, local
         key: plan.slug,
         name: copy.name,
         price: String(priceMajor),
+        wasPrice: plan.price?.compareAtAmount ? String(Math.round(plan.price.compareAtAmount / 100)) : null,
         tagline: copy.tagline,
         cta: plan.kind === "free" ? t.ctaFree : t.ctaGet.replace("{name}", copy.name),
         features: copy.highlights,
         badge: copy.badge,
         subBadge: null,
+        saleLabel: saleLabelFor(t, plan, locale),
+        trialLabel: plan.trialDays > 0 ? t.trialBadge.replace("{days}", String(plan.trialDays)) : null,
       };
     });
   }
@@ -51,11 +77,14 @@ function resolvePlans(t: Dictionary["pricing"], plans: Plan[] | undefined, local
     key: plan.name,
     name: plan.name,
     price: plan.price,
+    wasPrice: null,
     tagline: plan.tagline,
     cta: plan.cta,
     features: plan.features,
     badge: plan.name === "Pro" ? t.mostPopular : null,
     subBadge: plan.name === "Studio" ? t.forStudios : null,
+    saleLabel: null,
+    trialLabel: null,
   }));
 }
 
@@ -108,8 +137,22 @@ export function Pricing({ dict, plans, locale = "en" }: { dict: Dictionary; plan
                   )}
                 </div>
 
+                {(plan.saleLabel || plan.trialLabel) && (
+                  <div className="mt-2 flex flex-col gap-0.5">
+                    {plan.saleLabel && (
+                      <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">{plan.saleLabel}</p>
+                    )}
+                    {plan.trialLabel && (
+                      <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">{plan.trialLabel}</p>
+                    )}
+                  </div>
+                )}
+
                 <div className="mt-4 flex items-end gap-1.5">
                   {!rtl && <span className="mb-1.5 text-sm font-medium text-muted-foreground">{t.currency}</span>}
+                  {plan.wasPrice && (
+                    <s className="mb-1.5 text-lg font-normal text-muted-foreground">{plan.wasPrice}</s>
+                  )}
                   <span className="tabular text-4xl font-semibold text-foreground">{plan.price}</span>
                   {rtl && <span className="mb-1.5 text-sm font-medium text-muted-foreground">{t.currency}</span>}
                   <span className="mb-1.5 text-sm text-muted-foreground">{t.perMonth}</span>
