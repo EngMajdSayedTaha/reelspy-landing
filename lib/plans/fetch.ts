@@ -48,6 +48,8 @@ function toPlan(value: unknown): Plan | null {
           currency: rawPrice.currency,
           unitAmount: rawPrice.unitAmount,
           interval: rawPrice.interval === "year" ? ("year" as const) : ("month" as const),
+          compareAtAmount: typeof rawPrice.compareAtAmount === "number" ? rawPrice.compareAtAmount : null,
+          saleEndsAt: typeof rawPrice.saleEndsAt === "string" ? rawPrice.saleEndsAt : null,
         }
       : null;
 
@@ -55,6 +57,7 @@ function toPlan(value: unknown): Plan | null {
     slug: v.slug,
     kind,
     sortOrder: typeof v.sortOrder === "number" ? v.sortOrder : 100,
+    trialDays: typeof v.trialDays === "number" && v.trialDays > 0 ? Math.trunc(v.trialDays) : 0,
     copy: { en, ar },
     price,
   };

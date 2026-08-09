@@ -234,6 +234,9 @@ export const ar: Dictionary = {
     currency: "درهم",
     ctaFree: "ابدأ مجانًا",
     ctaGet: "احصل على {name}",
+    saveBadge: "وفّر {pct}%",
+    saleEndsOn: "ينتهي في {date}",
+    trialBadge: "تجربة مجانية {days} أيام",
     plans: [
       {
         name: "المجانية",
