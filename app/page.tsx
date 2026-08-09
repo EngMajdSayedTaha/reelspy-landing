@@ -17,9 +17,30 @@ import { FinalCTA } from "@/components/landing/FinalCTA";
 import { Footer } from "@/components/landing/Footer";
 import { WaitlistProvider } from "@/components/landing/waitlist/WaitlistProvider";
 import { getWaitlistState } from "@/lib/waitlist";
+import { getPlans } from "@/lib/plans/fetch";
+import type { Plan } from "@/lib/plans/types";
 
-function jsonLd() {
+// Mirrors Pricing.tsx's own fallback: structured data must describe exactly
+// what the page rendered, so it reads the same admin-published plans (or the
+// same static fallback) rather than a third, independent source.
+function jsonLd(plans: Plan[]) {
   const en = getDictionary("en");
+  const offers =
+    plans.length > 0
+      ? plans
+          .filter((p) => p.price)
+          .map((p) => ({
+            "@type": "Offer",
+            name: p.copy.en.name,
+            price: String(Math.round(p.price!.unitAmount / 100)),
+            priceCurrency: p.price!.currency.toUpperCase(),
+          }))
+      : en.pricing.plans.map((p) => ({
+          "@type": "Offer",
+          name: p.name,
+          price: p.price,
+          priceCurrency: "AED",
+        }));
   const application = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -29,12 +50,7 @@ function jsonLd() {
     url: SITE_URL,
     description:
       "ReelSpy tracks the creators you admire, ranks which reels are over-performing right now, writes original AI scripts in your voice, and publishes straight to Instagram, with TikTok, YouTube & Facebook coming soon.",
-    offers: en.pricing.plans.map((p) => ({
-      "@type": "Offer",
-      name: p.name,
-      price: p.price,
-      priceCurrency: "AED",
-    })),
+    offers,
   };
   const organization = {
     "@context": "https://schema.org",
@@ -63,6 +79,10 @@ export default async function LandingPage() {
   // "off"). When it's on, every /signup CTA below becomes "Join the waiting
   // list" and opens the dialog — see components/ui/CTALink.tsx.
   const waitlist = await getWaitlistState();
+  // Admin-published plans from the dashboard zone (cached 60s, fails to empty
+  // — see lib/plans/fetch.ts). Pricing.tsx falls back to its own static copy
+  // when this is empty, so a fetch failure degrades to today's behavior.
+  const plans = await getPlans();
 
   return (
     <WaitlistProvider
@@ -83,14 +103,14 @@ export default async function LandingPage() {
         <LiveTrending dict={dict} />
         <NicheRadar dict={dict} />
         <BentoGrid dict={dict} />
-        <Pricing dict={dict} />
+        <Pricing dict={dict} plans={plans} locale={locale} />
         <BeforeAfter dict={dict} />
         <FAQ dict={dict} />
         <FinalCTA dict={dict} />
       </main>
       <Footer dict={dict} locale={locale} />
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd()) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd(plans)) }} />
     </WaitlistProvider>
   );
 }

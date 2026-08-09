@@ -216,6 +216,10 @@ export const en = {
     mostPopular: "Most popular",
     forStudios: "For teams & studios",
     currency: "AED",
+    // Used for admin-published plans, whose CTA copy isn't part of the plan
+    // catalog — {name} is replaced with the plan's display name.
+    ctaFree: "Start free",
+    ctaGet: "Get {name}",
     plans: [
       {
         name: "Free",

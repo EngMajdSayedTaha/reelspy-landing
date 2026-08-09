@@ -232,6 +232,8 @@ export const ar: Dictionary = {
     mostPopular: "الأكثر رواجًا",
     forStudios: "للفرق والاستوديوهات",
     currency: "درهم",
+    ctaFree: "ابدأ مجانًا",
+    ctaGet: "احصل على {name}",
     plans: [
       {
         name: "المجانية",

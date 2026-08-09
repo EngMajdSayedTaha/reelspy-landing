@@ -4,11 +4,65 @@ import { Reveal } from "@/components/ui/Reveal";
 import { CTALink } from "@/components/ui/CTALink";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n/en";
+import type { Locale } from "@/lib/i18n/config";
+import type { Plan } from "@/lib/plans/types";
 import { BuildYourOwn } from "./BuildYourOwn";
 
-export function Pricing({ dict }: { dict: Dictionary }) {
+type RenderPlan = {
+  key: string;
+  name: string;
+  price: string;
+  tagline: string;
+  cta: string;
+  features: string[];
+  badge: string | null;
+  /**
+   * The small "For teams & studios" chip. The plan catalog only carries one
+   * copy field for a badge, so this only exists for the built-in Studio slug
+   * shown by the fallback dictionary copy — an admin-published plan has no
+   * second badge to show here yet.
+   */
+  subBadge: string | null;
+};
+
+// Admin-published plans (from the dashboard's plan catalog) win when present;
+// the dictionary's static copy is the fallback for a fetch failure, a fresh
+// checkout before the catalog migration is applied, or a caller (tests) that
+// doesn't pass `plans` at all. See lib/plans/fetch.ts for why an empty array,
+// never stale/invented data, is what a failure resolves to.
+function resolvePlans(t: Dictionary["pricing"], plans: Plan[] | undefined, locale: Locale): RenderPlan[] {
+  if (plans && plans.length > 0) {
+    return plans.map((plan) => {
+      const copy = plan.copy[locale] ?? plan.copy.en;
+      const priceMajor = plan.price ? Math.round(plan.price.unitAmount / 100) : 0;
+      return {
+        key: plan.slug,
+        name: copy.name,
+        price: String(priceMajor),
+        tagline: copy.tagline,
+        cta: plan.kind === "free" ? t.ctaFree : t.ctaGet.replace("{name}", copy.name),
+        features: copy.highlights,
+        badge: copy.badge,
+        subBadge: null,
+      };
+    });
+  }
+  return t.plans.map((plan) => ({
+    key: plan.name,
+    name: plan.name,
+    price: plan.price,
+    tagline: plan.tagline,
+    cta: plan.cta,
+    features: plan.features,
+    badge: plan.name === "Pro" ? t.mostPopular : null,
+    subBadge: plan.name === "Studio" ? t.forStudios : null,
+  }));
+}
+
+export function Pricing({ dict, plans, locale = "en" }: { dict: Dictionary; plans?: Plan[]; locale?: Locale }) {
   const t = dict.pricing;
   const rtl = dict.meta.dir === "rtl";
+  const renderPlans = resolvePlans(t, plans, locale);
 
   return (
     <Section id="pricing" className="bg-background">
@@ -23,34 +77,33 @@ export function Pricing({ dict }: { dict: Dictionary }) {
           boundary out far enough to contain the badge. Desktop is a plain grid
           with `overflow-visible`, so it resets. */}
       <Reveal className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 pt-5 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 sm:pt-0 lg:grid-cols-4">
-        {t.plans.map((plan, i) => {
-          const isPro = plan.name === "Pro";
-          const isStudio = plan.name === "Studio";
+        {renderPlans.map((plan) => {
+          const highlighted = Boolean(plan.badge);
           return (
             <div
-              key={i}
+              key={plan.key}
               className={cn(
                 "relative flex min-w-[80%] shrink-0 snap-center flex-col rounded-2xl p-6 sm:min-w-0",
-                isPro ? "lp-gradient-border order-first sm:order-none" : "border border-border bg-card"
+                highlighted ? "lp-gradient-border order-first sm:order-none" : "border border-border bg-card"
               )}
             >
               {/* Badge */}
-              {isPro && (
+              {plan.badge && (
                 <span className="absolute -top-3 start-6 rounded-full bg-lp-yellow px-3 py-1 text-[0.68rem] font-semibold text-lp-yellow-fg shadow">
-                  {t.mostPopular}
+                  {plan.badge}
                 </span>
               )}
-              {/* The Pro card no longer needs its own text colors: it used to
-                  sit on a dark gradient panel while the others were light, so
-                  every label had to branch. Now every card is a themed surface
-                  and the highlight is carried by the animated accent border
-                  plus the filled CTA. */}
+              {/* The highlighted card no longer needs its own text colors: it
+                  used to sit on a dark gradient panel while the others were
+                  light, so every label had to branch. Now every card is a
+                  themed surface and the highlight is carried by the animated
+                  accent border plus the filled CTA. */}
               <div className="relative flex flex-col">
                 <div className="flex items-center gap-2">
                   <h3 className="text-lg font-semibold text-foreground">{plan.name}</h3>
-                  {isStudio && (
+                  {plan.subBadge && (
                     <span className="rounded-full border border-border px-2 py-0.5 text-[0.62rem] font-medium text-muted-foreground">
-                      {t.forStudios}
+                      {plan.subBadge}
                     </span>
                   )}
                 </div>
@@ -69,9 +122,9 @@ export function Pricing({ dict }: { dict: Dictionary }) {
                 <CTALink
                   href="/signup"
                   size="md"
-                  variant={isPro ? "primary" : "ghost"}
+                  variant={highlighted ? "primary" : "ghost"}
                   magnetic={false}
-                  className={cn("mt-4 w-full", !isPro && "border-border-strong text-foreground hover:bg-accent")}
+                  className={cn("mt-4 w-full", !highlighted && "border-border-strong text-foreground hover:bg-accent")}
                 >
                   {plan.cta}
                 </CTALink>
