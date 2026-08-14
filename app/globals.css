@@ -310,17 +310,6 @@ html[lang="ar"] p {
   color: var(--lp-yellow-fg);
 }
 
-/* Elevated card. Now theme-aware — it was hardcoded to the dark navy, which
-   is what made light mode look half-finished. */
-.lp-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
-  box-shadow:
-    0 20px 60px color-mix(in srgb, var(--foreground) 10%, transparent),
-    inset 0 1px 0 color-mix(in srgb, var(--foreground) 5%, transparent);
-}
-
 .lp-glass {
   background: color-mix(in srgb, var(--card) 72%, transparent);
   backdrop-filter: blur(14px) saturate(1.2);
@@ -607,22 +596,6 @@ html.js [data-reveal]:not([data-visible="true"]) {
   }
 }
 
-/* Shimmer for skeleton thumbnails */
-@keyframes lp-shimmer {
-  0% { background-position: -160% 0; }
-  100% { background-position: 260% 0; }
-}
-.lp-shimmer {
-  background: linear-gradient(
-    100deg,
-    var(--secondary) 30%,
-    color-mix(in srgb, var(--lp-yellow) 16%, var(--secondary)) 50%,
-    var(--secondary) 70%
-  );
-  background-size: 220% 100%;
-  animation: lp-shimmer 3.2s ease-in-out infinite;
-}
-
 /* Count-up numbers never jitter */
 .count {
   font-variant-numeric: tabular-nums;
@@ -718,7 +691,6 @@ html.js [data-reveal]:not([data-visible="true"]) {
 /* prefers-contrast: solidify hairlines */
 @media (prefers-contrast: more) {
   .lp-hairline,
-  .lp-card,
   .lp-glass {
     border-color: color-mix(in srgb, var(--foreground) 45%, transparent);
   }
