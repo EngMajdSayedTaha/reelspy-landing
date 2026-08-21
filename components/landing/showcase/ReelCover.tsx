@@ -34,15 +34,23 @@ export function ReelCover({
   calm = false,
   /**
    * Play the reel's video, when the payload has one. Off by default: the grid
-   * below the wall is for reading captions and numbers, and the wall's back row
-   * is depth — neither is worth a video decode. See ReelWall for the split.
+   * below the wall is for reading captions and numbers, so it isn't worth a
+   * video decode there. See ReelWall for where it's turned on.
    */
   video = false,
+  /**
+   * The play glyph overlay. Off on the wall: those cards aren't clickable and
+   * a static "play" icon sitting on top of footage that is already looping
+   * reads as broken, not as an affordance. On by default for the grid, where
+   * the card really is a link and the glyph is the "this is a reel" cue.
+   */
+  showPlayIcon = true,
 }: {
   reel: ShowcaseReel;
   className?: string;
   calm?: boolean;
   video?: boolean;
+  showPlayIcon?: boolean;
 }) {
   const art = coverArtFor(reel);
 
@@ -130,11 +138,13 @@ export function ReelCover({
           top of running footage reads as "paused", which is the opposite of
           what it is there to say. `group-has-` keys off the <video> the layer
           above renders, so no state has to be lifted to do it. */}
-      <span className="pointer-events-none absolute inset-0 grid place-items-center transition-opacity duration-500 group-has-[video]:opacity-0">
-        <span className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-black/25 backdrop-blur-[2px] transition duration-500 group-hover:scale-110 group-hover:bg-black/40">
-          <Play size={14} className="translate-x-px text-white/90" fill="currentColor" />
+      {showPlayIcon && (
+        <span className="pointer-events-none absolute inset-0 grid place-items-center transition-opacity duration-500 group-has-[video]:opacity-0">
+          <span className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-black/25 backdrop-blur-[2px] transition duration-500 group-hover:scale-110 group-hover:bg-black/40">
+            <Play size={14} className="translate-x-px text-white/90" fill="currentColor" />
+          </span>
         </span>
-      </span>
+      )}
     </div>
   );
 }
