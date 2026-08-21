@@ -57,16 +57,21 @@ export function CTALink({
   };
 
   const base =
-    "relative inline-flex items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap transition-[transform,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] focus-visible:outline-2 focus-visible:outline-offset-2";
+    "relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap tracking-[-0.01em] transition-[transform,box-shadow,background-color,border-color] duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] focus-visible:outline-2 focus-visible:outline-offset-2";
   const sizes = {
     md: "px-5 py-2.5 text-sm",
     lg: "px-7 py-3.5 text-[0.95rem]",
   };
+  // The primary button's glow used to be a 44px-wide yellow halo. On a page
+  // that no longer has any other yellow light on it, that halo was the loudest
+  // element on screen and it bled onto whatever sat behind the button. It is
+  // now a real elevation shadow — the button reads as raised rather than lit —
+  // with the color kept where it belongs: in the fill.
   const variants = {
     primary:
-      "lp-cta-bg shadow-[0_8px_30px_rgba(249,228,0,0.28)] hover:shadow-[0_12px_44px_rgba(249,228,0,0.42)] hover:brightness-[0.96] hover:scale-[1.02] before:absolute before:inset-0 before:rounded-full before:bg-[linear-gradient(180deg,rgba(255,255,255,0.3),transparent_45%)] before:pointer-events-none",
+      "lp-cta-bg shadow-[var(--lp-shadow-2)] hover:shadow-[var(--lp-shadow-3)] hover:brightness-[0.97] hover:scale-[1.02] active:scale-[0.99] before:absolute before:inset-0 before:rounded-full before:bg-[linear-gradient(180deg,rgba(255,255,255,0.36),transparent_46%)] before:pointer-events-none",
     ghost:
-      "border border-border-strong text-foreground hover:bg-accent hover:border-foreground/25 backdrop-blur-sm",
+      "border border-border bg-card/60 text-foreground shadow-[var(--lp-sheen)] hover:bg-accent hover:border-border-strong backdrop-blur-sm",
   };
 
   // A plain <a>, not next/link, on purpose. Almost every CTA points at

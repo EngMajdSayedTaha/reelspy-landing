@@ -13,7 +13,7 @@ export function BentoGrid({ dict }: { dict: Dictionary }) {
   const t = dict.bento;
   return (
     <Section className="bg-background">
-      <SectionHeading eyebrow={t.eyebrow} title={t.h2} align="center" className="mx-auto mb-14" />
+      <SectionHeading eyebrow={t.eyebrow} title={t.h2} align="center" className="mx-auto mb-16" />
       {/* The 2-column tier matters: going straight from 1 to 4 columns put four
           tiles (two of them double-width) on one row from 640px up, which was
           unreadable on a small tablet. */}
@@ -21,20 +21,20 @@ export function BentoGrid({ dict }: { dict: Dictionary }) {
         {t.tiles.map((tile, i) => {
           const Icon = ICONS[i];
           return (
-            <Reveal
-              key={i}
-              delay={(i % 4) * 60}
-              className={cn(
-                "lp-lift group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5",
-                SPANS[i]
-              )}
-            >
-              <span className="lp-icon-tile h-10 w-10 transition-transform duration-300 group-hover:scale-110">
-                <Icon size={18} strokeWidth={1.7} />
-              </span>
-              <div>
-                <h3 className="text-[0.95rem] font-semibold text-foreground">{tile.t}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{tile.d}</p>
+            // The card is a child of the Reveal, never the Reveal itself.
+            // A reveal target is held at `transform: translateY(18px)` by a
+            // selector more specific than any `:hover` rule, so a hover lift on
+            // the same element silently does nothing — which is exactly what
+            // was happening to these tiles.
+            <Reveal key={i} delay={(i % 4) * 60} className={cn("flex", SPANS[i])}>
+              <div className="lp-surface lp-surface-hover lp-spot group flex w-full flex-col gap-4 p-5">
+                <span className="lp-icon-tile h-10 w-10 transition-transform duration-300 group-hover:scale-110">
+                  <Icon size={18} strokeWidth={1.7} />
+                </span>
+                <div>
+                  <h3 className="text-[0.95rem] font-semibold text-foreground">{tile.t}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{tile.d}</p>
+                </div>
               </div>
             </Reveal>
           );

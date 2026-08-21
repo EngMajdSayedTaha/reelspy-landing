@@ -39,6 +39,28 @@
   --brand: #a16207;
   --radius: 0.75rem;
 
+  /* ---- Elevation --------------------------------------------------------
+     Layered, never single-shadow. A tight contact shadow plus a wide ambient
+     one is the whole difference between a card that looks pasted onto the page
+     and one that looks lit by it. Alpha stays low on purpose: on a near-neutral
+     background a heavy shadow reads as a smudge, not as depth. */
+  --lp-shadow-1: 0 1px 2px rgba(16, 16, 20, 0.04), 0 2px 8px -2px rgba(16, 16, 20, 0.05);
+  --lp-shadow-2: 0 1px 2px rgba(16, 16, 20, 0.05), 0 10px 26px -8px rgba(16, 16, 20, 0.10);
+  --lp-shadow-3: 0 2px 4px rgba(16, 16, 20, 0.05), 0 22px 54px -16px rgba(16, 16, 20, 0.16);
+  --lp-shadow-4: 0 4px 10px rgba(16, 16, 20, 0.06), 0 44px 96px -28px rgba(16, 16, 20, 0.24);
+  /* The one-pixel lit top edge. Cheap, and it is most of what separates a
+     "premium" surface from a filled rectangle. */
+  --lp-sheen: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+  /* ---- Ambience ---------------------------------------------------------
+     The page used to be lit by yellow blooms. It is now lit by NEUTRAL light:
+     an ink wash on light backgrounds, a pale wash on dark ones. --lp-air is the
+     rgb triplet those washes are mixed from, so ambience is a value of the
+     theme rather than a second brand color. Yellow is now reserved strictly for
+     things you can act on — CTAs, the live badge, an out-performance chip. */
+  --lp-air: 24, 24, 31;
+  --lp-grain: 0.035;
+
   /* ---- Landing marketing palette ---------------------------------------
      Graphite + electric yellow, matching the product's volt preset. There is
      exactly ONE chromatic voice (--lp-yellow); everything else is the neutral
@@ -102,6 +124,17 @@
   /* On graphite the neon has ample contrast, so accent text is the neon
      itself rather than the light-mode amber. */
   --lp-yellow-ink: #f9e400;
+
+  /* Graphite swallows light shadows, so the scale goes darker and wider, and
+     the sheen inverts to a faint white top edge instead of a bright one. */
+  --lp-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.30), 0 2px 8px -2px rgba(0, 0, 0, 0.28);
+  --lp-shadow-2: 0 1px 2px rgba(0, 0, 0, 0.34), 0 10px 26px -8px rgba(0, 0, 0, 0.42);
+  --lp-shadow-3: 0 2px 4px rgba(0, 0, 0, 0.36), 0 22px 54px -16px rgba(0, 0, 0, 0.52);
+  --lp-shadow-4: 0 4px 10px rgba(0, 0, 0, 0.40), 0 44px 96px -28px rgba(0, 0, 0, 0.62);
+  --lp-sheen: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  --lp-air: 236, 236, 242;
+  --lp-grain: 0.05;
 }
 
 @theme inline {
@@ -141,6 +174,13 @@
 
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
+  --radius-2xl: 1.75rem;
+  --radius-3xl: 2.25rem;
+
+  --shadow-e1: var(--lp-shadow-1);
+  --shadow-e2: var(--lp-shadow-2);
+  --shadow-e3: var(--lp-shadow-3);
+  --shadow-e4: var(--lp-shadow-4);
 }
 
 /* ==========================================================================
@@ -244,12 +284,42 @@ summary {
    Typography helpers
    ========================================================================== */
 
+/* The eyebrow is now a hairline-bounded pill rather than loose yellow caps.
+   Loose colored caps floating above a heading is the single most dated element
+   on a marketing page; a contained, mostly-neutral label with one small accent
+   dot reads as a system rather than as decoration. Colors stay on the token so
+   an eyebrow inside a dark mock still resolves correctly. */
 .lp-eyebrow {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.75rem 0.3rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 70%, transparent);
+  box-shadow: var(--lp-sheen);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--lp-yellow-ink);
+  color: var(--muted-foreground);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+/* The accent dot. Drawn by the class itself so no call site has to remember it,
+   and `::before` rather than markup so it never lands in the accessible name. */
+.lp-eyebrow::before {
+  content: "";
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 999px;
+  background: var(--lp-yellow);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lp-yellow) 18%, transparent);
+  flex: none;
+}
+/* Logical padding for RTL: the tighter side is always the dot's side. */
+html[dir="rtl"] .lp-eyebrow {
+  padding: 0.3rem 0.6rem 0.3rem 0.75rem;
 }
 
 .font-mono {
@@ -261,29 +331,52 @@ summary {
   font-feature-settings: "tnum";
 }
 
-/* Fluid display type */
+/* Fluid display type.
+
+   Weights went 600 → 620/650 and tracking tightened. At display sizes a 600 in
+   Geist reads soft and the default tracking opens up visibly — big type needs
+   NEGATIVE tracking to look like the same typeface as the body copy. The
+   headline sizes also grew: a $25k page commits to its headline instead of
+   hedging at 4rem. */
 .lp-h1 {
-  font-size: clamp(2.5rem, 1.4rem + 4.6vw, 4rem);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  font-weight: 600;
+  font-size: clamp(2.75rem, 1.3rem + 5.6vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  font-weight: 650;
+  text-wrap: balance;
 }
 .lp-h2 {
-  font-size: clamp(1.875rem, 1.2rem + 2.6vw, 2.75rem);
-  line-height: 1.1;
-  letter-spacing: -0.015em;
-  font-weight: 600;
+  font-size: clamp(2rem, 1.25rem + 3.1vw, 3.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  font-weight: 650;
+  text-wrap: balance;
 }
 .lp-h3 {
-  font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.5rem);
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-  font-weight: 600;
+  font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.55rem);
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  font-weight: 620;
 }
 .lp-lead {
-  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
-  line-height: 1.65;
+  font-size: clamp(1.0625rem, 1rem + 0.45vw, 1.3rem);
+  line-height: 1.6;
+  letter-spacing: -0.011em;
+  text-wrap: pretty;
 }
+
+/* Arabic sets badly under Latin display tracking: negative letter-spacing
+   breaks the joins between letterforms outright, and 0.98 leading collides the
+   ascenders with the row above. Reset both — the Arabic face carries the same
+   authority at its own natural metrics. */
+html[lang="ar"] .lp-h1,
+html[lang="ar"] .lp-h2,
+html[lang="ar"] .lp-h3,
+html[lang="ar"] .lp-lead {
+  letter-spacing: 0;
+}
+html[lang="ar"] .lp-h1 { line-height: 1.18; }
+html[lang="ar"] .lp-h2 { line-height: 1.22; }
 html[lang="ar"] .lp-lead,
 html[lang="ar"] p {
   line-height: 1.9;
@@ -297,10 +390,16 @@ html[lang="ar"] p {
    visual interest comes from surface elevation and hairlines instead.
    ========================================================================== */
 
-/* Accent text (was .lp-gradient-text). Solid, and theme-aware so it stays
-   readable on light backgrounds where the neon yellow would vanish. */
+/* The second clause of a two-tone headline.
+   It used to be brand yellow. Putting the accent on the headline meant the
+   accent had already been spent by the time the eye reached the CTA — and it
+   forced --lp-yellow-ink (amber) in light mode purely to survive contrast, so
+   the "brand color" was a different color in each theme anyway.
+   Dropping to the muted tone gives the same emphasis structure with none of
+   that: the headline stays one typographic voice at two weights of attention,
+   and yellow is now reserved for things that respond to a click. */
 .lp-accent-text {
-  color: var(--lp-yellow-ink);
+  color: var(--muted-foreground);
 }
 
 /* Solid accent fill for CTAs (was .lp-gradient-bg). Always pairs with
@@ -312,9 +411,10 @@ html[lang="ar"] p {
 
 .lp-glass {
   background: color-mix(in srgb, var(--card) 72%, transparent);
-  backdrop-filter: blur(14px) saturate(1.2);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.35);
+  -webkit-backdrop-filter: blur(16px) saturate(1.35);
   border: 1px solid var(--border);
+  box-shadow: var(--lp-sheen);
 }
 
 .lp-hairline {
@@ -353,6 +453,59 @@ html[lang="ar"] p {
 @keyframes lp-border-flow {
   0% { background-position: 0% 50%; }
   100% { background-position: 300% 50%; }
+}
+
+/* ==========================================================================
+   Segmented control
+
+   One primitive for both of the showcase's control groups. They used to be two
+   different things — the niche tabs were solid yellow pills, the sort buttons
+   were bare text — which made the row read as two unrelated widgets and put a
+   full-strength brand color on a control that isn't the point of the section.
+   A track with a lifted thumb is the pattern people already know from the OS,
+   and it spends no accent at all.
+   ========================================================================== */
+.lp-segment {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.lp-segment::-webkit-scrollbar {
+  display: none;
+}
+.lp-segment-item {
+  flex: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.83rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--muted-foreground);
+  transition:
+    color var(--dur-fast) ease,
+    background-color var(--dur-fast) ease,
+    box-shadow var(--dur-fast) ease;
+}
+@media (hover: hover) {
+  .lp-segment-item:hover {
+    color: var(--foreground);
+  }
+}
+/* Both ARIA spellings, because a tablist marks selection with aria-selected and
+   a toggle group marks it with aria-pressed — and the two groups have to look
+   identical or the pattern falls apart. */
+.lp-segment-item[aria-selected="true"],
+.lp-segment-item[aria-pressed="true"] {
+  color: var(--foreground);
+  background: var(--card);
+  box-shadow: var(--lp-shadow-1), var(--lp-sheen);
 }
 
 /* Signal chip (score / badge) */
@@ -424,47 +577,152 @@ html[lang="ar"] p {
   color: var(--lp-yellow-ink);
 }
 
-/* Glow bloom behind hero / bands.
+/* ==========================================================================
+   Ambience — neutral light, not colored glow
 
-   NOTE: no `filter: blur()` here. This used to be blur(80px), and two of these
-   over an animating 3D scene was the single largest source of jank on low-end
-   phones — a full-viewport blur re-rasterizes every frame the nebula drifts.
-   A radial-gradient with a wide, soft falloff is visually equivalent at a
-   fraction of the cost, because it composites instead of filtering. Callers
-   supply the gradient; keep the outer stop fully transparent so the edge is
-   soft without a blur pass. */
-.lp-nebula {
+   The page was previously lit by two full-viewport YELLOW radial blooms per
+   section. Yellow is the brand's only chromatic voice, and spending it on a
+   background wash meant every section arrived pre-shouting: by the time the eye
+   reached the CTA — the one thing that is actually yellow for a reason — the
+   color had stopped meaning anything. It also tinted the body copy sitting on
+   top of it, which is why the text kept reading as washed out.
+
+   Ambience is now achromatic. `.lp-air` is a soft wash of --lp-air (ink on the
+   light theme, pale on the dark one), so it adds depth in exactly the way a
+   studio light does — by lifting a surface, not by coloring it. Everything that
+   is still yellow on this page is now something you can click.
+   ========================================================================== */
+
+/* NOTE: no `filter: blur()` anywhere in here. A full-viewport blur
+   re-rasterizes every frame that anything behind it moves, which was the single
+   largest source of jank on low-end phones. A radial-gradient with a wide, soft
+   falloff composites instead of filtering and is visually equivalent. */
+.lp-air {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(var(--lp-air), 0.5),
+    rgba(var(--lp-air), 0.16) 45%,
+    transparent 70%
+  );
   /* Brightness is a token, not an inline `opacity`, so it can be scaled in one
      place. Callers set --lp-bloom; they must NOT set `opacity` directly, or the
      mobile rule below can't reach them (an inline style beats a stylesheet). */
-  opacity: var(--lp-bloom, 0.12);
+  opacity: var(--lp-bloom, 0.1);
 }
 
-/* Phones get roughly half the bloom.
+/* Phones get roughly half the ambience.
    These are sized in percentages of their section. On a desktop column a 42%
-   bloom is a soft corner glow; on a 390px phone the same 42% is a huge wash
-   sitting directly behind the body copy, because the single-column layout puts
-   the text exactly where the art used to be. Same CSS, completely different
-   result — which is why tuning the values for desktop kept leaving mobile
-   washed out. Scale the whole system down instead of re-tuning each caller. */
+   wash is a soft corner light; on a 390px phone the same 42% sits directly
+   behind the body copy, because the single-column layout puts the text exactly
+   where the art used to be. Same CSS, completely different result — so scale
+   the whole system down rather than re-tuning each caller. */
 @media (max-width: 640px) {
-  .lp-nebula {
-    opacity: calc(var(--lp-bloom, 0.12) * 0.45);
+  .lp-air {
+    opacity: calc(var(--lp-bloom, 0.1) * 0.5);
   }
+}
+
+/* Film grain. An inline feTurbulence tile, so it costs one data URI and zero
+   requests, and it composites once instead of animating. This is the detail
+   that keeps large flat fills from banding on a wide gradient and reads, at a
+   glance, as "printed" rather than "rendered" — the cheapest premium cue there
+   is. Opacity is per-theme: dark surfaces need more grain to show any at all. */
+.lp-noise {
+  /* The isolation is load-bearing, not a stylistic choice. The grain has to
+     paint ABOVE the element's own background and BELOW its content — grain
+     laid over text greys it out, and over the yellow CTA it turns the fill
+     olive. `z-index: -1` gets exactly that ordering, but only inside a
+     stacking context; without one the pseudo-element escapes to the nearest
+     ancestor context and disappears behind the section background entirely. */
+  isolation: isolate;
+}
+.lp-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: var(--lp-grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Hairline rule that dissolves at both ends. A full-width 1px border stops a
+   section dead; a rule that fades out lets one band hand off to the next. Used
+   as a section divider and under the nav. */
+.lp-rule {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border-strong) 18%,
+    var(--border-strong) 82%,
+    transparent
+  );
 }
 
 /* Blueprint grid texture. Theme-aware, so it reads as faint ink on light and
    faint light on dark. */
 .lp-grid-bg {
   background-image:
-    linear-gradient(color-mix(in srgb, var(--foreground) 7%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--foreground) 7%, transparent) 1px, transparent 1px);
-  background-size: 44px 44px;
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
+    linear-gradient(color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 72%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 72%);
+}
+
+/* ==========================================================================
+   Surface primitives
+   ========================================================================== */
+
+/* The standard elevated card. One class instead of the border+bg+shadow triple
+   that was being re-typed at every call site, which is how six sections ended
+   up with six slightly different cards. */
+.lp-surface {
+  position: relative;
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 1rem;
+  box-shadow: var(--lp-shadow-1), var(--lp-sheen);
+  transition:
+    border-color var(--dur-base) ease,
+    box-shadow var(--dur-base) var(--ease-out-expo),
+    transform var(--dur-base) var(--ease-out-expo);
+}
+@media (hover: hover) {
+  .lp-surface-hover:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--lp-shadow-3), var(--lp-sheen);
+    transform: translateY(-3px);
+  }
+}
+
+/* Cursor spotlight. A client component writes --mx/--my as percentages on
+   pointermove; with no JS (or no pointer) the highlight simply never paints,
+   because the layer is opacity 0 until :hover. Pure composite — no repaint on
+   the card's own content. */
+.lp-spot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-base) ease;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--lp-yellow) 10%, transparent),
+    transparent 62%
+  );
+}
+@media (hover: hover) {
+  .lp-spot:hover::before {
+    opacity: 1;
+  }
 }
 
 /* ==========================================================================
@@ -563,6 +821,101 @@ html.js [data-reveal]:not([data-visible="true"]) {
   animation-play-state: paused;
 }
 
+/* ==========================================================================
+   Reel wall — the infinite play rail
+
+   Two rows of reel cards that never stop and never seam. The track holds the
+   same cards TWICE and travels exactly -50%, so the moment the first copy has
+   fully exited, the second copy is pixel-for-pixel where the first began and
+   the animation restarts invisibly. That is the whole trick, and it is why the
+   duplicate is not optional — a single copy would visibly snap back.
+
+   Deliberately NOT paused on hover, unlike .lp-marquee above it. This band is
+   meant to read as playback: a wall of reels running continuously, the way the
+   product's feed does. A rail that freezes under the cursor reads as a
+   carousel, which is the opposite of the point.
+
+   Duration is a per-row custom property rather than a fixed value so the two
+   rows drift at different speeds — matched speeds read as one rigid slab
+   sliding, mismatched ones read as depth. */
+.lp-rail {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: lp-rail-run var(--rail-dur, 64s) linear infinite;
+}
+
+/* Two keyframes, one per writing direction, because the travel is PHYSICAL.
+   `transform` knows nothing about `dir`: in RTL a max-content flex track is laid
+   out from the right edge leftwards, so translating it -50% walks it further off
+   the left of the viewport instead of scrolling it — the front row left the
+   screen entirely a few seconds into the animation and never came back. The RTL
+   track has to travel +50% to land its second copy exactly where the first
+   started. Which copy is on screen at t=0 differs, but the two copies are
+   identical, so there is nothing to see either way. */
+@keyframes lp-rail-run {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes lp-rail-run-rtl {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(50%, 0, 0); }
+}
+
+/* Playhead. Each card runs its own offset copy, so the wall shows every stage
+   of playback at once rather than a hundred bars marching in lockstep. */
+@keyframes lp-playhead {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.lp-playhead {
+  /* Physical keywords with a [dir] override, NOT `inline-start`.
+     `transform-origin` has no logical keyword syntax — `inline-start` is simply
+     an invalid value, so the whole declaration was being dropped and every
+     playhead fell back to the default 50% 50%, growing outwards from the middle
+     of the card in both directions like a wipe rather than filling like a
+     progress bar. */
+  transform-origin: left center;
+  animation: lp-playhead var(--play-dur, 9s) linear infinite;
+}
+[dir="rtl"] .lp-playhead {
+  transform-origin: right center;
+}
+
+/* Ken Burns. This is what sells "this is video, not a screenshot": a still
+   cover that slowly pushes in and drifts never reads as frozen. Scale stays
+   under 1.12 — past that the crop starts eating the subject. */
+@keyframes lp-kenburns {
+  0%   { transform: scale(1.04) translate3d(0, 0, 0); }
+  50%  { transform: scale(1.11) translate3d(-1.5%, -2%, 0); }
+  100% { transform: scale(1.04) translate3d(0, 0, 0); }
+}
+.lp-kenburns {
+  animation: lp-kenburns var(--kb-dur, 14s) ease-in-out infinite;
+}
+
+/* A soft highlight sweeping down the cover — a screen-light cue, the same thing
+   that makes a phone in someone's hand look on rather than off. */
+@keyframes lp-screenlight {
+  0%   { transform: translateY(-60%); opacity: 0; }
+  35%  { opacity: 0.55; }
+  100% { transform: translateY(160%); opacity: 0; }
+}
+
+/* Level meter next to the live badge. Three bars on staggered delays is enough
+   to imply audio; anything more looks like a music player. */
+@keyframes lp-level {
+  0%, 100% { transform: scaleY(0.35); }
+  50%      { transform: scaleY(1); }
+}
+
+/* Rising counter tick — a one-shot lift used when a metric increments, so the
+   numbers on the wall feel observed rather than printed. */
+@keyframes lp-tick {
+  from { opacity: 0; transform: translateY(0.5em); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* Blinking caret for the script demo */
 @keyframes lp-caret {
   0%, 49% { opacity: 1; }
@@ -588,11 +941,14 @@ html.js [data-reveal]:not([data-visible="true"]) {
   transition: transform var(--dur-base) var(--ease-spring), box-shadow var(--dur-base) var(--ease-out-expo), border-color var(--dur-base) ease;
 }
 @media (hover: hover) {
+  /* The hover ring used to be a 40%-alpha yellow outline on every card, which
+     put brand color on eight tiles at once the moment a cursor crossed the
+     grid. The lift itself plus a real elevation step is the signal; the ring is
+     now a hairline strengthening, and yellow stays with the CTA. */
   .lp-lift:hover {
     transform: translateY(-4px);
-    box-shadow:
-      0 24px 70px color-mix(in srgb, var(--foreground) 16%, transparent),
-      0 0 0 1px color-mix(in srgb, var(--lp-yellow) 40%, transparent);
+    box-shadow: var(--lp-shadow-3), var(--lp-sheen);
+    border-color: var(--border-strong);
   }
 }
 

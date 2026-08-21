@@ -27,7 +27,7 @@ export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   const sheetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -66,81 +66,86 @@ export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
 
   return (
     <>
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
-        // The unscrolled state used to be text-white, which worked only because
-        // the hero behind it was permanently dark. Now that the hero follows
-        // the theme, the nav has to as well.
-        scrolled
-          ? "bg-background/72 backdrop-blur-xl border-b border-border/70 text-foreground supports-[backdrop-filter]:bg-background/60"
-          : "bg-transparent text-foreground"
-      )}
-    >
-      <nav className="mx-auto flex h-16 max-w-[1240px] items-center justify-between gap-4 px-4 sm:px-6">
-        <Link href="#top" aria-label="ReelSpy — home" className="shrink-0">
-          <span className="text-foreground transition-opacity">
-            <Logo size={30} animated />
-          </span>
-        </Link>
+      {/* A floating pill rather than a full-width bar.
+          The full-width bar had to choose between two bad states: transparent,
+          in which case it disappeared over the hero grid, or a solid strip,
+          which cut a hard horizontal line across the top of the page. A
+          detached, self-contained pill is legible over anything, keeps the
+          hero's top edge intact, and gives the page an object at the top rather
+          than a chrome band. */}
+      <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
+        <nav
+          className={cn(
+            "pointer-events-auto mx-auto flex max-w-[1160px] items-center justify-between gap-3 rounded-full border px-3 text-foreground transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:px-4",
+            scrolled
+              ? "h-14 border-border bg-background/75 shadow-[var(--lp-shadow-2),var(--lp-sheen)] backdrop-blur-xl supports-[backdrop-filter]:bg-background/60"
+              : "h-16 border-transparent bg-transparent shadow-none"
+          )}
+        >
+          <Link href="#top" aria-label="ReelSpy — home" className="shrink-0">
+            <span className="text-foreground transition-opacity">
+              <Logo size={30} animated />
+            </span>
+          </Link>
 
-        {/* Center anchors — desktop */}
-        <ul className="hidden items-center gap-1 lg:flex">
-          {SECTIONS.map((s) => (
-            <li key={s.id}>
-              <a
-                href={`#${s.id}`}
-                className={cn(
-                  "relative rounded-full px-3.5 py-2 text-sm font-medium text-current/75 transition hover:text-current",
-                  active === s.id && "text-current"
-                )}
-              >
-                {t[s.key]}
-                <span
+          {/* Center anchors — desktop */}
+          <ul className="hidden items-center gap-0.5 lg:flex">
+            {SECTIONS.map((s) => (
+              <li key={s.id}>
+                <a
+                  href={`#${s.id}`}
                   className={cn(
-                    "absolute inset-x-3.5 -bottom-0.5 h-px origin-center scale-x-0 rounded bg-current transition-transform duration-300",
-                    active === s.id && "scale-x-100"
+                    // The active state is a filled chip, not an underline.
+                    // A 1px underline under a 14px label inside a translucent
+                    // pill is invisible at a glance; a soft chip is readable
+                    // over the hero art and over a solid section alike.
+                    "relative rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-200",
+                    active === s.id
+                      ? "bg-secondary text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
-                />
-              </a>
-            </li>
-          ))}
-        </ul>
+                >
+                  {t[s.key]}
+                </a>
+              </li>
+            ))}
+          </ul>
 
-        {/* Right controls — desktop */}
-        <div className="hidden items-center gap-2 lg:flex">
-          <LangToggle locale={locale} toggleLabel={t.langToggle} ariaLabel={t.langToggleLabel} />
-          <ThemeToggle label={t.themeToggle} />
-          {/* Plain anchor: /login lives in the dashboard zone (see lib/zones). */}
-          <a
-            href="/login"
-            className="rounded-full px-3.5 py-2 text-sm font-medium text-current/85 transition hover:text-current"
-          >
-            {t.login}
-          </a>
-          <CTALink href="/signup" size="md" magnetic={false}>
-            {t.startFree}
-          </CTALink>
-        </div>
+          {/* Right controls — desktop */}
+          <div className="hidden items-center gap-1.5 lg:flex">
+            <LangToggle locale={locale} toggleLabel={t.langToggle} ariaLabel={t.langToggleLabel} />
+            <ThemeToggle label={t.themeToggle} />
+            <span aria-hidden className="mx-1 h-5 w-px bg-border" />
+            {/* Plain anchor: /login lives in the dashboard zone (see lib/zones). */}
+            <a
+              href="/login"
+              className="rounded-full px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {t.login}
+            </a>
+            <CTALink href="/signup" size="md" magnetic={false}>
+              {t.startFree}
+            </CTALink>
+          </div>
 
-        {/* Mobile trigger */}
-        <div className="flex items-center gap-1.5 lg:hidden">
-          <ThemeToggle label={t.themeToggle} />
-          <button
-            type="button"
-            aria-label={t.openMenu}
-            aria-expanded={open}
-            onClick={() => setOpen(true)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-current/15 text-current"
-          >
-            <Menu size={20} strokeWidth={1.7} />
-          </button>
-        </div>
-      </nav>
+          {/* Mobile trigger */}
+          <div className="flex items-center gap-1.5 lg:hidden">
+            <ThemeToggle label={t.themeToggle} />
+            <button
+              type="button"
+              aria-label={t.openMenu}
+              aria-expanded={open}
+              onClick={() => setOpen(true)}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/70 text-foreground shadow-[var(--lp-sheen)] backdrop-blur-sm"
+            >
+              <Menu size={19} strokeWidth={1.8} />
+            </button>
+          </div>
+        </nav>
       </header>
 
       {/* Mobile sheet — rendered as a sibling of <header>, NOT a child.
-          When the page is scrolled the header gets `backdrop-blur-xl`, and a
+          When the page is scrolled the nav gets `backdrop-blur-xl`, and a
           `backdrop-filter` turns an element into the containing block for its
           `position: fixed` descendants. Nested inside the header, this overlay
           therefore sized to the 64px header instead of the viewport: its opaque
@@ -165,7 +170,7 @@ export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
               } as React.CSSProperties
             }
           >
-            <div className="mb-4 flex items-center justify-between">
+            <div className="mb-5 flex items-center justify-between">
               <Logo size={28} animated={false} />
               <button
                 type="button"
@@ -186,7 +191,7 @@ export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
                 {t[s.key]}
               </a>
             ))}
-            <div className="my-3 h-px bg-border" />
+            <hr className="lp-rule my-3" />
             <a
               href="/login"
               onClick={() => setOpen(false)}
@@ -194,10 +199,10 @@ export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
             >
               {t.login}
             </a>
-            <CTALink href="/signup" size="lg" magnetic={false} className="mt-1 w-full" onClick={() => setOpen(false)}>
+            <CTALink href="/signup" size="lg" magnetic={false} className="mt-2 w-full" onClick={() => setOpen(false)}>
               {t.startFree}
             </CTALink>
-            <div className="mt-4">
+            <div className="mt-5">
               <LangToggle locale={locale} toggleLabel={t.langToggle} ariaLabel={t.langToggleLabel} />
             </div>
           </div>

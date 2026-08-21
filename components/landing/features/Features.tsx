@@ -27,7 +27,7 @@ function FeatureBlock({
 }) {
   const reversed = index % 2 === 1;
   return (
-    <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+    <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-20">
       <Reveal
         className={cn(
           // Copy is centered on mobile — where it stacks above the demo and
@@ -37,9 +37,19 @@ function FeatureBlock({
           reversed ? "lg:order-2" : "lg:order-1"
         )}
       >
-        <span className="lp-icon-tile mb-5">{icon}</span>
-        <p className="lp-eyebrow mb-3">{eyebrow}</p>
-        <h3 className="lp-h2 max-w-[16ch] text-balance text-foreground" style={{ fontSize: "clamp(1.6rem,1.2rem+1.6vw,2.25rem)" }}>
+        {/* Icon tile + step number on one rule. Four unnumbered feature blocks
+            read as four separate pitches; numbering them turns the stack into
+            one sequence, which is what the product actually is — watch, read,
+            write, publish. */}
+        <div className="mb-6 flex items-center gap-3">
+          <span className="lp-icon-tile">{icon}</span>
+          <span aria-hidden className="h-px w-8 bg-border" />
+          <span aria-hidden className="tabular text-[0.75rem] font-semibold tracking-[0.14em] text-muted-foreground/60">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+        </div>
+        <p className="lp-eyebrow mb-4">{eyebrow}</p>
+        <h3 className="lp-h2 max-w-[16ch] text-foreground" style={{ fontSize: "clamp(1.7rem,1.2rem+1.8vw,2.5rem)" }}>
           {title}
         </h3>
         <p className="lp-lead mt-5 max-w-[46ch] text-muted-foreground">{body}</p>
@@ -55,11 +65,12 @@ export function Features({ dict, locale }: { dict: Dictionary; locale: Locale })
   const f = dict.features;
   return (
     <Section id="features" className="bg-background">
-      <Reveal className="mb-16 flex flex-col items-center gap-3 text-center">
+      <Reveal className="mb-20 flex flex-col items-center gap-6 text-center">
         <span className="lp-eyebrow">{f.eyebrow}</span>
+        <hr className="lp-rule w-full max-w-[22rem]" />
       </Reveal>
 
-      <div className="flex flex-col gap-24 lg:gap-32">
+      <div className="flex flex-col gap-28 lg:gap-40">
         <FeatureBlock
           index={0}
           icon={<Radar size={22} />}

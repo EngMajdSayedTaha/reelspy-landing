@@ -1,7 +1,8 @@
-import { ArrowUpRight, Eye, Heart, MessageCircle, Play, TrendingUp } from "lucide-react";
+import { ArrowUpRight, Eye, Heart, MessageCircle, TrendingUp } from "lucide-react";
 import type { Dictionary } from "@/lib/i18n/en";
 import type { ShowcaseReel } from "@/lib/showcase/types";
 import { formatDaysAgo } from "@/lib/showcase/format";
+import { ReelCover } from "./ReelCover";
 
 // Mirrors the dashboard's TrendReelCard, minus everything that needs an
 // account: no tracking action, no saved state. What's left is the part a
@@ -32,66 +33,49 @@ export function TrendingCard({ reel, dict }: { reel: ShowcaseReel; dict: Diction
 
   return (
     <article
-      className={`group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card focus-within:ring-2 focus-within:ring-lp-yellow-ink ${
-        href ? "lp-lift" : ""
+      className={`group lp-surface lp-spot relative flex h-full flex-col overflow-hidden rounded-2xl focus-within:ring-2 focus-within:ring-lp-yellow-ink ${
+        href ? "lp-surface-hover" : ""
       }`}
     >
-      <div className="relative aspect-[9/16] overflow-hidden bg-secondary">
-        {reel.thumbnailUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element -- Supabase Storage URLs, not a configured next/image loader.
-          <img
-            src={reel.thumbnailUrl}
-            alt=""
-            loading="lazy"
-            referrerPolicy="no-referrer"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-          />
-        ) : (
-          // Placeholder for reels whose thumbnail we don't self-host. The
-          // endpoint nulls out expiring Instagram CDN URLs rather than ship
-          // links that rot, so this is the normal case, not an error state —
-          // which is exactly why it has to look like a deliberate reel cover,
-          // not an empty box that reads as "the image failed to load". A warm
-          // graphite wash, the blueprint grid texture and a framed play glyph
-          // give it the same visual weight as a real thumbnail.
-          <div
-            className="relative grid h-full w-full place-items-center overflow-hidden"
-            style={{ background: "linear-gradient(155deg,#43434c,#26262d 70%)" }}
-            aria-hidden
-          >
-            <div className="lp-grid-bg absolute inset-0 opacity-40" />
-            <div
-              className="absolute -inset-x-4 top-0 h-2/3"
-              style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(249,228,0,0.14), transparent 65%)" }}
-            />
-            <span className="relative grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/10 backdrop-blur-sm">
-              <Play size={18} className="translate-x-px text-white/85" fill="currentColor" />
-            </span>
-          </div>
-        )}
+      {/* 4:5, not the reel's native 9:16. At four columns across 1240px a true
+          9:16 cover is ~530px tall, so a row of eight cards ran past two full
+          screens and the captions and metrics — the part that demonstrates the
+          ranking — fell below the fold. 4:5 is the crop Instagram's own grid
+          uses, so it still reads as a reel while keeping the card scannable. */}
+      <div className="relative aspect-[4/5] overflow-hidden">
+        {/* The same frame the wall above uses, on its calm setting: in a static
+            grid the reader is scanning captions and numbers, and forty cards
+            each pushing in on their own Ken Burns cycle turns that into work.
+            The wall performs; the grid holds still. */}
+        <ReelCover reel={reel} calm />
 
         {isOutperforming && (
-          <span className="lp-chip lp-chip-accent absolute start-2 top-2 backdrop-blur">
-            <TrendingUp size={11} />
+          <span className="absolute start-2 top-2 inline-flex items-center gap-1 rounded-full bg-lp-yellow px-2 py-0.5 text-[0.66rem] font-bold text-lp-yellow-fg shadow-sm">
+            <TrendingUp size={11} strokeWidth={2.6} />
             <span className="tabular" dir="ltr">
               {reel.outperformRatio.toFixed(1)}×
             </span>
           </span>
         )}
+
+        {days !== null && (
+          <span className="absolute end-2 top-2 rounded-full bg-black/45 px-2 py-0.5 text-[0.64rem] font-medium text-white/85 backdrop-blur-sm">
+            {formatDaysAgo(days, t.day)}
+          </span>
+        )}
+
+        {/* Handle sits on the frame rather than in the body: it belongs to the
+            footage, and moving it up buys the caption a full two lines below
+            without making the card taller. */}
+        <span
+          className="absolute inset-x-3 bottom-3 truncate text-[0.8rem] font-semibold text-white drop-shadow"
+          dir="ltr"
+        >
+          @{reel.igUsername}
+        </span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-2 p-3.5">
-        <div className="flex items-baseline justify-between gap-2">
-          <span className="truncate text-sm font-semibold text-foreground" dir="ltr">
-            @{reel.igUsername}
-          </span>
-          {days !== null && (
-            <span className="shrink-0 text-[0.7rem] text-muted-foreground">
-              {formatDaysAgo(days, t.day)}
-            </span>
-          )}
-        </div>
-
+      <div className="flex flex-1 flex-col gap-3 p-3.5">
         {/* `dir="auto"` rather than a fixed direction: captions are whatever the
             creator wrote, so the direction has to come from the content, not from
             the page locale. Inheriting the page's RTL for an English caption put
@@ -99,12 +83,12 @@ export function TrendingCard({ reel, dict }: { reel: ShowcaseReel; dict: Diction
             fragment ("...xed my lower back in a"). auto resolves per string, so
             English reads LTR and Arabic reads RTL inside the same grid. */}
         {reel.caption && (
-          <p dir="auto" className="line-clamp-2 text-start text-[0.78rem] leading-snug text-muted-foreground">
+          <p dir="auto" className="line-clamp-2 text-start text-[0.8rem] leading-snug text-foreground/85">
             {reel.caption}
           </p>
         )}
 
-        <div className="mt-auto flex items-center gap-3 pt-1 text-[0.72rem] text-muted-foreground">
+        <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2.5 text-[0.72rem] text-muted-foreground">
           <span className="inline-flex items-center gap-1">
             <Eye size={12} />
             <span className="tabular" dir="ltr">{compact.format(reel.viewCount)}</span>
@@ -120,7 +104,7 @@ export function TrendingCard({ reel, dict }: { reel: ShowcaseReel; dict: Diction
         </div>
 
         {href && (
-          <span className="inline-flex items-center gap-1 text-[0.72rem] font-medium text-lp-yellow-ink transition group-hover:underline">
+          <span className="inline-flex items-center gap-1 text-[0.72rem] font-medium text-lp-yellow-ink transition group-hover:gap-1.5">
             {t.viewOn}
             <ArrowUpRight size={12} className="rtl:-scale-x-100" />
           </span>

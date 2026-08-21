@@ -7,22 +7,25 @@ export function FinalCTA({ dict }: { dict: Dictionary }) {
   const t = dict.finalCta;
   return (
     <section
-      className="relative overflow-hidden border-y border-border bg-surface-2 text-foreground"
+      className="lp-noise relative overflow-hidden border-y border-border bg-surface-2 text-foreground"
       style={{ paddingBlock: "clamp(5rem, 11vh, 8rem)" }}
     >
-      {/* The closing band is where the accent earns its keep: a yellow rail
-          across the top, and a single warm bloom behind the copy. */}
-      <div aria-hidden className="absolute inset-x-0 top-0 h-0.5 bg-lp-yellow" />
+      {/* The closing band is where the accent earns its keep — but as a single
+          hairline rail, not as a bloom. An 80%-tall yellow wash behind the
+          closing copy was the loudest thing on the page, and it was sitting
+          directly under the one paragraph that has to be read before someone
+          decides to sign up. The light behind the copy is achromatic now; the
+          only yellow left in the band is the rail and the CTA it points at. */}
+      <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-lp-yellow to-transparent" />
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="lp-grid-bg absolute inset-0 opacity-40" />
+        <div className="lp-grid-bg absolute inset-0 opacity-50" />
         <div
-          className="lp-nebula lp-drift"
+          className="lp-air lp-drift"
           style={{
-            inset: "auto auto -30% 20%",
-            width: "60%",
-            height: "80%",
-            background: "radial-gradient(circle, var(--lp-yellow), transparent 60%)",
-            ["--lp-bloom" as string]: 0.16,
+            inset: "auto auto -34% 18%",
+            width: "64%",
+            height: "84%",
+            ["--lp-bloom" as string]: 0.14,
           }}
         />
       </div>

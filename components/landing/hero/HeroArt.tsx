@@ -40,9 +40,14 @@ const LAYOUT = [
   { x: 10, y: -20.9, z: 40, r: 4.5, o: 0.94 },
 ];
 
-// Thumbnail ramps: graphite by default, warm for the card that's "going viral".
+// Thumbnail ramps: graphite by default, a warm GRADE (not a slab of brand
+// yellow) for the card that's going viral. A solid #f9e400 rectangle here read
+// as a swatch rather than as a video frame, and it spent the page's only accent
+// color on decoration — the yellow that survives is the hairline ring and the
+// live dot, both of which mean something.
 const THUMB_COOL = "linear-gradient(150deg,#3f3f46,#27272d)";
-const THUMB_HOT = "linear-gradient(150deg,#f9e400,#a16207)";
+const THUMB_HOT =
+  "radial-gradient(120% 90% at 30% 15%, hsl(38 34% 38%), transparent 62%), linear-gradient(150deg,hsl(32 22% 26%),hsl(24 24% 12%))";
 
 export function HeroArt({ labels, rtl = false }: { labels: Labels; rtl?: boolean }) {
   const sceneRef = useRef<HTMLDivElement>(null);
@@ -143,13 +148,13 @@ export function HeroArt({ labels, rtl = false }: { labels: Labels; rtl?: boolean
       className="lp-scene relative mx-auto aspect-[11/12] w-full max-w-[440px] select-none"
       style={{ perspective: "1200px", containerType: "inline-size" }}
     >
-      {/* Warm bloom behind the stack. No blur filter — see .lp-nebula. */}
+      {/* Neutral key light behind the stack, so the deck sits in a lit space
+          rather than on a flat panel. No blur filter and no hue — see .lp-air. */}
       <div
-        className="lp-nebula lp-drift"
+        className="lp-air lp-drift"
         style={{
-          inset: "8% 12% 22% 8%",
-          background: "radial-gradient(circle at 40% 40%, var(--lp-yellow), transparent 60%)",
-          ["--lp-bloom" as string]: 0.1,
+          inset: "6% 10% 20% 6%",
+          ["--lp-bloom" as string]: 0.14,
         }}
       />
 
@@ -187,7 +192,7 @@ export function HeroArt({ labels, rtl = false }: { labels: Labels; rtl?: boolean
               }}
             >
             <article
-              className="w-[clamp(190px,66cqw,290px)] rounded-2xl border bg-card p-3"
+              className="w-[clamp(190px,66cqw,290px)] rounded-2xl border bg-card p-3.5"
               style={{
                 // The stack overlaps tightly by design, so every card showing
                 // its score/multiplier chips at full strength made adjacent
@@ -195,27 +200,42 @@ export function HeroArt({ labels, rtl = false }: { labels: Labels; rtl?: boolean
                 // "conflicting" rather than as a deck. Push the non-focused
                 // cards well back so only the highlighted card carries crisp
                 // data; the rest are depth, not competing signal.
-                opacity: isHot ? 1 : Math.min(pos.o, 0.42),
+                opacity: isHot ? 1 : Math.min(pos.o, 0.58),
                 borderColor: isHot ? "var(--lp-yellow)" : "var(--border)",
                 boxShadow: isHot
-                  ? "0 24px 70px rgba(0,0,0,0.28), 0 0 0 1px var(--lp-yellow), 0 0 44px rgba(249,228,0,0.3)"
-                  : "0 20px 50px rgba(0,0,0,0.18)",
+                  ? "var(--lp-shadow-4), 0 0 0 1px var(--lp-yellow), 0 0 22px -4px color-mix(in srgb, var(--lp-yellow) 32%, transparent)"
+                  : "var(--lp-shadow-3)",
                 transition: "box-shadow 0.6s ease, border-color 0.6s ease, opacity 0.6s ease",
                 animation: reduced ? undefined : `lp-float ${7 + i}s ease-in-out ${i * 0.6}s infinite`,
               }}
             >
               <div className="flex items-center gap-3">
                 {/* Abstract reel thumbnail */}
+                {/* Mini reel frame, built the same way the reel wall's covers
+                    are: graded fill, a play glyph, and a playhead along the
+                    bottom edge. It reads as a piece of footage rather than as a
+                    coloured rectangle, and it ties the hero to the band further
+                    down the page instead of inventing a second visual language
+                    for the same object. */}
                 <div
                   className="relative grid h-16 w-12 shrink-0 place-items-center overflow-hidden rounded-lg transition-[background] duration-500"
                   style={{ background: isHot ? THUMB_HOT : THUMB_COOL }}
                 >
-                  <Play size={16} className="text-white/90" fill="currentColor" />
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.35),transparent_55%)]" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_18%,rgba(255,255,255,0.28),transparent_58%)]" />
+                  <div className="absolute inset-x-0 bottom-0 h-px bg-white/25" />
+                  <div
+                    className="absolute bottom-0 h-px bg-white/80"
+                    style={{ insetInlineStart: 0, width: isHot ? "62%" : "24%", transition: "width 0.7s ease" }}
+                  />
+                  <Play size={15} className="relative translate-x-px text-white/90" fill="currentColor" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="mb-1.5 h-2.5 w-4/5 rounded-full bg-foreground/12" />
-                  <div className="mb-2.5 h-2.5 w-3/5 rounded-full bg-foreground/8" />
+                  {/* Deliberately abstract: the hero must not put invented
+                      handles or captions on screen as if they were data. Two
+                      bars at different weights carry the shape of a row without
+                      claiming anything. */}
+                  <div className="mb-1.5 h-2.5 w-4/5 rounded-full bg-foreground/18" />
+                  <div className="mb-2.5 h-2.5 w-2/5 rounded-full bg-foreground/10" />
                   <div className="flex items-center gap-1.5">
                     <span className="lp-chip lp-chip-accent tabular">
                       <Flame size={11} />
