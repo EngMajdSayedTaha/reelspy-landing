@@ -93,8 +93,9 @@ export function ReelWall({
                   cardClass={cn(row.scale, row.dim)}
                   // Both rows name their creator — a card with nothing but a
                   // play glyph on it reads as a placeholder. Only the front row
-                  // carries the runtime and level meter, so the back row stays
-                  // quieter without going blank.
+                  // carries the runtime, the level meter and actual video
+                  // playback; the back row stays quieter without going blank,
+                  // which also halves the number of concurrent decodes.
                   showPlayback={i === 0}
                 />
               );
@@ -160,7 +161,7 @@ function WallCard({ reel, showPlayback }: { reel: ShowcaseReel; showPlayback: bo
   const hot = reel.outperformRatio >= 2.5;
   return (
     <div className="group relative aspect-[9/16] overflow-hidden rounded-[1.15rem] border border-white/10 bg-lp-deep shadow-[var(--lp-shadow-3)]">
-      <ReelCover reel={reel} />
+      <ReelCover reel={reel} video={showPlayback} />
 
       {/* Top row: the out-performance multiple is the one thing on this wall
           that is allowed to be yellow, because it is the one thing the product

@@ -92,5 +92,31 @@ deployment, not a failure.
 
 Thumbnails only ship if they're self-hosted in the `ig-media` bucket. Raw
 Instagram CDN URLs are signed and expire in about a week, so a cached
-marketing page would rot into broken images; cards render a graphite
-placeholder instead.
+marketing page would rot into broken images; cards render a generated cover
+instead.
+
+### Playing video on the reel wall
+
+The wall plays a reel whenever the payload gives it somewhere to play from,
+and shows the still cover when it doesn't. Today it never does: the endpoint
+returns `thumbnailUrl` and nothing else, `ig_reel_snapshots` has no video
+column, and `ig-media` holds images only. That's why the band is stills.
+
+The landing side is already wired for it, so this is a dashboard change
+alone. To turn it on, add one field to `/api/public/trending`:
+
+```jsonc
+{ "videoUrl": "https://<project>.supabase.co/storage/v1/object/public/ig-media/<id>.mp4" }
+```
+
+It must be **self-hosted**, for the same reason thumbnails are — Instagram's
+`media_url` for a VIDEO is a signed CDN link that expires in about a week, so
+mirroring it into `ig-media` alongside the cover is the whole job. Anything
+that isn't an `http(s)` URL is dropped at the boundary (`lib/showcase/fetch`),
+and a URL that 404s or fails to decode falls back to the still with nothing
+visible to the user.
+
+Playback is muted, looping, inline and uncontrollable by design, and only the
+wall's front row plays — roughly eight concurrent decodes rather than the ~48
+that playing every card twice would cost. `prefers-reduced-motion` gets the
+stills.

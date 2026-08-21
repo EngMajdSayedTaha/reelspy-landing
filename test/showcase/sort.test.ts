@@ -9,6 +9,7 @@ function reel(over: Partial<ShowcaseReel> = {}): ShowcaseReel {
     permalink: "https://www.instagram.com/reel/ABC/",
     caption: null,
     thumbnailUrl: null,
+    videoUrl: null,
     viewCount: 1000,
     likeCount: 100,
     commentCount: 10,

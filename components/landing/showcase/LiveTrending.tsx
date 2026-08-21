@@ -48,8 +48,16 @@ export async function LiveTrending({ dict }: { dict: Dictionary }) {
       <div className="relative mx-auto w-full max-w-[1240px] px-4 sm:px-6">
         <Reveal className="mx-auto flex max-w-[46rem] flex-col items-center gap-5 text-center">
           <span className="lp-eyebrow">{t.eyebrow}</span>
-          <h2 className="lp-h2 text-balance text-foreground">
-            {t.h2a} <span className="text-muted-foreground">{t.h2b}</span>
+          {/* The two clauses each get their own line rather than being left to
+              `text-wrap: balance`, which balanced the character count and broke
+              it as "See what's breaking / out. While it's still early." — an
+              even split straight through the middle of a sentence. A width
+              tuned to make the natural break land correctly would only hold for
+              this exact string in this exact locale; a block span holds for
+              both locales and every width. */}
+          <h2 className="lp-h2 text-foreground">
+            <span className="block text-balance">{t.h2a}</span>
+            <span className="block text-balance text-muted-foreground">{t.h2b}</span>
           </h2>
           <p className="lp-lead max-w-[54ch] text-muted-foreground">{t.body}</p>
         </Reveal>

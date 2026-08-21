@@ -2,35 +2,47 @@ import { Play } from "lucide-react";
 import type { ShowcaseReel } from "@/lib/showcase/types";
 import { coverArtFor } from "@/lib/showcase/cover";
 import { cn } from "@/lib/utils";
+import { ReelVideo } from "./ReelVideo";
 
 /**
- * A reel frame that reads as *playing*.
+ * A reel frame, in three tiers of fidelity — each one a fallback for the last.
  *
- * There is no video in the payload — see lib/showcase/cover — so "playing" is
- * assembled out of four cues that a still frame doesn't have, all of them CSS,
- * all of them composited transforms:
+ *   1. `videoUrl` → the reel actually plays (muted, looping, inline). Only when
+ *      the caller opts in with `video`, and only on cards near the viewport;
+ *      see ReelVideo.
+ *   2. `thumbnailUrl` → the real still, which is what production serves today.
+ *   3. neither → a generated cover; see lib/showcase/cover.
  *
- *   1. a slow Ken Burns push, so the frame is never actually still;
- *   2. a screen-light bar drifting down it, the cue that tells you a phone in
- *      someone's hand is on rather than off;
- *   3. a playhead crossing the bottom edge on the reel's own runtime;
- *   4. a level meter, because silent video reads as a GIF.
+ * Tiers 2 and 3 are still images, so they get the cues a still does not have on
+ * its own and that make a frame read as footage: a slow Ken Burns push, a
+ * screen-light bar drifting down it, a playhead crossing the bottom edge on the
+ * reel's own runtime, and a level meter, because silent video reads as a GIF.
+ * Every one runs on an offset derived from the reel itself, so a wall of them
+ * shows every stage of playback at once rather than marching in lockstep —
+ * which is the tell that gives a fake feed away.
  *
- * Every one of those runs on an offset derived from the reel itself, so a wall
- * of these shows every stage of playback at once instead of forty cards
- * marching in lockstep — which is the tell that gives away a fake feed.
+ * All three tiers stack: the video layer sits over the still and only fades in
+ * once it is genuinely painting frames, so a slow, blocked or missing video
+ * degrades to the tier below it with nothing to see.
  *
- * Server component: no hooks, no "use client", zero JS shipped for any of it.
+ * Server component. Only tier 1 pulls in client JS, and only where used.
  */
 export function ReelCover({
   reel,
   className,
   /** Quieter treatment for the static grid, where the cards are read, not watched. */
   calm = false,
+  /**
+   * Play the reel's video, when the payload has one. Off by default: the grid
+   * below the wall is for reading captions and numbers, and the wall's back row
+   * is depth — neither is worth a video decode. See ReelWall for the split.
+   */
+  video = false,
 }: {
   reel: ShowcaseReel;
   className?: string;
   calm?: boolean;
+  video?: boolean;
 }) {
   const art = coverArtFor(reel);
 
@@ -64,6 +76,12 @@ export function ReelCover({
           </>
         )}
       </div>
+
+      {/* The reel itself, when there is one to play. It sits over the still
+          cover and fades in only once it is painting frames, so the graded
+          frame above stays visible while it loads — and stays visible forever
+          if the video is missing, blocked or broken. */}
+      {video && reel.videoUrl && <ReelVideo src={reel.videoUrl} poster={reel.thumbnailUrl} />}
 
       {/* Screen light. Skipped on the calm variant and, below sm, wherever the
           card is too small for the sweep to read as anything but a flicker. */}
@@ -106,8 +124,13 @@ export function ReelCover({
 
       {/* Play glyph — the universal "this is video" mark, held small so it
           reads as a state, not a button. Nothing here is clickable; the card
-          that owns this cover carries the link. */}
-      <span className="pointer-events-none absolute inset-0 grid place-items-center">
+          that owns this cover carries the link.
+
+          Hidden on a card that is actually playing: a play button sitting on
+          top of running footage reads as "paused", which is the opposite of
+          what it is there to say. `group-has-` keys off the <video> the layer
+          above renders, so no state has to be lifted to do it. */}
+      <span className="pointer-events-none absolute inset-0 grid place-items-center transition-opacity duration-500 group-has-[video]:opacity-0">
         <span className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-black/25 backdrop-blur-[2px] transition duration-500 group-hover:scale-110 group-hover:bg-black/40">
           <Play size={14} className="translate-x-px text-white/90" fill="currentColor" />
         </span>

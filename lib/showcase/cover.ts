@@ -1,11 +1,17 @@
 import type { ShowcaseReel } from "./types";
 
-// Deterministic cover art for a reel.
+// Deterministic cover art for a reel — the last-resort tier.
 //
-// The trending payload carries no video and, in practice, no thumbnail either:
-// the dashboard endpoint nulls out expiring Instagram CDN URLs rather than ship
-// links that rot, and the curated fixtures are `thumbnailUrl: null` throughout.
-// So the reel wall has to draw its own frames.
+// Production usually has a real thumbnail: the enrichment job mirrors reel
+// covers into the `ig-media` bucket, and the endpoint nulls out only the raw
+// Instagram CDN URLs, which are signed and expire in about a week. What it
+// never has is video, so what this draws is a still either way.
+//
+// This exists for the cases where even the thumbnail is missing: a reel
+// enriched before mirroring existed, one whose CDN URL expired before it was
+// copied, and the curated fixtures, which are `thumbnailUrl: null` throughout
+// because shipping hotlinked images in the repo would be worse. A card with no
+// cover has to look like a deliberate frame, not like a failed image.
 //
 // The rule those frames follow is that they must look GRADED, not generated.
 // Random hues at full saturation would give a rainbow wall that reads as

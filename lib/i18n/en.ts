@@ -149,9 +149,15 @@ export const en = {
   },
   showcase: {
     eyebrow: "Live from the product",
-    h2a: "This is the actual feed.",
-    h2b: "Not a screenshot.",
-    body: "Real reels, ranked the way ReelSpy ranks them: against each account's own median, so a small creator's genuine outlier beats a big account's ordinary day. Pick a niche, re-sort it, open anything that catches your eye.",
+    // The headline used to be "This is the actual feed. / Not a screenshot."
+    // Denying an accusation nobody made is a weak opening — it spends the
+    // section's biggest line defending the demo instead of stating what the
+    // product does, and it plants the idea that a screenshot was a possibility.
+    // The wall running underneath already proves it is live; the headline's job
+    // is the promise, which is catching a reel on the way up rather than after.
+    h2a: "See what's breaking out.",
+    h2b: "While it's still early.",
+    body: "Every reel here is real, and ranked the way ReelSpy ranks them: against each account's own median, so a small creator's genuine outlier beats a big account's ordinary day.",
     sorts: {
       score: "Out-performing",
       views: "Views",
