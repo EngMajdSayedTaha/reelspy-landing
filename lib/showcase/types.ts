@@ -9,6 +9,23 @@ export type ShowcaseReel = {
   permalink: string | null;
   caption: string | null;
   thumbnailUrl: string | null;
+  /**
+   * Direct URL to the reel's video file (mp4), self-hosted the same way
+   * thumbnails are. When present the card PLAYS it — muted, looping, inline —
+   * instead of showing a still.
+   *
+   * The dashboard does not emit this yet: `ig_reel_snapshots` carries
+   * `thumbnail_url` and nothing else, and the `ig-media` bucket holds images
+   * only. Until the enrichment job mirrors the video alongside the thumbnail
+   * this is null for every reel and the wall renders stills — which is exactly
+   * what it does today. Nothing here breaks when it stays null; the moment the
+   * endpoint starts emitting `videoUrl`, the wall starts playing.
+   *
+   * Must be a self-hosted URL, not a raw Instagram CDN one: those are signed
+   * and expire in about a week, so a cached marketing page would rot into
+   * dead <video> elements the same way it would rot into broken images.
+   */
+  videoUrl: string | null;
   viewCount: number;
   likeCount: number;
   commentCount: number;

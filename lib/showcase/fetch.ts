@@ -26,6 +26,23 @@ const FETCH_TIMEOUT_MS = 4000;
 // the payload crosses a deployment boundary — the dashboard can be redeployed
 // independently, and a shape change there must degrade to fixtures here rather
 // than throw during a page render.
+// Every URL in this payload ends up in an `href` or a `src`. The payload
+// crosses a deployment boundary, so "the dashboard would never send that" is a
+// deployment assumption rather than a guarantee — and a `javascript:` value
+// reaching `permalink` becomes script execution the moment a visitor clicks a
+// card. Restricting the scheme costs nothing and closes that off. Relative
+// URLs are rejected too (`new URL` throws without a base); the endpoint serves
+// absolute Supabase Storage URLs, so there is nothing legitimate to lose.
+function safeUrl(value: unknown): string | null {
+  if (typeof value !== "string" || !value) return null;
+  try {
+    const { protocol } = new URL(value);
+    return protocol === "https:" || protocol === "http:" ? value : null;
+  } catch {
+    return null;
+  }
+}
+
 function toReel(value: unknown): ShowcaseReel | null {
   if (!value || typeof value !== "object") return null;
   const r = value as Record<string, unknown>;
@@ -36,9 +53,12 @@ function toReel(value: unknown): ShowcaseReel | null {
 
   return {
     igUsername: r.igUsername,
-    permalink: str(r.permalink),
+    permalink: safeUrl(r.permalink),
     caption: str(r.caption),
-    thumbnailUrl: str(r.thumbnailUrl),
+    thumbnailUrl: safeUrl(r.thumbnailUrl),
+    // Absent today — see ShowcaseReel.videoUrl. Reading it now means shipping
+    // video is a change to the endpoint alone, not to this app as well.
+    videoUrl: safeUrl(r.videoUrl),
     viewCount: num(r.viewCount),
     likeCount: num(r.likeCount),
     commentCount: num(r.commentCount),
