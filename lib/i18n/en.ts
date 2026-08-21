@@ -184,6 +184,14 @@ export const en = {
     cta: "Track this niche",
     demoNote: "Sample data — connect an account to see live reels from your own niche.",
     empty: "No reels to show right now.",
+    // The reel wall is decorative (the same reels are rendered as real content
+    // by the explorer below it), so this one sentence is what a screen reader
+    // gets instead of forty unreachable cards.
+    wallLabel:
+      "A continuously running wall of reels currently over-performing across every niche ReelSpy tracks.",
+    exploreTitle: "Now sort it the way you would.",
+    exploreBody:
+      "Same reels, your rules. Switch niche, re-rank by out-performance, views, likes or recency, and open anything worth stealing an idea from.",
   },
   radar: {
     eyebrow: "Niche Radar — the moat",

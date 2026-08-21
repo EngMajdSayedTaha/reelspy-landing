@@ -1,7 +1,7 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { ArrowRight, Info } from "lucide-react";
 import { CTALink } from "@/components/ui/CTALink";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n/en";
@@ -51,18 +51,26 @@ export function TrendingExplorer({ data, dict }: { data: ShowcaseData; dict: Dic
     nodes.forEach((el, key) => prevRects.current.set(key, el.getBoundingClientRect()));
   }, [sort, nicheIndex]);
 
+  // Feeds the cursor spotlight on each card (.lp-spot). Custom properties
+  // inherit, so writing them on the wrapper reaches the <article> inside it —
+  // and writing a property, rather than a style the card also uses, means this
+  // can never fight the FLIP transform living on the same element.
+  const trackPointer = (e: ReactPointerEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
+    el.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
+  };
+
   const nicheLabel = (slug: string) =>
     (t.niches as Record<string, string>)[slug] ?? slug;
 
   return (
     <div>
-      {/* Controls */}
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div
-          role="tablist"
-          aria-label={t.nicheLabel}
-          className="-mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:px-0"
-        >
+      {/* Controls. Two segmented groups of the same primitive, so the row reads
+          as one control surface rather than as tabs plus loose text buttons. */}
+      <div className="mb-6 flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div role="tablist" aria-label={t.nicheLabel} className="lp-segment">
           {data.niches.map((n, i) => (
             <button
               key={n.niche}
@@ -70,35 +78,25 @@ export function TrendingExplorer({ data, dict }: { data: ShowcaseData; dict: Dic
               role="tab"
               aria-selected={i === nicheIndex}
               onClick={() => setNicheIndex(i)}
-              className={cn(
-                "shrink-0 rounded-full border px-4 py-1.5 text-sm font-medium transition",
-                i === nicheIndex
-                  ? "border-lp-yellow bg-lp-yellow text-lp-yellow-fg"
-                  : "border-border bg-card text-muted-foreground hover:border-border-strong hover:text-foreground"
-              )}
+              className="lp-segment-item"
             >
               {nicheLabel(n.niche)}
             </button>
           ))}
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="hidden text-[0.72rem] font-medium uppercase tracking-wide text-muted-foreground sm:inline">
+        <div className="flex items-center gap-2.5">
+          <span className="hidden text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground/70 sm:inline">
             {t.sortLabel}
           </span>
-          <div className="-mx-4 flex gap-1.5 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+          <div className="lp-segment">
             {SHOWCASE_SORTS.map((s) => (
               <button
                 key={s}
                 type="button"
                 aria-pressed={s === sort}
                 onClick={() => setSort(s)}
-                className={cn(
-                  "shrink-0 rounded-lg px-3 py-1.5 text-[0.8rem] font-medium transition",
-                  s === sort
-                    ? "bg-secondary text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
+                className="lp-segment-item"
               >
                 {t.sorts[s]}
               </button>
@@ -113,13 +111,14 @@ export function TrendingExplorer({ data, dict }: { data: ShowcaseData; dict: Dic
       ) : (
         <div
           ref={gridRef}
-          className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
+          className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
         >
           {reels.map((reel) => {
             const key = reelKey(reel);
             return (
               <div
                 key={key}
+                onPointerMove={trackPointer}
                 ref={(el) => {
                   if (el) itemsRef.current.set(key, el);
                   else itemsRef.current.delete(key);
@@ -133,9 +132,12 @@ export function TrendingExplorer({ data, dict }: { data: ShowcaseData; dict: Dic
       )}
 
       {/* Footer: sample-data disclosure + CTA */}
-      <div className="mt-8 flex flex-col items-center gap-4 text-center">
+      <div className="mt-10 flex flex-col items-center gap-5 text-center">
         {data.isDemo && (
-          <p className="text-[0.78rem] text-muted-foreground">{t.demoNote}</p>
+          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-[0.76rem] text-muted-foreground">
+            <Info size={13} className="shrink-0 text-muted-foreground/70" />
+            {t.demoNote}
+          </p>
         )}
         <CTALink href="/signup" size="lg">
           {t.cta}

@@ -4,6 +4,12 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowUpRight, Flame, Play, TrendingUp } from "lucide-react";
 import { MockScreen } from "./MockScreen";
 
+// The reel thumbnail inside the mock. A graded warm frame rather than a slab
+// of brand yellow: a solid #f9e400 rectangle reads as a color swatch, not as a
+// piece of video, and it spends the page's one accent color on decoration.
+const GRADED_THUMB =
+  "radial-gradient(120% 90% at 30% 15%, hsl(38 34% 38%), transparent 62%), linear-gradient(150deg,hsl(32 22% 26%),hsl(24 24% 12%))";
+
 type Labels = {
   sortOut: string;
   sortViral: string;
@@ -15,7 +21,7 @@ type Labels = {
 type Reel = { id: string; name: string; grad: string; score: number; mult: number };
 
 const REELS: Reel[] = [
-  { id: "a", name: "@fit.mia", grad: "linear-gradient(150deg,#f9e400,#a16207)", score: 640, mult: 5.2 },
+  { id: "a", name: "@fit.mia", grad: GRADED_THUMB, score: 640, mult: 5.2 },
   { id: "b", name: "@chef.omar", grad: "linear-gradient(150deg,#3f3f46,#27272d)", score: 1520, mult: 1.4 },
   { id: "c", name: "@code.sam", grad: "linear-gradient(150deg,#52525b,#34343b)", score: 910, mult: 3.1 },
   { id: "d", name: "@travel.lea", grad: "linear-gradient(150deg,#3f3f46,#27272d)", score: 1180, mult: 2.0 },

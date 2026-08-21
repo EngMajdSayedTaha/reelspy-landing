@@ -5,6 +5,12 @@ import { Check, Play, Quote, Search, Sparkles } from "lucide-react";
 import { MockScreen } from "./MockScreen";
 import { usePrefersReducedMotion } from "@/components/ui/usePrefersReducedMotion";
 
+// The reel thumbnail inside the mock. A graded warm frame rather than a slab
+// of brand yellow: a solid #f9e400 rectangle reads as a color swatch, not as a
+// piece of video, and it spends the page's one accent color on decoration.
+const GRADED_THUMB =
+  "radial-gradient(120% 90% at 30% 15%, hsl(38 34% 38%), transparent 62%), linear-gradient(150deg,hsl(32 22% 26%),hsl(24 24% 12%))";
+
 type Labels = {
   transcribing: string;
   hookLibrary: string;
@@ -64,7 +70,7 @@ export function TranscriptDemo({ labels }: { labels: Labels }) {
         {/* Reel being transcribed */}
         <div className="rounded-xl border border-[var(--lp-hairline)] bg-white/[0.02] p-3">
           <div className="flex items-center gap-3">
-            <div className="relative grid h-12 w-9 shrink-0 place-items-center overflow-hidden rounded-md" style={{ background: "linear-gradient(150deg,#f9e400,#a16207)" }}>
+            <div className="relative grid h-12 w-9 shrink-0 place-items-center overflow-hidden rounded-md" style={{ background: GRADED_THUMB }}>
               <Play size={13} className="text-white/90" fill="currentColor" />
             </div>
             <div className="min-w-0 flex-1">

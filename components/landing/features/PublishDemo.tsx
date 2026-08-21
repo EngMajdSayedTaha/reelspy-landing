@@ -6,6 +6,12 @@ import { InstagramMark, TikTokMark, YouTubeMark, FacebookMark } from "@/componen
 import { MockScreen } from "./MockScreen";
 import { usePrefersReducedMotion } from "@/components/ui/usePrefersReducedMotion";
 
+// The reel thumbnail inside the mock. A graded warm frame rather than a slab
+// of brand yellow: a solid #f9e400 rectangle reads as a color swatch, not as a
+// piece of video, and it spends the page's one accent color on decoration.
+const GRADED_THUMB =
+  "radial-gradient(120% 90% at 30% 15%, hsl(38 34% 38%), transparent 62%), linear-gradient(150deg,hsl(32 22% 26%),hsl(24 24% 12%))";
+
 type Labels = {
   upload: string;
   schedule: string;
@@ -100,7 +106,7 @@ export function PublishDemo({ labels }: { labels: Labels }) {
             className="fanout-unflip absolute flex flex-col items-center"
             style={{ left: "3%", top: "50%", transform: "translateY(-50%) var(--unflip, scaleX(1))", width: "27%" }}
           >
-            <div className="relative grid aspect-[9/12] w-full place-items-center overflow-hidden rounded-lg border border-[var(--lp-hairline)]" style={{ background: "linear-gradient(150deg,#f9e400,#a16207)" }}>
+            <div className="relative grid aspect-[9/12] w-full place-items-center overflow-hidden rounded-lg border border-[var(--lp-hairline)]" style={{ background: GRADED_THUMB }}>
               <Play size={16} className="text-white" fill="currentColor" />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.35),transparent_55%)]" />
             </div>

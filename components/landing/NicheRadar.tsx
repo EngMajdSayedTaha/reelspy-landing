@@ -21,26 +21,23 @@ export function NicheRadar({ dict }: { dict: Dictionary }) {
   const t = dict.radar;
   return (
     <section
-      className="relative overflow-hidden bg-surface-2 text-foreground"
+      className="lp-noise relative overflow-hidden border-y border-border bg-surface-2 text-foreground"
       style={{ paddingBlock: "clamp(5rem, 10vh, 8rem)" }}
     >
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="lp-grid-bg absolute inset-0 opacity-40" />
-        {/* Anchored to the bottom-right so it blooms behind the radar art only.
-            It used to start at left:30% and run 50% of the section wide, which
-            put its brightest core directly under the body copy — a ~1030px wash
-            of yellow across the paragraph on a 1440px viewport. That's what made
-            the text look washed out rather than lit. Anchoring it to the art
-            column and halving the opacity keeps the glow as depth behind the
-            radar without ever crossing into the reading column. */}
+        <div className="lp-grid-bg absolute inset-0 opacity-50" />
+        {/* Anchored to the art column, never crossing into the reading column.
+            It was a yellow wash whose brightest core landed under the body copy
+            — roughly 1030px of it on a 1440px viewport — which is what made the
+            paragraph read as faded rather than lit. Achromatic now (.lp-air), so
+            even where it does overlap text it changes luminance, not hue. */}
         <div
-          className="lp-nebula lp-drift"
+          className="lp-air lp-drift"
           style={{
             inset: "auto -6% -14% auto",
-            width: "42%",
-            height: "52%",
-            background: "radial-gradient(circle, var(--lp-yellow), transparent 62%)",
-            ["--lp-bloom" as string]: 0.12,
+            width: "46%",
+            height: "56%",
+            ["--lp-bloom" as string]: 0.13,
           }}
         />
       </div>
@@ -54,7 +51,7 @@ export function NicheRadar({ dict }: { dict: Dictionary }) {
             {t.h2a} <span className="lp-accent-text">{t.h2b}</span>
           </h2>
           <p className="lp-lead mt-5 max-w-[48ch] text-muted-foreground">{t.body}</p>
-          <p className="mt-6 inline-flex items-start gap-2 rounded-xl border border-border bg-card px-4 py-3 text-start text-sm text-muted-foreground">
+          <p className="lp-surface mt-8 inline-flex items-start gap-2.5 rounded-2xl px-4 py-3.5 text-start text-sm text-muted-foreground">
             <Lock size={16} className="mt-0.5 shrink-0 text-lp-yellow-ink" />
             <span className="max-w-[44ch]">{t.anonymity}</span>
           </p>
@@ -66,9 +63,13 @@ export function NicheRadar({ dict }: { dict: Dictionary }) {
             {/* Rings */}
             <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
               <defs>
+                {/* Achromatic. A yellow disc under the whole radar meant the
+                    dish itself was the same color as the blips on it, so the
+                    thing the section is about — three over-performing nodes —
+                    had nothing to stand out against. */}
                 <radialGradient id="radarGlow" cx="50" cy="50" r="50" gradientUnits="userSpaceOnUse">
-                  <stop offset="0" stopColor="var(--lp-yellow)" stopOpacity="0.14" />
-                  <stop offset="1" stopColor="var(--lp-yellow)" stopOpacity="0" />
+                  <stop offset="0" stopColor="var(--foreground)" stopOpacity="0.1" />
+                  <stop offset="1" stopColor="var(--foreground)" stopOpacity="0" />
                 </radialGradient>
               </defs>
               <circle cx="50" cy="50" r="46" fill="url(#radarGlow)" />
@@ -93,16 +94,15 @@ export function NicheRadar({ dict }: { dict: Dictionary }) {
               <div
                 className="absolute inset-0"
                 style={{
-                  // Peak alpha down again (0.32 → 0.16) with more intermediate
-                  // stops. The leading edge of a conic gradient is a hard line by
-                  // construction, and at 0.32 against a dark surface that line was
-                  // still reading as a solid spotlight beam rather than a radar
-                  // sweep — most obviously on a phone, where the radar fills the
-                  // full column width. The mask now starts fading at 30% instead
-                  // of 55%, so the cone is brightest near the hub and has
+                  // Low peak alpha with several intermediate stops. The leading
+                  // edge of a conic gradient is a hard line by construction, and
+                  // at any real alpha that line reads as a solid spotlight beam
+                  // rather than a radar sweep — most obviously on a phone, where
+                  // the radar fills the full column width. The mask starts fading
+                  // at 30%, so the cone is brightest near the hub and has
                   // essentially dissolved before it reaches the outer ring.
                   background:
-                    "conic-gradient(from 0deg, rgba(249,228,0,0.16) 0deg, rgba(249,228,0,0.08) 16deg, rgba(249,228,0,0.035) 34deg, rgba(249,228,0,0.012) 54deg, transparent 78deg, transparent 360deg)",
+                    "conic-gradient(from 0deg, color-mix(in srgb, var(--foreground) 13%, transparent) 0deg, color-mix(in srgb, var(--foreground) 7%, transparent) 16deg, color-mix(in srgb, var(--foreground) 3%, transparent) 34deg, color-mix(in srgb, var(--foreground) 1%, transparent) 54deg, transparent 78deg, transparent 360deg)",
                   WebkitMaskImage: "radial-gradient(circle at 50% 50%, #000 30%, rgba(0,0,0,0.35) 62%, transparent 82%)",
                   maskImage: "radial-gradient(circle at 50% 50%, #000 30%, rgba(0,0,0,0.35) 62%, transparent 82%)",
                   animation: "lp-spin 7s linear infinite",

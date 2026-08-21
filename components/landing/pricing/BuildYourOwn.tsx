@@ -25,14 +25,16 @@ export function BuildYourOwn({ dict }: { dict: Dictionary }) {
   }, [vals]);
 
   return (
-    <div className="lp-gradient-border mt-8 overflow-hidden p-6 sm:p-8">
+    <div className="lp-gradient-border mt-10 overflow-hidden p-6 shadow-[var(--lp-shadow-2)] sm:p-8">
       <div className="relative grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <div>
-          <div className="flex items-center gap-2 text-lp-yellow-ink">
-            <SlidersHorizontal size={18} />
-            <span className="text-sm font-semibold">{t.byoTitle}</span>
+          <div className="flex items-center gap-2.5">
+            <span className="lp-icon-tile h-9 w-9 rounded-lg">
+              <SlidersHorizontal size={16} />
+            </span>
+            <span className="lp-h3">{t.byoTitle}</span>
           </div>
-          <p className="mt-2 max-w-[42ch] text-muted-foreground">{t.byoBody}</p>
+          <p className="mt-3 max-w-[42ch] text-muted-foreground">{t.byoBody}</p>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {t.byoSliders.map((s, i) => (
@@ -58,11 +60,15 @@ export function BuildYourOwn({ dict }: { dict: Dictionary }) {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border bg-card p-6 text-center">
-          <span className="text-[0.72rem] font-medium uppercase tracking-wide text-muted-foreground">{t.byoLivePrice}</span>
+        <div className="lp-surface flex flex-col items-center justify-center gap-4 rounded-2xl p-6 text-center">
+          <span className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground/70">
+            {t.byoLivePrice}
+          </span>
           <div className="flex items-end justify-center gap-1.5">
             {!rtl && <span className="mb-1 text-sm font-medium text-muted-foreground">{t.currency}</span>}
-            <span className="tabular text-5xl font-semibold text-foreground">{price}</span>
+            <span className="tabular text-5xl font-semibold leading-none tracking-[-0.035em] text-foreground">
+              {price}
+            </span>
             {rtl && <span className="mb-1 text-sm font-medium text-muted-foreground">{t.currency}</span>}
             <span className="mb-1.5 text-sm text-muted-foreground">{t.perMonth}</span>
           </div>

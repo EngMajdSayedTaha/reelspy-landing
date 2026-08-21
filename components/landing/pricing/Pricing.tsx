@@ -113,12 +113,14 @@ export function Pricing({ dict, plans, locale = "en" }: { dict: Dictionary; plan
               key={plan.key}
               className={cn(
                 "relative flex min-w-[80%] shrink-0 snap-center flex-col rounded-2xl p-6 sm:min-w-0",
-                highlighted ? "lp-gradient-border order-first sm:order-none" : "border border-border bg-card"
+                highlighted
+                  ? "lp-gradient-border order-first shadow-[var(--lp-shadow-3)] sm:order-none"
+                  : "lp-surface"
               )}
             >
               {/* Badge */}
               {plan.badge && (
-                <span className="absolute -top-3 start-6 rounded-full bg-lp-yellow px-3 py-1 text-[0.68rem] font-semibold text-lp-yellow-fg shadow">
+                <span className="absolute -top-3 start-6 rounded-full bg-lp-yellow px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.06em] text-lp-yellow-fg shadow-[var(--lp-shadow-2)]">
                   {plan.badge}
                 </span>
               )}
@@ -148,13 +150,18 @@ export function Pricing({ dict, plans, locale = "en" }: { dict: Dictionary; plan
                   </div>
                 )}
 
-                <div className="mt-4 flex items-end gap-1.5">
-                  {!rtl && <span className="mb-1.5 text-sm font-medium text-muted-foreground">{t.currency}</span>}
+                <div className="mt-5 flex items-end gap-1.5">
+                  {!rtl && <span className="mb-2 text-sm font-medium text-muted-foreground">{t.currency}</span>}
                   {plan.wasPrice && (
-                    <s className="mb-1.5 text-lg font-normal text-muted-foreground">{plan.wasPrice}</s>
+                    <s className="mb-2 text-lg font-normal text-muted-foreground/70">{plan.wasPrice}</s>
                   )}
-                  <span className="tabular text-4xl font-semibold text-foreground">{plan.price}</span>
-                  {rtl && <span className="mb-1.5 text-sm font-medium text-muted-foreground">{t.currency}</span>}
+                  {/* The price is the one number on this card anyone is looking
+                      for, so it gets display treatment — tight tracking and real
+                      weight — rather than a slightly-larger body size. */}
+                  <span className="tabular text-[2.75rem] font-semibold leading-none tracking-[-0.035em] text-foreground">
+                    {plan.price}
+                  </span>
+                  {rtl && <span className="mb-2 text-sm font-medium text-muted-foreground">{t.currency}</span>}
                   <span className="mb-1.5 text-sm text-muted-foreground">{t.perMonth}</span>
                 </div>
 
@@ -172,10 +179,10 @@ export function Pricing({ dict, plans, locale = "en" }: { dict: Dictionary; plan
                   {plan.cta}
                 </CTALink>
 
-                <ul className="mt-6 flex flex-col gap-2.5">
+                <ul className="mt-6 flex flex-col gap-2.5 border-t border-border pt-5">
                   {plan.features.map((feat, fi) => (
-                    <li key={fi} className="flex items-start gap-2 text-[0.82rem] text-muted-foreground">
-                      <Check size={15} className="mt-0.5 shrink-0 text-lp-yellow-ink" />
+                    <li key={fi} className="flex items-start gap-2.5 text-[0.82rem] leading-relaxed text-muted-foreground">
+                      <Check size={14} strokeWidth={2.6} className="mt-[3px] shrink-0 text-lp-yellow-ink" />
                       <span>{feat}</span>
                     </li>
                   ))}
@@ -191,7 +198,7 @@ export function Pricing({ dict, plans, locale = "en" }: { dict: Dictionary; plan
         <BuildYourOwn dict={dict} />
       </Reveal>
 
-      <p className="mt-6 text-center text-[0.78rem] text-muted-foreground">{t.footnote}</p>
+      <p className="mt-8 text-center text-[0.78rem] text-muted-foreground">{t.footnote}</p>
     </Section>
   );
 }

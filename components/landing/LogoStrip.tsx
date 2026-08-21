@@ -33,7 +33,13 @@ export function LogoStrip({ dict }: { dict: Dictionary }) {
     ));
 
   return (
-    <section aria-label={t.connects} className="relative border-y border-border bg-background py-7 text-foreground">
+    <section aria-label={t.connects} className="relative bg-background py-9 text-foreground">
+      {/* Fading hairlines instead of hard 1px borders top and bottom. A band
+          bounded by two full-width rules reads as a table row wedged between
+          the hero and the next section; rules that dissolve at the edges let it
+          read as part of the same page. */}
+      <hr aria-hidden className="lp-rule absolute inset-x-0 top-0" />
+      <hr aria-hidden className="lp-rule absolute inset-x-0 bottom-0" />
       <p className="sr-only">{t.connects}</p>
       <div
         aria-hidden="true"

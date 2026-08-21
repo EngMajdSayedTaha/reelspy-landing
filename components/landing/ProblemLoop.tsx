@@ -32,13 +32,17 @@ export function ProblemLoop({ dict }: { dict: Dictionary }) {
               key={i}
               data-reveal=""
               style={{ ["--reveal-delay" as string]: `${i * 70}ms` }}
-              className="group rounded-2xl border border-border bg-card p-5 transition hover:border-border-strong"
+              className="flex"
             >
-              <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-secondary text-muted-foreground transition group-hover:text-foreground">
-                <Icon size={18} strokeWidth={1.6} />
-              </span>
-              <h3 className="text-[0.95rem] font-semibold leading-snug text-foreground">{p.t}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{p.d}</p>
+              {/* Inner card, not the reveal target — see BentoGrid for why a
+                  hover lift on a [data-reveal] element never fires. */}
+              <div className="lp-surface lp-surface-hover group flex w-full flex-col p-5">
+                <span className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-secondary text-muted-foreground transition group-hover:border-border-strong group-hover:text-foreground">
+                  <Icon size={18} strokeWidth={1.6} />
+                </span>
+                <h3 className="text-[0.95rem] font-semibold leading-snug text-foreground">{p.t}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.d}</p>
+              </div>
             </div>
           );
         })}
@@ -46,7 +50,8 @@ export function ProblemLoop({ dict }: { dict: Dictionary }) {
 
       {/* Pivot + loop diagram */}
       <div className="mt-20 flex flex-col items-center">
-        <Reveal className="mb-4 flex items-center gap-2 text-center">
+        <Reveal className="mb-2 flex flex-col items-center gap-5 text-center">
+          <hr className="lp-rule w-full max-w-[14rem]" />
           <span className="lp-h3 max-w-[26ch] text-balance font-semibold text-foreground">{t.pivot}</span>
         </Reveal>
 
@@ -62,7 +67,7 @@ export function ProblemLoop({ dict }: { dict: Dictionary }) {
             return (
               <div
                 key={n.key}
-                className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4"
+                className="lp-surface flex items-start gap-3 p-4"
               >
                 <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border text-lp-yellow-ink">
                   <Icon size={18} strokeWidth={1.7} />
@@ -96,10 +101,15 @@ export function ProblemLoop({ dict }: { dict: Dictionary }) {
                 style={{ animation: "lp-ring-flow 6s linear infinite" }}
               />
               <defs>
+                {/* The dashed ring used to be full-strength brand yellow the
+                    whole way round — a 340px yellow circle competing with the
+                    one dot that is actually meant to be tracked, and by far the
+                    largest patch of accent color on the page. The ring is track;
+                    only the dot moving along it is signal. */}
                 <linearGradient id="loopGrad" x1="0" y1="0" x2="100" y2="100">
-                  <stop offset="0" stopColor="var(--lp-yellow)" />
-                  <stop offset="0.5" stopColor="var(--lp-yellow)" stopOpacity="0.45" />
-                  <stop offset="1" stopColor="var(--lp-yellow)" />
+                  <stop offset="0" stopColor="var(--border-strong)" />
+                  <stop offset="0.5" stopColor="var(--border)" />
+                  <stop offset="1" stopColor="var(--border-strong)" />
                 </linearGradient>
               </defs>
             </svg>
@@ -108,14 +118,14 @@ export function ProblemLoop({ dict }: { dict: Dictionary }) {
             <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 h-0 w-0">
               <div className="lp-orbit absolute h-0 w-0">
                 <span
-                  className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-lp-yellow"
-                  style={{ top: "-35%", boxShadow: "0 0 16px 4px rgba(249,228,0,0.6)" }}
+                  className="absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-lp-yellow"
+                  style={{ top: "-35%", boxShadow: "0 0 14px 3px color-mix(in srgb, var(--lp-yellow) 55%, transparent)" }}
                 />
               </div>
             </div>
 
             {/* Center hub */}
-            <div className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl border border-border bg-card shadow-lg">
+            <div className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl border border-border bg-card shadow-[var(--lp-shadow-3),var(--lp-sheen)]">
               <LoopHub />
             </div>
 
@@ -128,7 +138,7 @@ export function ProblemLoop({ dict }: { dict: Dictionary }) {
                   key={n.key}
                   className={`absolute w-[clamp(112px,30cqw,140px)] -translate-x-1/2 -translate-y-1/2 ${n.pos}`}
                 >
-                  <div className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-card/80 p-3 text-center backdrop-blur">
+                  <div className="lp-glass flex flex-col items-center gap-2 rounded-2xl p-3 text-center">
                     <span
                       className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted-foreground"
                       style={{ animation: `lp-node-lit 8s linear ${n.delay} infinite` }}
@@ -163,7 +173,7 @@ function LoopHub() {
       <defs>
         <linearGradient id="hubGrad" x1="0" y1="0" x2="24" y2="24">
           <stop offset="0" stopColor="var(--lp-yellow)" />
-          <stop offset="1" stopColor="var(--lp-yellow-ink)" />
+          <stop offset="1" stopColor="var(--muted-foreground)" />
         </linearGradient>
       </defs>
     </svg>
