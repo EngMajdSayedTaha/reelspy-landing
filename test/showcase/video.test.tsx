@@ -78,16 +78,28 @@ describe("ReelCover video layer", () => {
 });
 
 describe("video placement across the section", () => {
-  // ~48 concurrent decodes for a band most visitors scroll past is not a
-  // trade worth making. The front row performs; the back row is depth.
-  it("plays video on the wall's front row only", () => {
+  // A wall where only half the cards were ever allowed to play read as
+  // broken, not as depth — every card plays its video when the reel has one,
+  // on both rows.
+  it("plays video on every row of the wall", () => {
     const reels = SHOWCASE_FIXTURES.niches
       .flatMap((n) => n.reels)
       .map((r) => ({ ...r, videoUrl: "https://cdn.example.com/r.mp4" }));
     const { container } = render(<ReelWall reels={reels} dict={en} />);
     const [front, back] = [...container.querySelectorAll<HTMLElement>(".lp-rail")];
     expect(front.querySelectorAll("video").length).toBe(front.children.length);
-    expect(back.querySelectorAll("video").length).toBe(0);
+    expect(back.querySelectorAll("video").length).toBe(back.children.length);
+  });
+
+  // Nothing on the wall is clickable and the band never pauses, so a play
+  // glyph sitting on top of it has no state to announce — it only ever reads
+  // as a stray "unmute me" icon.
+  it("never shows the play glyph on the wall", () => {
+    const reels = SHOWCASE_FIXTURES.niches
+      .flatMap((n) => n.reels)
+      .map((r) => ({ ...r, videoUrl: "https://cdn.example.com/r.mp4" }));
+    const { container } = render(<ReelWall reels={reels} dict={en} />);
+    expect(container.querySelectorAll('svg[class*="lucide-play"]')).toHaveLength(0);
   });
 
   // The grid is for reading captions and numbers. Cards that each start

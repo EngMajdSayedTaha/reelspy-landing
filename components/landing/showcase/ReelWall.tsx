@@ -91,11 +91,11 @@ export function ReelWall({
                   reverse={row.reverse}
                   rtl={rtl}
                   cardClass={cn(row.scale, row.dim)}
-                  // Both rows name their creator — a card with nothing but a
-                  // play glyph on it reads as a placeholder. Only the front row
-                  // carries the runtime, the level meter and actual video
-                  // playback; the back row stays quieter without going blank,
-                  // which also halves the number of concurrent decodes.
+                  // Both rows name their creator and both play video when the
+                  // reel has one — a wall where only half the cards were ever
+                  // allowed to move read as broken, not as depth. Only the
+                  // front row carries the runtime and the level meter; the
+                  // back row stays quieter without going blank.
                   showPlayback={i === 0}
                 />
               );
@@ -160,8 +160,11 @@ function Rail({
 function WallCard({ reel, showPlayback }: { reel: ShowcaseReel; showPlayback: boolean }) {
   const hot = reel.outperformRatio >= 2.5;
   return (
-    <div className="group relative aspect-[9/16] overflow-hidden rounded-[1.15rem] border border-white/10 bg-lp-deep shadow-[var(--lp-shadow-3)]">
-      <ReelCover reel={reel} video={showPlayback} />
+    <div className="relative aspect-[9/16] overflow-hidden rounded-[1.15rem] border border-white/10 bg-lp-deep shadow-[var(--lp-shadow-3)]">
+      {/* Every card on the wall plays its video when the reel has one — this
+          band never pauses and nothing here is clickable, so there is no
+          "paused" state to advertise with a play icon. */}
+      <ReelCover reel={reel} video showPlayIcon={false} />
 
       {/* Top row: the out-performance multiple is the one thing on this wall
           that is allowed to be yellow, because it is the one thing the product
