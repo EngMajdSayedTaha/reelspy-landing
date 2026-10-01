@@ -179,7 +179,7 @@ export const ar: Dictionary = {
     sortLabel: "ترتيب حسب",
     nicheLabel: "المجال",
     niches: {
-      fitness: "اللياقة",
+      "real estate": "العقارات",
       food: "الطعام",
       travel: "السفر",
     },
@@ -212,7 +212,7 @@ export const ar: Dictionary = {
     h2b: "الآن يمكنك رؤيته.",
     body: "يجمع ReelSpy بصورة مجهولة ما يتابعه جميع مستخدميه ويُظهر ما يتفوق في الأداء عبر مجالك بأكمله الآن — معلومات لا يمكن لأي مراقب حساب واحد أن يمنحك إياها.",
     anonymity: "مجهول بالكامل. لا أحد يرى ما تتابعه، وأنت ترى الاتجاه لا المصدر.",
-    labels: ["لياقة", "طعام", "مال", "جمال", "تقنية"],
+    labels: ["عقارات", "طعام", "مال", "جمال", "تقنية"],
     ping: "فوق المعدل",
   },
   bento: {
@@ -359,7 +359,7 @@ export const ar: Dictionary = {
     handleLabel: "حساب إنستغرام",
     handlePlaceholder: "@حسابك",
     nicheLabel: "مجالك",
-    nichePlaceholder: "لياقة، طعام، عقارات…",
+    nichePlaceholder: "عقارات، طعام، سفر…",
     followersLabel: "عدد المتابعين",
     followersAny: "أفضّل عدم الإفصاح",
     referralLabel: "كيف سمعت عنا؟",

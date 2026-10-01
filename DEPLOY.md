@@ -30,7 +30,7 @@ The domain currently points at the product project, so move it **last**.
    production. Smoke-test on its own `*.vercel.app` URL:
    - `/login` renders and its CSS/JS load (assets come from
      `/dashboard-static/_next/...`)
-   - `/api/public/trending?niche=fitness` returns JSON with
+   - `/api/public/trending?niche=real%20estate` returns JSON with
      `cache-control: public, s-maxage=1800, stale-while-revalidate=86400`
    - `/api/public/trending?niche=nope` returns 400
 
