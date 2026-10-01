@@ -3,7 +3,7 @@ import type { ShowcaseData, ShowcaseNiche, ShowcaseReel } from "./types";
 
 // Niches to show as tabs, in order. These must exist in SHOWCASE_NICHES on the
 // dashboard's public endpoint, which validates against its own allowlist.
-const NICHES = ["fitness", "food", "travel"] as const;
+const NICHES = ["real estate", "food", "travel"] as const;
 
 // Below this, a niche's grid looks broken rather than sparse, so that
 // individual tab falls back to its own fixture instead of showing a

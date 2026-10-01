@@ -17,16 +17,16 @@ export const SHOWCASE_FIXTURES: ShowcaseData = {
   isDemo: true,
   niches: [
     {
-      niche: "fitness",
+      niche: "real estate",
       reels: [
-        { igUsername: "kettlebell.kate", permalink: null, caption: "The 12-minute session that replaced my hour at the gym.", thumbnailUrl: null, videoUrl: null, viewCount: 2_410_000, likeCount: 184_000, commentCount: 3_120, postedAt: "2026-07-09T08:00:00.000Z", outperformRatio: 6.4, followers: 214_000 },
-        { igUsername: "form.first", permalink: null, caption: "Three deadlift cues that fixed my lower back in a week.", thumbnailUrl: null, videoUrl: null, viewCount: 1_870_000, likeCount: 142_000, commentCount: 2_640, postedAt: "2026-07-11T15:30:00.000Z", outperformRatio: 4.9, followers: 388_000 },
-        { igUsername: "run.slowly", permalink: null, caption: "Why your easy runs should feel embarrassingly easy.", thumbnailUrl: null, videoUrl: null, viewCount: 1_320_000, likeCount: 98_400, commentCount: 4_210, postedAt: "2026-07-13T06:15:00.000Z", outperformRatio: 3.8, followers: 156_000 },
-        { igUsername: "desk.mobility", permalink: null, caption: "Two minutes of this beats an hour of stretching later.", thumbnailUrl: null, videoUrl: null, viewCount: 964_000, likeCount: 77_100, commentCount: 1_480, postedAt: "2026-07-14T12:00:00.000Z", outperformRatio: 3.1, followers: 92_000 },
-        { igUsername: "protein.plainly", permalink: null, caption: "I tracked every gram for 30 days. Here's what mattered.", thumbnailUrl: null, videoUrl: null, viewCount: 741_000, likeCount: 52_300, commentCount: 2_910, postedAt: "2026-07-15T18:45:00.000Z", outperformRatio: 2.7, followers: 331_000 },
-        { igUsername: "kettlebell.kate", permalink: null, caption: "Stop counting reps. Count quality reps.", thumbnailUrl: null, videoUrl: null, viewCount: 612_000, likeCount: 44_800, commentCount: 986, postedAt: "2026-07-16T09:20:00.000Z", outperformRatio: 2.2, followers: 214_000 },
-        { igUsername: "the.rest.day", permalink: null, caption: "Rest days aren't lazy. Here's the science, in 40 seconds.", thumbnailUrl: null, videoUrl: null, viewCount: 508_000, likeCount: 39_600, commentCount: 1_205, postedAt: "2026-07-17T07:10:00.000Z", outperformRatio: 1.9, followers: 61_000 },
-        { igUsername: "form.first", permalink: null, caption: "The warm-up I do before every single session.", thumbnailUrl: null, videoUrl: null, viewCount: 433_000, likeCount: 31_200, commentCount: 742, postedAt: "2026-07-18T16:00:00.000Z", outperformRatio: 1.6, followers: 388_000 },
+        { igUsername: "keys.with.kareem", permalink: null, caption: "I toured a $2M penthouse so you don't have to. The kitchen alone…", thumbnailUrl: null, videoUrl: null, viewCount: 2_380_000, likeCount: 171_000, commentCount: 4_960, postedAt: "2026-07-09T17:30:00.000Z", outperformRatio: 6.2, followers: 236_000 },
+        { igUsername: "first.home.files", permalink: null, caption: "Three questions to ask before you sign any rental contract.", thumbnailUrl: null, videoUrl: null, viewCount: 1_790_000, likeCount: 133_000, commentCount: 5_410, postedAt: "2026-07-11T10:00:00.000Z", outperformRatio: 4.8, followers: 312_000 },
+        { igUsername: "offplan.honest", permalink: null, caption: "Off-plan vs ready: I ran both through five years of numbers.", thumbnailUrl: null, videoUrl: null, viewCount: 1_280_000, likeCount: 91_700, commentCount: 3_380, postedAt: "2026-07-13T13:15:00.000Z", outperformRatio: 3.7, followers: 148_000 },
+        { igUsername: "staging.room", permalink: null, caption: "Same apartment, $400 of staging, listed for 11% more.", thumbnailUrl: null, videoUrl: null, viewCount: 942_000, likeCount: 74_200, commentCount: 1_560, postedAt: "2026-07-14T08:40:00.000Z", outperformRatio: 3.0, followers: 87_000 },
+        { igUsername: "keys.with.kareem", permalink: null, caption: "What a 1-bedroom actually costs to run, month by month.", thumbnailUrl: null, videoUrl: null, viewCount: 728_000, likeCount: 50_900, commentCount: 2_740, postedAt: "2026-07-15T19:20:00.000Z", outperformRatio: 2.6, followers: 236_000 },
+        { igUsername: "yield.notes", permalink: null, caption: "The rental yield math most listings quietly leave out.", thumbnailUrl: null, videoUrl: null, viewCount: 604_000, likeCount: 42_100, commentCount: 1_930, postedAt: "2026-07-16T11:05:00.000Z", outperformRatio: 2.2, followers: 119_000 },
+        { igUsername: "first.home.files", permalink: null, caption: "Viewing checklist: the five things I test in every unit.", thumbnailUrl: null, videoUrl: null, viewCount: 497_000, likeCount: 37_800, commentCount: 1_140, postedAt: "2026-07-17T15:50:00.000Z", outperformRatio: 1.9, followers: 312_000 },
+        { igUsername: "broker.unfiltered", permalink: null, caption: "Why the cheapest listing on the street is rarely a deal.", thumbnailUrl: null, videoUrl: null, viewCount: 421_000, likeCount: 30_400, commentCount: 896, postedAt: "2026-07-18T09:30:00.000Z", outperformRatio: 1.6, followers: 64_000 },
       ],
     },
     {

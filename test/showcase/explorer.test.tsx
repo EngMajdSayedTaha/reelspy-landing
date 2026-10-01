@@ -62,7 +62,7 @@ describe("TrendingExplorer", () => {
   });
 
   it("renders an empty niche without crashing", () => {
-    const empty: ShowcaseData = { isDemo: false, niches: [{ niche: "fitness", reels: [] }] };
+    const empty: ShowcaseData = { isDemo: false, niches: [{ niche: "real estate", reels: [] }] };
     render(<TrendingExplorer data={empty} dict={en} />);
     expect(screen.getByText(en.showcase.empty)).toBeInTheDocument();
   });
@@ -74,7 +74,7 @@ describe("TrendingExplorer", () => {
       </div>
     );
     expect(within(container).getByText(ar.showcase.demoNote)).toBeInTheDocument();
-    expect(within(container).getByRole("tab", { name: ar.showcase.niches.fitness })).toBeInTheDocument();
+    expect(within(container).getByRole("tab", { name: ar.showcase.niches["real estate"] })).toBeInTheDocument();
   });
 
   // Outbound links to someone else's Instagram post must not leak referrer or
@@ -84,7 +84,7 @@ describe("TrendingExplorer", () => {
       isDemo: false,
       niches: [
         {
-          niche: "fitness",
+          niche: "real estate",
           reels: [
             { ...SHOWCASE_FIXTURES.niches[0].reels[0], permalink: "https://www.instagram.com/reel/AAA/" },
           ],

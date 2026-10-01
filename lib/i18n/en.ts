@@ -167,7 +167,7 @@ export const en = {
     sortLabel: "Sort by",
     nicheLabel: "Niche",
     niches: {
-      fitness: "Fitness",
+      "real estate": "Real estate",
       food: "Food",
       travel: "Travel",
     },
@@ -205,7 +205,7 @@ export const en = {
     h2b: "Now you can see it.",
     body: "ReelSpy anonymously aggregates what all its users track and shows what's over-performing across your entire niche right now — intelligence no single account-watcher can give you.",
     anonymity: "Fully anonymized. Nobody sees what you track, and you see the trend, never the source.",
-    labels: ["fitness", "food", "finance", "beauty", "tech"],
+    labels: ["real estate", "food", "finance", "beauty", "tech"],
     ping: "over avg",
   },
   bento: {
@@ -400,7 +400,7 @@ export const en = {
     handleLabel: "Instagram handle",
     handlePlaceholder: "@yourhandle",
     nicheLabel: "Your niche",
-    nichePlaceholder: "Fitness, food, real estate…",
+    nichePlaceholder: "Real estate, food, travel…",
     followersLabel: "Followers",
     followersAny: "Prefer not to say",
     referralLabel: "How did you hear about us?",
